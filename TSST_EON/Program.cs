@@ -11,6 +11,8 @@ namespace TSST_EON
         static void Main(string[] args)
         {
             Console.WriteLine("elo");
+            Console.WriteLine("elo2");
+            Console.WriteLine("elo3");
         }
     }
 }
