@@ -10,6 +10,7 @@ namespace TSST_EON
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("elo");
         }
     }
 }
