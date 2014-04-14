@@ -17,6 +17,8 @@ namespace Cloud
             cloud.connect(1, 4);
             cloud.connect(6, 3);
             cloud.disconnect(1, 2);
+            cloud.disconnect(1, 2);
+            cloud.disconnect(3, 6);
             Console.ReadLine();
         }
     }
