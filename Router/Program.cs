@@ -11,6 +11,9 @@ namespace Router
     {
         static void Main(string[] args)
         {
+
+
+
             TcpClient connection = new Router("www.google.com", 80, 5000).Connect();
             NetworkStream stream = connection.GetStream();
 
