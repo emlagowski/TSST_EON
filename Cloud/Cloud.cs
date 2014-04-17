@@ -25,14 +25,17 @@ namespace Cloud
          **/
         public void connect(int portA, int portB){
             Boolean flag = true;
+            int i =0;
             foreach(int obj in busyPorts)
             {
                 if (obj == portA || obj == portB)
                 {
                     Console.WriteLine("This port is used.");
                     flag = false;
-                    break;
+                    break; //czy ten brejk wyjdzie z calego foreach?
                 }
+                Console.WriteLine(i);
+                i++;
             }
             if (flag == true)
             {

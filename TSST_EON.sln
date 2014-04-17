@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Router", "Router\Router.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{77F23948-BB13-4CF5-9D99-D8867C8F3BAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WireCloud", "WireCloud\WireCloud.csproj", "{1313CA9F-77C2-4B6B-801B-E74D98386531}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{77F23948-BB13-4CF5-9D99-D8867C8F3BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77F23948-BB13-4CF5-9D99-D8867C8F3BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77F23948-BB13-4CF5-9D99-D8867C8F3BAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1313CA9F-77C2-4B6B-801B-E74D98386531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1313CA9F-77C2-4B6B-801B-E74D98386531}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1313CA9F-77C2-4B6B-801B-E74D98386531}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1313CA9F-77C2-4B6B-801B-E74D98386531}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

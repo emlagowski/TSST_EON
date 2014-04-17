@@ -9,6 +9,7 @@ namespace Router
 {
     class Router
     {
+
         String hostname;
         int port;
         int timeout_milliseconds;
