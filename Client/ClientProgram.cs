@@ -17,7 +17,7 @@ namespace Client
             cl1.send("Pierwszy do drugiego");
             Console.ReadLine();
 
-
+            //bbb
 
         }
     }
