@@ -22,7 +22,7 @@ namespace Client
         }
         public void send(string str)
         {
-            
+
             NetworkStream stream1 = tcpClient.GetStream();
             byte[] msg = System.Text.Encoding.ASCII.GetBytes(str);
             stream1.Write(msg, 0, msg.Length);
@@ -93,3 +93,4 @@ namespace Client
         }
     }
 }
+
