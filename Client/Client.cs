@@ -34,8 +34,10 @@ namespace Client
         {
             this.port = port;
             IPEndPoint localend = new IPEndPoint(localIP, port);
-            TcpClient tcpClient = new TcpClient(localend);
-            // = new TcpListener(localIP, port);
+           // TcpClient tcpClient = new TcpClient(localend);
+            TcpListener listener = new TcpListener(localIP, port);
+            TcpClient tcpClient = new TcpClient();
+            tcpClient.Connect(localend);
             Thread thread = new Thread(new ThreadStart(threadRun));
             thread.Start();
             Console.WriteLine("Starting listening at port {0}", port);
@@ -44,9 +46,9 @@ namespace Client
         }
         private void threadRun()
         {
-            //listener.Start();
+            listener.Start();
             Console.WriteLine("Thread for port {0} started", port);
-            //TcpClient client = listener.AcceptTcpClient(); //Metoda ta blokuje wykonywanie kodu dopoki cos nie przyjdzie na port;
+            TcpClient tcpClient = listener.AcceptTcpClient(); //Metoda ta blokuje wykonywanie kodu dopoki cos nie przyjdzie na port;
             Console.WriteLine("Connection established at port: {0}", port);
             Byte[] bytes = new Byte[256];
             String data = null;

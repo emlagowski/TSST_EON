@@ -13,7 +13,7 @@ namespace Client
             Client cl1 = new Client();
             Client cl2 = new Client();
             cl1.connect(1);
-            cl2.connect(1);
+            cl2.connect(2);
             cl1.send("Pierwszy do drugiego");
             Console.ReadLine();
 
