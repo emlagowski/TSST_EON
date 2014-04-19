@@ -83,6 +83,8 @@ namespace WireCloud
                         Console.WriteLine("Received at port {0}: {1}", pointStart.receivingPort, data);
                         Console.WriteLine("Data size : " + data.Length);
                         i = stream.Read(bytes, 0, bytes.Length);
+
+                        //x
                     }
                     TcpClient sendingClient = new TcpClient();
                     sendingClient.Connect(localIP, pointStop.sendingPort);
