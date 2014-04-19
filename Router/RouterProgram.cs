@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.IO;
 using System.Net;
+using System.Collections;
 
 namespace Router
 {
-    class Program
+    class RouterProgram
     {
         static void Main(string[] args)
         {
@@ -46,7 +47,12 @@ namespace Router
             ASCIIEncoding asen = new ASCIIEncoding();
             byte[] ba = asen.GetBytes(str);
             Console.WriteLine("Transmitting.....");
-
+            BitArray bits = new BitArray(ba);
+            for(int i = 0; i < bits.Length; i++)
+            {
+                if(bits[i]) Console.Write("1");
+                else Console.Write("0");
+            }
             stm.Write(ba, 0, ba.Length);
 
             byte[] bb = new byte[100];
