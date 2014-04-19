@@ -16,7 +16,7 @@ using System.IO;
 
 namespace WireCloud
 {
-    class Program
+    class WireCloudProgram
     {
         static void Main(string[] args)
         {
