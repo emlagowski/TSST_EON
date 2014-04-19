@@ -14,29 +14,32 @@ namespace WireCloud
     {
         TcpListener end1;
         TcpListener end2;
-        Int32 port1;
-        Int32 port2;
+       // Int32 port1;
+        EndPoint endpoint1;
+        EndPoint endpoint2;
+      //  Int32 port2;
         IPAddress localIP;
         Boolean wireIsOn;
         /*W konstruktorze tworzymy TcpListenery i odpalamy dla nich oddzielne watki ktore nasluchuja na portach. Chcialem jeden watek dla jednego kabla
          * ale nie wiem jak bo kazdy nasluch blokuje wykonywanie kodu. Sa jakies bajery do zrobienia watkow bardziej wydajnie chyba typu ThreadPool
          * ale nie chcialomi sie wglebiac juz.
          */
-        public Wire(int port1, int port2)
+        public Wire(int sendingPortA, int receivingPortA, int sendingPortB, int receivingPortB)
         {
-            this.port1 = port1;
-            this.port2 = port2;
+            endpoint1 = new EndPoint(sendingPortA, receivingPortA);
+            endpoint2 = new EndPoint(sendingPortB, receivingPortB);            
             localIP = IPAddress.Parse(LocalIPAddress());
-            end1 = new TcpListener(localIP, port1);
-            end2 = new TcpListener(localIP, port2);
+            end1 = new TcpListener(localIP, endpoint1.receivingPort);
+            end2 = new TcpListener(localIP, endpoint2.receivingPort);
             //Thread thread1 = new Thread(new ThreadStart(threadRun1));
             //Thread thread2 = new Thread(new ThreadStart(threadRun2));
             wireIsOn = true;
             //thread1.Start();
             //thread2.Start();
-            StartTheThread(end1, port1, port2);
-            StartTheThread(end2, port2, port1);
-            Console.WriteLine("Wire beetwen ports {0} and {1} connected", port1, port2);
+            StartTheThread(end1, endpoint1, endpoint2);
+            StartTheThread(end2, endpoint2, endpoint1);
+            Console.WriteLine("Wire beetwen ENDPOINT[RECEIVING: {0} SENDING: {1}] \n& ENDPOINT[RECEIVING: {2} SENDING: {3}] connected",
+                endpoint1.receivingPort, endpoint1.sendingPort, endpoint2.receivingPort, endpoint2.sendingPort);
 
 
         }
@@ -44,9 +47,9 @@ namespace WireCloud
 
         /* Jedna metoda sluzy do wolania z parametrami, dzieki czemu przekazujemy argumenty do watkow.
          */
-        public Thread StartTheThread(TcpListener end, Int32 portStart, Int32 portStop)
+        public Thread StartTheThread(TcpListener end, EndPoint pointStart, EndPoint pointStop)
         {
-            var t = new Thread(() => threadRun(end, portStart, portStop));
+            var t = new Thread(() => threadRun(end, pointStart, pointStop));
             t.Start();
             return t;
         }
@@ -56,16 +59,16 @@ namespace WireCloud
          * tworzymy TcpClienta zeby odebrane dane wyslac drugim portem.
          * */
 
-        private void threadRun(TcpListener end, Int32 portStart, Int32 portStop)
+        private void threadRun(TcpListener end, EndPoint pointStart, EndPoint pointStop)
         {
             end.Start();
-            Console.WriteLine("Thread for port {0} started", portStart);
+            Console.WriteLine("Thread for ports RECIEIVING {0} & SENDING: {1} started", pointStart.receivingPort, pointStart.sendingPort);
             while (wireIsOn)
             {
                 try
                 {
                     TcpClient client = end.AcceptTcpClient(); //Metoda ta blokuje wykonywanie kodu dopoki cos nie przyjdzie na port;
-                    Console.WriteLine("Connection established at port: {0}", portStart);
+                    Console.WriteLine("Connection established at RECEIVING port: {0}", pointStart.receivingPort);
                     Byte[] bytes = new Byte[256];
                     String data = null;
                     Stream stream = client.GetStream();
@@ -77,12 +80,12 @@ namespace WireCloud
                     {
                         // Translate data bytes to a ASCII string.
                         data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("Received at port {0}: {1}", portStart, data);
+                        Console.WriteLine("Received at port {0}: {1}", pointStart.receivingPort, data);
                         Console.WriteLine("Data size : " + data.Length);
                         i = stream.Read(bytes, 0, bytes.Length);
                     }
                     TcpClient sendingClient = new TcpClient();
-                    sendingClient.Connect(localIP, portStop);
+                    sendingClient.Connect(localIP, pointStop.sendingPort);
                     Stream streamSend = sendingClient.GetStream();
                     byte[] sendMsg = System.Text.Encoding.ASCII.GetBytes(data);
                     streamSend.Write(sendMsg, 0, sendMsg.Length);

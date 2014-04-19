@@ -20,7 +20,7 @@ namespace WireCloud
     {
         static void Main(string[] args)
         {
-            Wire one = new Wire(1, 2);
+            Wire one = new Wire(1, 2, 3, 4);
             
             Console.ReadLine();
         }
