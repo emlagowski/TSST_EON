@@ -16,6 +16,7 @@ namespace WireCloud
         Int32 port1;
         Int32 port2;
         IPAddress localIP;
+        Boolean wireIsOn;
         /*W konstruktorze tworzymy TcpListenery i odpalamy dla nich oddzielne watki ktore nasluchuja na portach. Chcialem jeden watek dla jednego kabla
          * ale nie wiem jak bo kazdy nasluch blokuje wykonywanie kodu. Sa jakies bajery do zrobienia watkow bardziej wydajnie chyba typu ThreadPool
          * ale nie chcialomi sie wglebiac juz.
@@ -29,6 +30,7 @@ namespace WireCloud
             end2 = new TcpListener(localIP, port2);
             Thread thread1 = new Thread(new ThreadStart(threadRun1));
             Thread thread2 = new Thread(new ThreadStart(threadRun2));
+            wireIsOn = true;
             thread1.Start();
             thread2.Start();
             Console.WriteLine("Wire beetwen ports {0} and {1} connected", port1, port2);
@@ -43,69 +45,78 @@ namespace WireCloud
         {
             end1.Start();
             Console.WriteLine("Thread for port {0} started", port1);
-            TcpClient client = end1.AcceptTcpClient(); //Metoda ta blokuje wykonywanie kodu dopoki cos nie przyjdzie na port;
-            Console.WriteLine("Connection established at port: {0}", port1);
-            Byte[] bytes = new Byte[256];
-            String data = null;
-            NetworkStream stream = client.GetStream();
-
-            int i;
-
-            // Loop to receive all the data sent by the client. 
-            while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+            while (wireIsOn)
             {
-                // Translate data bytes to a ASCII string.
-                data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                Console.WriteLine("Received at port {0}: {1}", port1, data);
+                TcpClient client = end1.AcceptTcpClient(); //Metoda ta blokuje wykonywanie kodu dopoki cos nie przyjdzie na port;
+                Console.WriteLine("Connection established at port: {0}", port1);
+                Byte[] bytes = new Byte[256];
+                String data = null;
+                NetworkStream stream = client.GetStream();
 
-                // Process the data sent by the client.
-                //data = data.ToUpper();
+                int i;
 
-                //byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+                // Loop to receive all the data sent by the client. 
+                while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                {
+                    // Translate data bytes to a ASCII string.
+                    data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                    Console.WriteLine("Received at port {0}: {1}", port1, data);
 
-                // Send back a response.
-                // stream.Write(msg, 0, msg.Length);
-                //Console.WriteLine("Sent: {0}", data);
+                    // Process the data sent by the client.
+                    //data = data.ToUpper();
+
+                    //byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+
+                    // Send back a response.
+                    // stream.Write(msg, 0, msg.Length);
+                    //Console.WriteLine("Sent: {0}", data);
+                }
+                IPEndPoint localend = new IPEndPoint(localIP, port2);
+                TcpClient sendingClient = new TcpClient();
+                sendingClient.Connect(localIP, port2);
+                NetworkStream stream1 = sendingClient.GetStream();
+                stream1.Write(bytes, 0, bytes.Length);
             }
-            IPEndPoint localend = new IPEndPoint(localIP, port2);
-            TcpClient sendingClient = new TcpClient(localend);
-            NetworkStream stream1 = sendingClient.GetStream();
-            stream1.Write(bytes, 0, bytes.Length);
-
+            Console.WriteLine("Exit form 1 thread");
         }
         private void threadRun2()
         {
             end2.Start();
             Console.WriteLine("Thread for port {0} started", port2);
-            TcpClient client = end2.AcceptTcpClient();
-            Console.WriteLine("Connection established at port: {0}", port2);
-            Byte[] bytes = new Byte[256];
-            String data = null;
-            NetworkStream stream = client.GetStream();
-
-            int i;
-
-            // Loop to receive all the data sent by the client. 
-            while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+            while (wireIsOn)
             {
-                // Translate data bytes to a ASCII string.
-                data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                Console.WriteLine("Received at port {0}: {1}", port2, data);
+                TcpClient client = end2.AcceptTcpClient();
+                Console.WriteLine("Connection established at port: {0}", port2);
+                Byte[] bytes = new Byte[256];
+                String data = null;
+                NetworkStream stream = client.GetStream();
+
+                int i;
+
+                // Loop to receive all the data sent by the client. 
+                while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                {
+                    // Translate data bytes to a ASCII string.
+                    data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                    Console.WriteLine("Received at port {0}: {1}", port2, data);
 
 
-                // Process the data sent by the client.
-                //data = data.ToUpper();
+                    // Process the data sent by the client.
+                    //data = data.ToUpper();
 
-                //byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+                    //byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
 
-                // Send back a response.
-                // stream.Write(msg, 0, msg.Length);
-                //Console.WriteLine("Sent: {0}", data);
+                    // Send back a response.
+                    // stream.Write(msg, 0, msg.Length);
+                    //Console.WriteLine("Sent: {0}", data);
+                }
+                IPEndPoint localend = new IPEndPoint(localIP, port1);
+                TcpClient sendingClient = new TcpClient();
+                sendingClient.Connect(localIP, port1);
+                NetworkStream stream1 = sendingClient.GetStream();
+                stream1.Write(bytes, 0, bytes.Length);
             }
-            IPEndPoint localend = new IPEndPoint(localIP, port1);
-            TcpClient sendingClient = new TcpClient(localend);
-            NetworkStream stream1 = sendingClient.GetStream();
-            stream1.Write(bytes, 0, bytes.Length);
+            Console.WriteLine("Exit form 2 thread");
         }
         /*Nie wiem czy ta metoda jest potrzebna pewnie mozna inaczej to porobic na localhoscie
          * w kazdym razie metoda ta pobiera adres IP komputera na ktorym wszystko to dziala.

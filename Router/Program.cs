@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.IO;
+using System.Net;
 
 namespace Router
 {
@@ -14,7 +16,7 @@ namespace Router
 
 
 
-            TcpClient connection = new Router("www.google.com", 80, 5000).Connect();
+            /*TcpClient connection = new Router("www.google.com", 80, 5000).Connect();
             NetworkStream stream = connection.GetStream();
 
             // Send 10 bytes
@@ -28,7 +30,32 @@ namespace Router
 
             // Disconnect nicely
             stream.Close(); // workaround for a .net bug: http://support.microsoft.com/kb/821625
-            connection.Close();
+            connection.Close();*/
+
+            IPAddress localIP = IPAddress.Parse(Router.LocalIPAddress());
+            TcpClient client = new TcpClient();
+            Console.Write("Enter the INT port number : ");
+            int port = Convert.ToInt32(Console.ReadLine());
+            client.Connect(localIP, port);
+            Console.WriteLine("Connected");
+            Console.Write("Enter the string to be transmitted : ");
+
+            String str = Console.ReadLine();
+            Stream stm = client.GetStream();
+
+            ASCIIEncoding asen = new ASCIIEncoding();
+            byte[] ba = asen.GetBytes(str);
+            Console.WriteLine("Transmitting.....");
+
+            stm.Write(ba, 0, ba.Length);
+
+            byte[] bb = new byte[100];
+            //int k = stm.Read(bb, 0, 100);
+
+            for (int i = 0; i < 5; i++)
+                Console.Write(Convert.ToChar(bb[i]));
+
+            client.Close();
 
             Console.ReadLine();
             ///hjgfhgdfs
