@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="ClientProgram.cs" />
+    <Compile Include="EndPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

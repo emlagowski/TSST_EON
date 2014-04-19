@@ -12,7 +12,7 @@ namespace Client
 {
     class Client
     {
-        Int32 port;
+        EndPoint point;
         TcpListener listener;
         TcpClient tcpClient;
         IPAddress localIP;
@@ -30,26 +30,23 @@ namespace Client
             Console.WriteLine("Message sent: {0}", str);
 
         }
-        public void connect(Int32 port)
+        public void connect(EndPoint ports)
         {
-            this.port = port;
-            IPEndPoint localend = new IPEndPoint(localIP, port);
-           // TcpClient tcpClient = new TcpClient(localend);
-            TcpListener listener = new TcpListener(localIP, port);
-            TcpClient tcpClient = new TcpClient();
-            tcpClient.Connect(localend);
+            this.point = ports;
+            listener = new TcpListener(localIP, point.receivingPort);
+            tcpClient = new TcpClient();
+            tcpClient.Connect(localIP, point.sendingPort);
             Thread thread = new Thread(new ThreadStart(threadRun));
             thread.Start();
-            Console.WriteLine("Starting listening at port {0}", port);
-
-
+            Console.WriteLine("Starting listening at port {0}", point.receivingPort);
+            Console.WriteLine("Starting sending at port {0}", point.sendingPort);
         }
         private void threadRun()
         {
             listener.Start();
-            Console.WriteLine("Thread for port {0} started", port);
+            Console.WriteLine("Thread for port {0} started", point.receivingPort);
             TcpClient tcpClient = listener.AcceptTcpClient(); //Metoda ta blokuje wykonywanie kodu dopoki cos nie przyjdzie na port;
-            Console.WriteLine("Connection established at port: {0}", port);
+            Console.WriteLine("Connection established at port: {0}", point.receivingPort);
             Byte[] bytes = new Byte[256];
             String data = null;
             NetworkStream stream = tcpClient.GetStream();
@@ -61,16 +58,8 @@ namespace Client
             {
                 // Translate data bytes to a ASCII string.
                 data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                Console.WriteLine("Received at port {0}: {1}", port, data);
+                Console.WriteLine("Received at port {0}: {1}", point.receivingPort, data);
 
-                // Process the data sent by the client.
-                //data = data.ToUpper();
-
-                //byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
-
-                // Send back a response.
-                // stream.Write(msg, 0, msg.Length);
-                //Console.WriteLine("Sent: {0}", data);
             }
 
         }
