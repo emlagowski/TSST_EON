@@ -16,10 +16,12 @@ namespace Client
         TcpListener listener;
         TcpClient tcpClient;
         IPAddress localIP;
+        Boolean clientIsOn;
 
         public Client()
         {
             localIP = IPAddress.Parse(LocalIPAddress());
+            clientIsOn = true;
         }
         public void send(string str)
         {
@@ -45,21 +47,24 @@ namespace Client
         {
             listener.Start();
             Console.WriteLine("Thread for port {0} started", point.receivingPort);
-            TcpClient tcpClient = listener.AcceptTcpClient(); //Metoda ta blokuje wykonywanie kodu dopoki cos nie przyjdzie na port;
-            Console.WriteLine("Connection established at port: {0}", point.receivingPort);
-            Byte[] bytes = new Byte[256];
-            String data = null;
-            NetworkStream stream = tcpClient.GetStream();
-
-            int i;
-
-            // Loop to receive all the data sent by the client. 
-            while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+            while (clientIsOn)
             {
-                // Translate data bytes to a ASCII string.
-                data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                Console.WriteLine("Received at port {0}: {1}", point.receivingPort, data);
+                TcpClient tcpClient = listener.AcceptTcpClient(); //Metoda ta blokuje wykonywanie kodu dopoki cos nie przyjdzie na port;
+                Console.WriteLine("Connection established at port: {0}", point.receivingPort);
+                Byte[] bytes = new Byte[256];
+                String data = null;
+                NetworkStream stream = tcpClient.GetStream();
 
+                int i;
+
+                // Loop to receive all the data sent by the client. 
+                while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                {
+                    // Translate data bytes to a ASCII string.
+                    data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                    Console.WriteLine("Received at port {0}: {1}", point.receivingPort, data);
+
+                }
             }
 
         }

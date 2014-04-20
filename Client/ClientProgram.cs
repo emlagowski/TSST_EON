@@ -24,6 +24,8 @@ namespace Client
             cl1.connect(new EndPoint(2,1));
             cl2.connect(new EndPoint(4,3));
             cl1.send("Pierwszy do drugiego");
+            cl2.send("Drugi do pierwszego");
+            cl1.send("Znow pierwszy do drugiego");
             Console.ReadLine();
 
             //bbb
