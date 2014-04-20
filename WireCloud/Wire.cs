@@ -84,10 +84,9 @@ namespace WireCloud
                         Console.WriteLine("Data size : " + data.Length);
                         i = stream.Read(bytes, 0, bytes.Length);
 
-                        //x
                     }
                     TcpClient sendingClient = new TcpClient();
-                    sendingClient.Connect(localIP, pointStop.sendingPort);
+                    sendingClient.Connect(localIP, pointStop.receivingPort);
                     Stream streamSend = sendingClient.GetStream();
                     byte[] sendMsg = System.Text.Encoding.ASCII.GetBytes(data);
                     streamSend.Write(sendMsg, 0, sendMsg.Length);
