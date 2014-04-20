@@ -76,7 +76,7 @@ namespace WireCloud
                     int i;
                     i = stream.Read(bytes, 0, bytes.Length);
                     // Loop to receive all the data sent by the client. 
-                   // while (i != 0)
+                  // while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                     //{
                         // Translate data bytes to a ASCII string.
                         data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
@@ -86,14 +86,14 @@ namespace WireCloud
 
                       //  i = stream.Read(bytes, 0, bytes.Length);
 
-                  //  }
-                    TcpClient sendingClient = new TcpClient();
-                    sendingClient.Connect(localIP, pointStop.sendingPort);
-                    Stream streamSend = sendingClient.GetStream();
-                    byte[] sendMsg = System.Text.Encoding.ASCII.GetBytes(data);
-                    streamSend.Write(sendMsg, 0, sendMsg.Length);
-                    Console.WriteLine("Data retransmitted from port {0}", pointStop.sendingPort);
-                    client.Close();
+                    //}
+                      TcpClient sendingClient = new TcpClient();
+                      sendingClient.Connect(localIP, pointStop.sendingPort);
+                      Stream streamSend = sendingClient.GetStream();
+                      byte[] sendMsg = System.Text.Encoding.ASCII.GetBytes(data);
+                      streamSend.Write(sendMsg, 0, sendMsg.Length);
+                      Console.WriteLine("Data retransmitted from port {0}", pointStop.sendingPort);
+                     client.Close();
                     sendingClient.Close();
                 }
                 catch (Exception e)
