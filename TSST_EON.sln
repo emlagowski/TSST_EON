@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WireCloud", "WireCloud\WireCloud.csproj", "{1313CA9F-77C2-4B6B-801B-E74D98386531}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudNewKURWA", "CloudNewKURWA\CloudNewKURWA.csproj", "{BA117C22-8AE2-4ACE-B590-6D9B5FA9CC09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{9F8B1F20-9574-4A3A-B49A-7691B49A7DC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{1313CA9F-77C2-4B6B-801B-E74D98386531}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1313CA9F-77C2-4B6B-801B-E74D98386531}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1313CA9F-77C2-4B6B-801B-E74D98386531}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA117C22-8AE2-4ACE-B590-6D9B5FA9CC09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA117C22-8AE2-4ACE-B590-6D9B5FA9CC09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA117C22-8AE2-4ACE-B590-6D9B5FA9CC09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA117C22-8AE2-4ACE-B590-6D9B5FA9CC09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F8B1F20-9574-4A3A-B49A-7691B49A7DC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F8B1F20-9574-4A3A-B49A-7691B49A7DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F8B1F20-9574-4A3A-B49A-7691B49A7DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F8B1F20-9574-4A3A-B49A-7691B49A7DC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
