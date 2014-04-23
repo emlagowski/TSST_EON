@@ -5,17 +5,17 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSST_EON", "TSST_EON\TSST_EON.csproj", "{F1A5EC56-C3AE-483E-AC30-E306354F53C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud", "Cloud\Cloud.csproj", "{34158474-29C7-4609-9326-CE835A1D7763}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oldCloud", "Cloud\oldCloud.csproj", "{34158474-29C7-4609-9326-CE835A1D7763}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Router", "Router\Router.csproj", "{35230114-73B9-4DAA-9E53-4E82EFCB2AAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oldRouter", "Router\oldRouter.csproj", "{35230114-73B9-4DAA-9E53-4E82EFCB2AAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{77F23948-BB13-4CF5-9D99-D8867C8F3BAA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oldClient", "Client\oldClient.csproj", "{77F23948-BB13-4CF5-9D99-D8867C8F3BAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WireCloud", "WireCloud\WireCloud.csproj", "{1313CA9F-77C2-4B6B-801B-E74D98386531}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oldWireCloud", "WireCloud\oldWireCloud.csproj", "{1313CA9F-77C2-4B6B-801B-E74D98386531}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudNewKURWA", "CloudNewKURWA\CloudNewKURWA.csproj", "{BA117C22-8AE2-4ACE-B590-6D9B5FA9CC09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{9F8B1F20-9574-4A3A-B49A-7691B49A7DC0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oldConsoleApplication1", "ConsoleApplication1\oldConsoleApplication1.csproj", "{9F8B1F20-9574-4A3A-B49A-7691B49A7DC0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientNew", "ClientNew\ClientNew.csproj", "{E41C83C7-61F9-4D6E-800D-162A2537338E}"
 EndProject
