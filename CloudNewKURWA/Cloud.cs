@@ -9,6 +9,6 @@ namespace CloudNewKURWA
     class Cloud
     {
 
-
+        //ggg
     }
 }
