@@ -32,6 +32,7 @@ namespace ClientNew
             t6.Start();
 
             c1.SendData("test");
+            c1.SendData("test");
             Console.ReadLine();
         }
     }

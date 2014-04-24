@@ -10,15 +10,17 @@ namespace CloudNew
 {
     public class HandleClientRequest
     {
-        TcpClient _clientSocket;
-        NetworkStream _networkStream = null;
-        public HandleClientRequest(TcpClient clientConnected)
+        TcpClient _clientSocket, _clientToSend;
+        NetworkStream _networkStream = null, _targetStream = null;
+        public HandleClientRequest(TcpClient clientConnected, TcpClient clientToSend)
         {
             this._clientSocket = clientConnected;
+            this._clientToSend = clientToSend;
         }
         public void StartClient()
         {
             _networkStream = _clientSocket.GetStream();
+            _targetStream = _clientToSend.GetStream();
             WaitForRequest();
         }
 
@@ -32,6 +34,7 @@ namespace CloudNew
         private void ReadCallback(IAsyncResult result)
         {
             NetworkStream networkStream = _clientSocket.GetStream();
+            NetworkStream targetStream = _clientToSend.GetStream();
             try
             {
                 int read = networkStream.EndRead(result);
@@ -44,12 +47,14 @@ namespace CloudNew
 
                 byte[] buffer = result.AsyncState as byte[];
                 string data = Encoding.Default.GetString(buffer, 0, read);
-                Console.WriteLine("Received {0}",data);
                 //do the job with the data here
                 //send the data back to client.
                 Byte[] sendBytes = Encoding.ASCII.GetBytes("Processed " + data);
-                networkStream.Write(sendBytes, 0, sendBytes.Length);
-                networkStream.Flush();
+                //networkStream.Write(sendBytes, 0, sendBytes.Length);
+                //networkStream.Flush();
+                targetStream.Write(sendBytes, 0, sendBytes.Length);
+                targetStream.Flush();
+                Console.WriteLine("Transferring '{0}' successful." , data);
             }
             catch (Exception ex)
             {

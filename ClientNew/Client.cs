@@ -48,27 +48,30 @@ namespace ClientNew
 
         public void ReceiveData()
         {
-            while (_client == null) Thread.Sleep(1000);
-            StringBuilder message = new StringBuilder();
-            NetworkStream serverStream = _client.GetStream();
-            serverStream.ReadTimeout = 100;
-            //the loop should continue until no dataavailable to read and message string is filled.
-            //if data is not available and message is empty then the loop should continue, until
-            //data is available and message is filled.
             while (true)
             {
-                if (serverStream.DataAvailable)
+                while (_client == null) Thread.Sleep(1000);
+                StringBuilder message = new StringBuilder();
+                NetworkStream serverStream = _client.GetStream();
+                serverStream.ReadTimeout = 100;
+                //the loop should continue until no dataavailable to read and message string is filled.
+                //if data is not available and message is empty then the loop should continue, until
+                //data is available and message is filled.
+                while (true)
                 {
-                    int read = serverStream.ReadByte();
-                    if (read > 0)
-                        message.Append((char)read);
-                    else
+                    if (serverStream.DataAvailable)
+                    {
+                        int read = serverStream.ReadByte();
+                        if (read > 0)
+                            message.Append((char)read);
+                        else
+                            break;
+                    }
+                    else if (message.ToString().Length > 0)
                         break;
                 }
-                else if (message.ToString().Length > 0)
-                    break;
+                Console.WriteLine("{0}:{1} - Received Data - {2}", _address, _port, message.ToString());
             }
-            Console.WriteLine("{0}:{1} - Received Data - {2}", _address, _port, message.ToString());
             //return message.ToString();
         }
 
