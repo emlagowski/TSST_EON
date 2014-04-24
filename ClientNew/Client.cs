@@ -76,7 +76,12 @@ namespace ClientNew
           //  TcpClient tmp = new TcpClient(address, port); // tu chyba trzeba dawac namiary na chmure, a nie na cel.
            // NetworkStream ns = tmp.GetStream();
             byte[] buffor = System.Text.Encoding.ASCII.GetBytes(msg);
-            Stream.Write(buffor, 0, buffor.Length);
+            try
+            {
+                Stream.Write(buffor, 0, buffor.Length);
+
+            }
+            catch (Exception e) { Console.WriteLine("Send method error: {0}", e.Message); }
             //ns.Close();
             //tmp.Close();
             Console.WriteLine("Sent!");
