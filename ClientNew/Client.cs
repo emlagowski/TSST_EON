@@ -43,6 +43,10 @@ namespace ClientNew
             ns.Write(sendMsg, 0, sendMsg.Length);
             Console.WriteLine("{0}:{1} - Init sent to cloud.", _address, _port);
             //
+            Byte[] ok = new Byte[3];
+            Byte[] okTest = {1,0,1};
+            ns.Read(ok, 0, ok.Length);
+            if (ok != okTest) return;
             TcpClient Clnt = new TcpClient(_address, _port);
             Stream = Clnt.GetStream();
             byte[] sendMsg1= System.Text.Encoding.ASCII.GetBytes("hello");
