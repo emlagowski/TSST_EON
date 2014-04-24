@@ -40,12 +40,12 @@ namespace ClientNew
             NetworkStream ns = tmp.GetStream();
             byte[] sendMsg = System.Text.Encoding.ASCII.GetBytes(getAddress());
             ns.Write(sendMsg, 0, sendMsg.Length);
-            Console.WriteLine("Init sent to cloud.");
+            Console.WriteLine("{0}:{1} - Init sent to cloud.", _address, _port);
             while (true)
             {
-                Console.WriteLine("Waiting ...");
+                //Console.WriteLine("{0}:{1} - Waiting ...", _address, _port);
                 _client = _listener.AcceptTcpClient();
-                Console.WriteLine("got something");
+                Console.WriteLine("{0}:{1} - got something", _address, _port);
             }
         }
 

@@ -17,8 +17,6 @@ namespace ClientNew
             Client c5 = new Client("127.0.0.5", 5);
             Client c6 = new Client("127.0.0.6", 6);
 
-
-
             Console.ReadLine();
         }
     }
