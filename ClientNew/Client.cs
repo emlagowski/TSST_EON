@@ -73,12 +73,17 @@ namespace ClientNew
 
         public void send(String address, Int32 port, String msg)
         {
-            TcpClient tmp = new TcpClient(address, port); // tu chyba trzeba dawac namiary na chmure, a nie na cel.
-            NetworkStream ns = tmp.GetStream();
+          //  TcpClient tmp = new TcpClient(address, port); // tu chyba trzeba dawac namiary na chmure, a nie na cel.
+           // NetworkStream ns = tmp.GetStream();
             byte[] buffor = System.Text.Encoding.ASCII.GetBytes(msg);
-            ns.Write(buffor, 0, buffor.Length);
-            ns.Close();
-            tmp.Close();
+            try
+            {
+                Stream.Write(buffor, 0, buffor.Length);
+
+            }
+            catch (Exception e) { Console.WriteLine("Send method error: {0}", e.Message); }
+            //ns.Close();
+            //tmp.Close();
             Console.WriteLine("Sent!");
         }
     }
