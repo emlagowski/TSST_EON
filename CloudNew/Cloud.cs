@@ -54,7 +54,7 @@ namespace CloudNew
             }
         }
 
-        public void update(String address, Int32 port)
+        public void update(String address, Int32 port, NetworkStream stream)
         {
             for (int i = 0; i < wires.Count; i++)
             {
@@ -64,10 +64,13 @@ namespace CloudNew
 
                 if ((addresses[0].Equals(address)) && (ports[0] == port))
                 {
-                    w._isOnOne = true;    
+                    w._isOnOne = true;
+                    w.First = stream; 
+   
                 } else if ((addresses[1].Equals(address)) && (ports[1] == port))
                 {
                     w._isOnTwo = true;
+                    w.Second = stream;
                 }
 
                 if (w._isOnOne && w._isOnTwo && !w._isOn) w.start();
@@ -89,11 +92,22 @@ namespace CloudNew
                 Console.WriteLine("Now we are splitting");
                 String[] tmp = data.Split('\0');
                 String[] address = tmp[0].Split(':');
-                update(address[0], Convert.ToInt32(address[1]));
+                //
+                TcpListener listenerTemp = new TcpListener(IPAddress.Parse(address[0]), Convert.ToInt32(address[1]));
+                listenerTemp.Start();
+                TcpClient clientTemp = listenerTemp.AcceptTcpClient();
+                NetworkStream streamTemp = clientTemp.GetStream();
+
+                //
+                update(address[0], Convert.ToInt32(address[1]), streamTemp);
                 Console.WriteLine("Router is online: {0}:{1} ", address[0], address[1]);
                 stream.Close();
                 client.Close();
             }
+        }
+        public void Run2
+        {
+
         }
 
         class Wire
@@ -102,6 +116,11 @@ namespace CloudNew
             public Boolean _isOnOne, _isOnTwo, _isOn;
             Int32 _portOne, _portTwo;
             TcpClient _first, _second;
+            //
+            
+            public NetworkStream First { get; set; }
+            public NetworkStream Second { get; set; }
+            //
 
             public String[] Addresses
             {
@@ -131,37 +150,37 @@ namespace CloudNew
                 _isOnTwo = false;
             }
 
-            public Thread StartTheThread(TcpClient start, TcpClient stop)
+            public Thread StartTheThread(NetworkStream start, NetworkStream stop)
             {
                 var t = new Thread(() => Run(start, stop));
                 t.Start();
                 return t;
             }
 
-            public void Run(TcpClient start, TcpClient stop)
+            public void Run(NetworkStream start, NetworkStream stop)
             {
-                NetworkStream nsStart = start.GetStream();
-                NetworkStream nsStop = start.GetStream();
+                //NetworkStream nsStart = start.GetStream();
+                //NetworkStream nsStop = start.GetStream();
                 Byte[] bytes = new Byte[256];
                 String data = null;
                 int i;
-                while ((i = nsStart.Read(bytes, 0, bytes.Length)) != 0)
+                while ((i = start.Read(bytes, 0, bytes.Length)) != 0)
                 {
                     Console.WriteLine("idzie idzie"); // no wlasnie nie idzie 
                     data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
                     byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
-                    nsStop.Write(msg, 0, msg.Length);
+                    stop.Write(msg, 0, msg.Length);
                 }                
             }
 
             internal void start()
             {
-                _first = new TcpClient();
-                _first.Connect(_addressOne, _portOne);
-                _second = new TcpClient();
-                _second.Connect(_addressTwo, _portTwo);
-                StartTheThread(_first, _second);
-                StartTheThread(_second, _first);
+                //_first = new TcpClient();
+                //_first.Connect(_addressOne, _portOne);
+                //_second = new TcpClient();
+                //_second.Connect(_addressTwo, _portTwo);
+                StartTheThread(First, Second);
+                StartTheThread(Second, First);
                 _isOn = true;
             }
         }
