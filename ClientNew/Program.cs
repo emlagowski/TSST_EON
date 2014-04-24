@@ -10,12 +10,14 @@ namespace ClientNew
     {
         static void Main(string[] args)
         {
-            Client c1 = new Client("127.0.0.1", 3);
-            Client c2 = new Client("127.0.0.2", 5);
-            Client c3 = new Client("127.0.0.3", 7);
-            Client c4 = new Client("127.0.0.4", 9);
-            Client c5 = new Client("127.0.0.5", 15);
-            Client c6 = new Client("127.0.0.6", 20);
+            Client c1 = new Client("127.0.0.1", 1);
+            Client c2 = new Client("127.0.0.2", 2);
+            Client c3 = new Client("127.0.0.3", 3);
+            Client c4 = new Client("127.0.0.4", 4);
+            Client c5 = new Client("127.0.0.5", 5);
+            Client c6 = new Client("127.0.0.6", 6);
+
+
 
             Console.ReadLine();
         }

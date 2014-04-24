@@ -28,11 +28,22 @@ namespace ClientNew
             t.Start();
         }
 
+        public String getAddress()
+        {
+            String s = String.Format(_address + ":" + _port); 
+            return s;
+        }
+
         public void Run()
         {
+            TcpClient tmp = new TcpClient("127.0.0.1", 2222);
+            NetworkStream ns = tmp.GetStream();
+            byte[] sendMsg = System.Text.Encoding.ASCII.GetBytes(getAddress());
+            ns.Write(sendMsg, 0, sendMsg.Length);
+            Console.WriteLine("Init sent to cloud.");
             while (true)
             {
-                Console.WriteLine("waiting ...");
+                Console.WriteLine("Waiting ...");
                 _client = _listener.AcceptTcpClient();
                 Console.WriteLine("got something");
             }
