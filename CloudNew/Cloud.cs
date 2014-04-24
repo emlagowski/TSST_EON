@@ -115,10 +115,7 @@ namespace CloudNew
                 client.Close();
             }
         }
-        public void Run2
-        {
-
-        }
+       
 
         class Wire
         {
