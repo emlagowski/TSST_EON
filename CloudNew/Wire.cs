@@ -11,8 +11,8 @@ namespace CloudNew
     {
         String _addressOne, _addressTwo;
         public Boolean _isOnOne, _isOnTwo, _isOn;
-        Int32 _portOne, _portTwo;
-        TcpClient _first, _second;
+        Int32 _portInA, _portInB, _portOutA, _portOutB;
+        TcpClient _inA, _inB, _outA, _outB;
 
         public String[] Addresses
         {
@@ -27,44 +27,37 @@ namespace CloudNew
         {
             get
             {
-                Int32[] i = { _portOne, _portTwo };
+                Int32[] i = { _portInA, _portOutA, _portInB, _portOutB };
                 return i;
             }
         }
 
-        public Boolean[] isOn
-        {
-            get
-            {
-                Boolean[] b = { _isOnOne, _isOnTwo };
-                return b;
-            }
-        }
-
-        public Wire(String addressOne, Int32 portOne, String addressTwo, Int32 portTwo)
+        public Wire(String addressOne, Int32 portInA, Int32 portOutA, String addressTwo, Int32 portInB, Int32 portOutB)
         {
             _addressOne = addressOne;
             _addressTwo = addressTwo;
-            _portOne = portOne;
-            _portTwo = portTwo;
+            _portInA = portInA;
+            _portOutA = portOutA;
+            _portInB = portInB;
+            _portOutB = portOutB;
             _isOnOne = false;
             _isOnTwo = false;
         }
 
         public void Run()
         {
-            HandleClientRequest Req = new HandleClientRequest(_first, _second);
-            Req.StartClient();
+            HandleClientRequest ReqA = new HandleClientRequest(_inA, _outB);
+            ReqA.StartClient();
+            HandleClientRequest ReqB = new HandleClientRequest(_inB, _outA);
+            ReqB.StartClient();
         }
 
         internal void start()
         {
-            _first = new TcpClient();
-            _first.Connect(_addressOne, _portOne);
-            _second = new TcpClient();
-            _second.Connect(_addressTwo, _portTwo);
-            //Thread thread = new Thread(Run);
-            //thread.Start();
+            _inA = new TcpClient(_addressOne, _portInA);
+            _inB = new TcpClient(_addressTwo, _portInB);
+            _outA = new TcpClient(_addressOne, _portOutA);
+            _outB = new TcpClient(_addressTwo, _portOutB);
             Run();
             _isOn = true;
         }
