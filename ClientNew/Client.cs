@@ -15,8 +15,11 @@ namespace ClientNew
         string _address;
         TcpListener _listener;
         TcpClient _client;
-        Boolean _isOn;
+        Boolean _isOn, StreamInitialized;
         NetworkStream Stream;
+        
+        static readonly object _locker = new object();
+        
 
         public Client(String address, int port)
         {
@@ -25,6 +28,7 @@ namespace ClientNew
            // _listener = new TcpListener(IPAddress.Parse(_address), _port);
            // _listener.Start();
             _isOn = false;
+            StreamInitialized = false;
             Thread t = new Thread(Run);
             t.Start();
         }
@@ -51,6 +55,12 @@ namespace ClientNew
             Stream = Clnt.GetStream();
             byte[] sendMsg1= System.Text.Encoding.ASCII.GetBytes("hello");
             Stream.Write(sendMsg1, 0, sendMsg1.Length);
+            
+            lock (_locker)                 // Let's now wake up the thread by
+            {                              // setting _go=true and pulsing.
+                StreamInitialized = true;
+                Monitor.Pulse(_locker);
+            }
 
             //
             while (true)
@@ -71,10 +81,21 @@ namespace ClientNew
             }
         }
 
-        public void send(String address, Int32 port, String msg)
+        
+        public Thread send(String address, Int32 port, String msg)
         {
-          //  TcpClient tmp = new TcpClient(address, port); // tu chyba trzeba dawac namiary na chmure, a nie na cel.
-           // NetworkStream ns = tmp.GetStream();
+            var t = new Thread(() => SendThread(address, port, msg));
+            t.Start();
+            return t;
+        }
+        public void SendThread(String address, Int32 port, String msg)
+        {
+             
+             lock (_locker)
+                 while (!StreamInitialized)
+                     Monitor.Wait(_locker);
+            //  TcpClient tmp = new TcpClient(address, port); // tu chyba trzeba dawac namiary na chmure, a nie na cel.
+            // NetworkStream ns = tmp.GetStream();
             byte[] buffor = System.Text.Encoding.ASCII.GetBytes(msg);
             try
             {
