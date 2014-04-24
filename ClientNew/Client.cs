@@ -50,17 +50,14 @@ namespace ClientNew
             Byte[] ok = new Byte[3];
             Byte[] okTest = {1,0,1};
             ns.Read(ok, 0, ok.Length);
-            if (ok != okTest) return;
+            if (!ok.SequenceEqual(okTest)) return;
             TcpClient Clnt = new TcpClient(_address, _port);
             Stream = Clnt.GetStream();
             byte[] sendMsg1= System.Text.Encoding.ASCII.GetBytes("hello");
             Stream.Write(sendMsg1, 0, sendMsg1.Length);
-            
-            lock (_locker)                 // Let's now wake up the thread by
-            {                              // setting _go=true and pulsing.
-                StreamInitialized = true;
-                Monitor.Pulse(_locker);
-            }
+            StreamInitialized = true;
+            Console.WriteLine("stream initialized");
+
 
             //
             while (true)
@@ -91,21 +88,22 @@ namespace ClientNew
         public void SendThread(String address, Int32 port, String msg)
         {
              
-             lock (_locker)
-                 while (!StreamInitialized)
-                     Monitor.Wait(_locker);
+            while (!StreamInitialized)
+                {
+                    Console.WriteLine("{0}:{1} is waiting for init stream", _address, _port);
+                }
+
             //  TcpClient tmp = new TcpClient(address, port); // tu chyba trzeba dawac namiary na chmure, a nie na cel.
             // NetworkStream ns = tmp.GetStream();
             byte[] buffor = System.Text.Encoding.ASCII.GetBytes(msg);
             try
             {
                 Stream.Write(buffor, 0, buffor.Length);
-
             }
             catch (Exception e) { Console.WriteLine("Send method error: {0}", e.Message); }
             //ns.Close();
             //tmp.Close();
-            Console.WriteLine("Sent!");
+            Console.WriteLine("Sent! {0}", msg);
         }
     }
 }

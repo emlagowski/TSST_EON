@@ -102,7 +102,7 @@ namespace CloudNew
                 NetworkStream streamTemp = clientTemp.GetStream();
                 Byte[] bytes1 = new Byte[256];
                 String data1 = null;
-                int j = stream.Read(bytes, 0, bytes.Length);
+                int j = stream.Read(bytes1, 0, bytes1.Length);
                 data1 = System.Text.Encoding.ASCII.GetString(bytes1, 0, bytes1.Length);
                 if(data1.Equals("hello"))
                     Console.WriteLine("Zainicjowano stream pomyslnie");

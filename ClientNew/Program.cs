@@ -16,6 +16,7 @@ namespace ClientNew
             Client c4 = new Client("127.0.0.4", 4);
             Client c5 = new Client("127.0.0.5", 5);
             Client c6 = new Client("127.0.0.6", 6);
+            System.Threading.Thread.Sleep(5000);
             c1.send("127.0.0.2", 2, "pierwsza");
             c1.send("127.0.0.4", 4, "druga");
             c1.send("127.0.0.2", 2, "trzecia");
