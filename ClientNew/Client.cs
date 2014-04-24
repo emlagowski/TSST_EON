@@ -34,6 +34,44 @@ namespace ClientNew
             return s;
         }
 
+        public void SendData(string dataTosend)
+        {
+            while (_client == null) Thread.Sleep(1000);
+            Console.WriteLine("{0}:{1} - Send Data - {2}", _address, _port, dataTosend);
+            if (string.IsNullOrEmpty(dataTosend))
+                return;
+            NetworkStream serverStream = _client.GetStream();
+            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(dataTosend);
+            serverStream.Write(outStream, 0, outStream.Length);
+            serverStream.Flush();
+        }
+
+        public void ReceiveData()
+        {
+            while (_client == null) Thread.Sleep(1000);
+            StringBuilder message = new StringBuilder();
+            NetworkStream serverStream = _client.GetStream();
+            serverStream.ReadTimeout = 100;
+            //the loop should continue until no dataavailable to read and message string is filled.
+            //if data is not available and message is empty then the loop should continue, until
+            //data is available and message is filled.
+            while (true)
+            {
+                if (serverStream.DataAvailable)
+                {
+                    int read = serverStream.ReadByte();
+                    if (read > 0)
+                        message.Append((char)read);
+                    else
+                        break;
+                }
+                else if (message.ToString().Length > 0)
+                    break;
+            }
+            Console.WriteLine("{0}:{1} - Received Data - {2}", _address, _port, message.ToString());
+            //return message.ToString();
+        }
+
         public void Run()
         {
             TcpClient tmp = new TcpClient("127.0.0.1", 2222);
@@ -46,19 +84,6 @@ namespace ClientNew
                 //Console.WriteLine("{0}:{1} - Waiting ...", _address, _port);
                 _client = _listener.AcceptTcpClient();
                 Console.WriteLine("{0}:{1} - got something", _address, _port);
-            }
-        }
-
-        public void connect()
-        {
-            try
-            {
-                _client.Connect(_address, _port);
-                _isOn = true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
             }
         }
     }

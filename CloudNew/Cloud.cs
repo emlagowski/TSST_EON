@@ -144,7 +144,10 @@ namespace CloudNew
             }
 
             public void Run(){
-
+                HandleClientRequest firstReq = new HandleClientRequest(_first);
+                firstReq.StartClient();
+                HandleClientRequest secondReq = new HandleClientRequest(_second);
+                secondReq.StartClient();
             }
 
             internal void start()
@@ -153,8 +156,9 @@ namespace CloudNew
                 _first.Connect(_addressOne, _portOne);
                 _second = new TcpClient();
                 _second.Connect(_addressTwo, _portTwo);
-                Thread thread = new Thread(Run);
-                thread.Start(); // ?
+                //Thread thread = new Thread(Run);
+                //thread.Start();
+                Run();
                 _isOn = true;
             }
         }
