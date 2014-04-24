@@ -17,6 +17,8 @@ namespace ClientNew
         TcpClient _client;
         Boolean _isOn, StreamInitialized;
         NetworkStream Stream;
+        private static AutoResetEvent event_1 = new AutoResetEvent(true);
+
         
         static readonly object _locker = new object();
         
@@ -56,6 +58,7 @@ namespace ClientNew
             byte[] sendMsg1= System.Text.Encoding.ASCII.GetBytes("hello");
             Stream.Write(sendMsg1, 0, sendMsg1.Length);
             StreamInitialized = true;
+            event_1.Set();
             Console.WriteLine("stream initialized");
 
 
@@ -88,14 +91,15 @@ namespace ClientNew
         public void SendThread(String address, Int32 port, String msg)
         {
              
-            while (!StreamInitialized)
+           /* while (!StreamInitialized)
                 {
                     Console.WriteLine("{0}:{1} is waiting for init stream", _address, _port);
-                }
+                }*/
 
             //  TcpClient tmp = new TcpClient(address, port); // tu chyba trzeba dawac namiary na chmure, a nie na cel.
             // NetworkStream ns = tmp.GetStream();
             byte[] buffor = System.Text.Encoding.ASCII.GetBytes(msg);
+            event_1.WaitOne();
             try
             {
                 Stream.Write(buffor, 0, buffor.Length);
