@@ -154,7 +154,7 @@ namespace CloudNew
                 _second = new TcpClient();
                 _second.Connect(_addressTwo, _portTwo);
                 Thread thread = new Thread(Run);
-                thread.Start();
+                thread.Start(); // ?
             }
         }
 
