@@ -71,10 +71,7 @@ namespace CloudNew
                 }
 
                 if (w._isOnOne && w._isOnTwo && !w._isOn) w.start();
-
             }
-
-
         }
 
         public void Run(){
@@ -134,8 +131,27 @@ namespace CloudNew
                 _isOnTwo = false;
             }
 
-            public void Run(){
+            public Thread StartTheThread(TcpClient start, TcpClient stop)
+            {
+                var t = new Thread(() => Run(start, stop));
+                t.Start();
+                return t;
+            }
 
+            public void Run(TcpClient start, TcpClient stop)
+            {
+                NetworkStream nsStart = start.GetStream();
+                NetworkStream nsStop = start.GetStream();
+                Byte[] bytes = new Byte[256];
+                String data = null;
+                int i;
+                while ((i = nsStart.Read(bytes, 0, bytes.Length)) != 0)
+                {
+                    Console.WriteLine("idzie idzie"); // no wlasnie nie idzie 
+                    data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+                    nsStop.Write(msg, 0, msg.Length);
+                }                
             }
 
             internal void start()
@@ -144,8 +160,8 @@ namespace CloudNew
                 _first.Connect(_addressOne, _portOne);
                 _second = new TcpClient();
                 _second.Connect(_addressTwo, _portTwo);
-                Thread thread = new Thread(Run);
-                thread.Start();
+                StartTheThread(_first, _second);
+                StartTheThread(_second, _first);
                 _isOn = true;
             }
         }

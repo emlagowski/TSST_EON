@@ -45,21 +45,29 @@ namespace ClientNew
             {
                 //Console.WriteLine("{0}:{1} - Waiting ...", _address, _port);
                 _client = _listener.AcceptTcpClient();
-                Console.WriteLine("{0}:{1} - got something", _address, _port);
+                NetworkStream stream = _client.GetStream();
+                Byte[] bytes = new Byte[256];
+                String data = null;
+                int i;
+                while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                {
+                    data = System.Text.Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+                    String[] d = data.Split('\0');
+                    Console.WriteLine("{0}:{1} - Received - {2}", _address, _port, d[0]);
+                }
+                stream.Close();
             }
         }
 
-        public void connect()
+        public void send(String address, Int32 port, String msg)
         {
-            try
-            {
-                _client.Connect(_address, _port);
-                _isOn = true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            TcpClient tmp = new TcpClient(address, port); // tu chyba trzeba dawac namiary na chmure, a nie na cel.
+            NetworkStream ns = tmp.GetStream();
+            byte[] buffor = System.Text.Encoding.ASCII.GetBytes(msg);
+            ns.Write(buffor, 0, buffor.Length);
+            ns.Close();
+            tmp.Close();
+            Console.WriteLine("Sent!");
         }
     }
 }
