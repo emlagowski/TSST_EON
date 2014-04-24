@@ -53,10 +53,8 @@ namespace CloudNew
 
         public void Run()
         {
-            HandleClientRequest firstReq = new HandleClientRequest(_first, _second);
-            firstReq.StartClient();
-            HandleClientRequest secondReq = new HandleClientRequest(_second, _first);
-            secondReq.StartClient();
+            HandleClientRequest Req = new HandleClientRequest(_first, _second);
+            Req.StartClient();
         }
 
         internal void start()
