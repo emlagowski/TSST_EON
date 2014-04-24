@@ -95,9 +95,12 @@ namespace CloudNew
                 //
                 TcpListener listenerTemp = new TcpListener(IPAddress.Parse(address[0]), Convert.ToInt32(address[1]));
                 listenerTemp.Start();
+                Byte[] ok = { 1, 0, 1 };
+                Console.WriteLine(System.Text.Encoding.ASCII.GetString(ok, 0, ok.Length));
+                stream.Write(ok, 0, ok.Length);
                 TcpClient clientTemp = listenerTemp.AcceptTcpClient();
                 NetworkStream streamTemp = clientTemp.GetStream();
-                 Byte[] bytes1 = new Byte[256];
+                Byte[] bytes1 = new Byte[256];
                 String data1 = null;
                 int j = stream.Read(bytes, 0, bytes.Length);
                 data1 = System.Text.Encoding.ASCII.GetString(bytes1, 0, bytes1.Length);
