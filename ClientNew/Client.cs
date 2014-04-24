@@ -16,13 +16,14 @@ namespace ClientNew
         TcpListener _listener;
         TcpClient _client;
         Boolean _isOn;
+        NetworkStream Stream;
 
         public Client(String address, int port)
         {
             _port = port;
             _address = address;
-            _listener = new TcpListener(IPAddress.Parse(_address), _port);
-            _listener.Start();
+           // _listener = new TcpListener(IPAddress.Parse(_address), _port);
+           // _listener.Start();
             _isOn = false;
             Thread t = new Thread(Run);
             t.Start();
@@ -41,21 +42,28 @@ namespace ClientNew
             byte[] sendMsg = System.Text.Encoding.ASCII.GetBytes(getAddress());
             ns.Write(sendMsg, 0, sendMsg.Length);
             Console.WriteLine("{0}:{1} - Init sent to cloud.", _address, _port);
+            //
+            TcpClient Clnt = new TcpClient(_address, _port);
+            Stream = Clnt.GetStream();
+            byte[] sendMsg1= System.Text.Encoding.ASCII.GetBytes("hello");
+            Stream.Write(sendMsg1, 0, sendMsg1.Length);
+
+            //
             while (true)
             {
                 //Console.WriteLine("{0}:{1} - Waiting ...", _address, _port);
-                _client = _listener.AcceptTcpClient();
-                NetworkStream stream = _client.GetStream();
+               // _client = _listener.AcceptTcpClient();
+               // NetworkStream stream = _client.GetStream();
                 Byte[] bytes = new Byte[256];
                 String data = null;
                 int i;
-                while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                while ((i = Stream.Read(bytes, 0, bytes.Length)) != 0)
                 {
                     data = System.Text.Encoding.ASCII.GetString(bytes, 0, bytes.Length);
                     String[] d = data.Split('\0');
                     Console.WriteLine("{0}:{1} - Received - {2}", _address, _port, d[0]);
                 }
-                stream.Close();
+                //stream.Close();
             }
         }
 
