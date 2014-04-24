@@ -70,7 +70,7 @@ namespace CloudNew
                     w._isOnTwo = true;
                 }
 
-                if (w._isOnOne && w._isOnTwo) w.start();
+                if (w._isOnOne && w._isOnTwo && !w._isOn) w.start();
 
             }
 
@@ -102,7 +102,7 @@ namespace CloudNew
         class Wire
         {
             String _addressOne, _addressTwo;
-            public Boolean _isOnOne, _isOnTwo;
+            public Boolean _isOnOne, _isOnTwo, _isOn;
             Int32 _portOne, _portTwo;
             TcpClient _first, _second;
 
@@ -121,15 +121,6 @@ namespace CloudNew
                 {
                     Int32[] i = { _portOne, _portTwo };
                     return i;
-                }
-            }
-
-            public Boolean[] isOn
-            {
-                get
-                {
-                    Boolean[] b = {_isOnOne, _isOnTwo};
-                    return b;
                 }
             }
 
@@ -155,6 +146,7 @@ namespace CloudNew
                 _second.Connect(_addressTwo, _portTwo);
                 Thread thread = new Thread(Run);
                 thread.Start();
+                _isOn = true;
             }
         }
 
