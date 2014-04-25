@@ -77,10 +77,32 @@ namespace CloudNew
                 }
 
                 if (w._isOnOne && w._isOnTwo && !w._isOn)
+                {
                     w.start();
+                    //Thread.Sleep(100);
+                    //intitListeners(w);
+                }
             }
             return result;
         }
+
+        private void intitListeners(Wire w)
+        {
+            String msg = "xxx";
+            byte[] bytesy = System.Text.Encoding.ASCII.GetBytes(msg);
+            TcpClient t1 = new TcpClient(w.Addresses[0], w.Ports[0]);
+            TcpClient t2 = new TcpClient(w.Addresses[0], w.Ports[1]);
+            TcpClient t3 = new TcpClient(w.Addresses[1], w.Ports[2]);
+            TcpClient t4 = new TcpClient(w.Addresses[1], w.Ports[3]);
+            NetworkStream n1 = t1.GetStream();
+            NetworkStream n2 = t2.GetStream();
+            NetworkStream n3 = t3.GetStream();
+            NetworkStream n4 = t4.GetStream();
+            n1.Write(bytesy, 0 , bytesy.Length);
+            n2.Write(bytesy, 0, bytesy.Length);
+            n3.Write(bytesy, 0, bytesy.Length);
+            n4.Write(bytesy, 0, bytesy.Length);
+         }
 
         public void Run(){
             listener.Start();
