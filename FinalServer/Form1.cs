@@ -41,6 +41,12 @@ namespace FinalServer
                 ds.ReadXml(xmlFile);
                 dataGridView1.DataSource = ds.Tables[0];
                 xmlFile.Close();
+                XmlReader xmlFile2;
+                xmlFile2 = XmlReader.Create("connections.xml", new XmlReaderSettings());
+                DataSet ds2 = new DataSet();
+                ds2.ReadXml(xmlFile2);
+                dataGridView2.DataSource = ds2.Tables[0];
+                xmlFile2.Close();
             }
             catch (Exception ex)
             {

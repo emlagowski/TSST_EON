@@ -19,16 +19,19 @@ namespace FinalServer
         ArrayList sockets;
         FIB fib;
         public ManualResetEvent allDone = new ManualResetEvent(false);
-        String xmlFileName = "log.xml";
-        XmlDocument xmlDoc;
-        XmlNode rootNode;
+        String xmlFileName = "log.xml", xmlConnectionName = "connections.xml";
+        XmlDocument xmlDoc, xmlDocConnection;
+        XmlNode rootNode, rootNodeConnection;
 
         public Server(string ip, int port)
         {
             fib = new FIB();
             xmlDoc = new XmlDocument();
             rootNode = xmlDoc.CreateElement("cloud-log");
+            xmlDocConnection = new XmlDocument();
+            rootNodeConnection = xmlDocConnection.CreateElement("connections");
             xmlDoc.AppendChild(rootNode);
+            xmlDocConnection.AppendChild(rootNodeConnection);
             sockets = new ArrayList();
             endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
             localSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -54,9 +57,42 @@ namespace FinalServer
             xmlDoc.Save(xmlFileName);
         }
 
+        void addConnection(String _ip)
+        {
+            XmlNode userNode = xmlDocConnection.CreateElement("router");
+            XmlAttribute ip = xmlDocConnection.CreateAttribute("ip");
+            ip.Value = _ip;
+            userNode.Attributes.Append(ip);
+            //userNode.InnerText = _ip;
+            rootNodeConnection.AppendChild(userNode);
+            lock (xmlDocConnection)
+            {
+                xmlDocConnection.Save(xmlConnectionName);
+            }
+        }
+
         public XmlDocument Doc
         {
             get { return xmlDoc; }
+        }
+
+        public ArrayList Sockets
+        {
+            get { return sockets; }
+        }
+
+        public String[] EPoints
+        {
+            get 
+            { 
+                String[] tmp = new String[sockets.Count];
+                for (int i = 0; i < sockets.Count; i++)
+                {
+                    Socket s = sockets[i] as Socket;
+                    tmp[i] = s.RemoteEndPoint.ToString();
+                }
+                return tmp;
+            }
         }
 
         void Run()
@@ -96,6 +132,7 @@ namespace FinalServer
             Socket listener = (Socket)ar.AsyncState;
             Socket handler = listener.EndAccept(ar);
             sockets.Add(handler);
+            addConnection(handler.RemoteEndPoint.ToString());
             Console.WriteLine("Socket [{0}] {1} - {2} was added to sockets list", sockets.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
 
             // Create the state object.

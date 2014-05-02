@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<cloud-log>
-  <event type="Receive" from="127.0.0.10:8010" to="127.0.0.20:8020">testOne</event>
-  <event type="Receive" from="127.0.0.10:8010" to="127.0.0.20:8020">testOne2</event>
-  <event type="Receive" from="127.0.0.10:8010" to="127.0.0.20:8020">testOne3</event>
-  <event type="Receive" from="127.0.0.10:8010" to="127.0.0.20:8020">testOne4</event>
-</cloud-log>
