@@ -19,7 +19,11 @@ namespace FinalClient
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
         public ManualResetEvent allDone = new ManualResetEvent(false);
         public ManualResetEvent allReceive = new ManualResetEvent(false);
+        private List<WireBand> AvalaibleBandIN;
+        private List<WireBand> AvalaibleBandOUT;
+        private List<Connection> Connections;
 
+        
         private String response = String.Empty;
 
         public Client(string ip, int port)
