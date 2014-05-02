@@ -19,15 +19,16 @@ namespace FinalClient
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
         public ManualResetEvent allDone = new ManualResetEvent(false);
         public ManualResetEvent allReceive = new ManualResetEvent(false);
-        private List<WireBand> AvalaibleBandIN;
-        private List<WireBand> AvalaibleBandOUT;
-        private List<Connection> Connections;
+      
+
+      
 
         
         private String response = String.Empty;
 
         public Client(string ip, int port)
         {
+            
             endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
             endPoint2 = new IPEndPoint(IPAddress.Parse(ip), port + 1);
             localSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -35,12 +36,17 @@ namespace FinalClient
             cloudEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
             localSocket.Bind(endPoint);
             localRecieveSocket.Bind(endPoint2);
+
+
             localSocket.BeginConnect(cloudEP,
                     new AsyncCallback(ConnectCallback), localSocket);
             connectDone.WaitOne();
+            
             Thread t = new Thread(Run);
             t.Start();
         }
+
+      
 
         void Run()
         {
@@ -172,7 +178,7 @@ namespace FinalClient
                 Console.WriteLine(e.ToString());
             }
         }
-
+        
 
     }
 
