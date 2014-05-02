@@ -191,20 +191,9 @@ namespace SocketClient
         {
             //StartClient();
 
-            IPEndPoint localEP = new IPEndPoint(IPAddress.Parse("127.0.0.10"), 8222);
-            Socket localSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8222);
             Socket remoteSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            localSocket.Bind(localEP);
-            localSocket.Connect(remoteEP);
-
-            String msg =  "elo";
-            localSocket.Send(System.Text.Encoding.ASCII.GetBytes(msg));
-
-            Console.WriteLine("{0} send {1} to {2}", IPAddress.Parse(((IPEndPoint)localSocket.LocalEndPoint).Address.ToString()),
-                                                           msg,
-                                                           IPAddress.Parse(((IPEndPoint)localSocket.RemoteEndPoint).Address.ToString()));
-
+            remoteSocket.Bind(remoteEP);
             Console.ReadLine();
             return 0;
         }

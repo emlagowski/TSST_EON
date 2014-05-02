@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketClient", "SocketClien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketServer", "SocketServer\SocketServer.csproj", "{B1E8714B-7F8B-4DF6-A497-3EB4D06E398B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalServer", "FinalServer\FinalServer.csproj", "{D571EE69-A0FC-44E8-B482-7B507BAFF90B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalClient", "FinalClient\FinalClient.csproj", "{21190D90-C3AC-4455-805C-99C56A81EDAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{B1E8714B-7F8B-4DF6-A497-3EB4D06E398B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1E8714B-7F8B-4DF6-A497-3EB4D06E398B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1E8714B-7F8B-4DF6-A497-3EB4D06E398B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D571EE69-A0FC-44E8-B482-7B507BAFF90B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D571EE69-A0FC-44E8-B482-7B507BAFF90B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D571EE69-A0FC-44E8-B482-7B507BAFF90B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D571EE69-A0FC-44E8-B482-7B507BAFF90B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21190D90-C3AC-4455-805C-99C56A81EDAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21190D90-C3AC-4455-805C-99C56A81EDAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21190D90-C3AC-4455-805C-99C56A81EDAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21190D90-C3AC-4455-805C-99C56A81EDAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

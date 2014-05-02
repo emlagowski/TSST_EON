@@ -172,16 +172,7 @@ namespace SocketServer
             IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8222);
             Socket remoteSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             remoteSocket.Bind(remoteEP);
-            remoteSocket.Listen(100);
-            Socket s =  remoteSocket.Accept();
-
-            byte[] bytes = new byte[256];
-            s.Receive(bytes);
-
-            Console.WriteLine("{0} received {1} from {2}", IPAddress.Parse(((IPEndPoint)s.LocalEndPoint).Address.ToString()),
-                                                           System.Text.Encoding.ASCII.GetString(bytes),
-                                                           IPAddress.Parse(((IPEndPoint)s.RemoteEndPoint).Address.ToString()));
-
+            
             Console.ReadLine();
             return 0;
         }
