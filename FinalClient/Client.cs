@@ -7,13 +7,19 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using System.IO;
+using System.Xml;
+using System.Xml.Linq;
+using System.Collections;
 
 namespace FinalClient
 {
     class Client
     {
-        IPEndPoint endPoint, endPoint2, cloudEP;
-        Socket localSocket, localRecieveSocket;
+        public static XmlDocument wires;
+        public static FIB fib;
+        String address;
+        IPEndPoint cloudEP;
+        ArrayList sockets;
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
@@ -22,17 +28,62 @@ namespace FinalClient
 
         private String response = String.Empty;
 
-        public Client(string ip, int port)
+        public static void readFIB()
         {
-            endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
-            endPoint2 = new IPEndPoint(IPAddress.Parse(ip), port + 1);
-            localSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            localRecieveSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            fib = new FIB();
+            String xmlString = File.ReadAllText("wires.xml");
+            using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
+            {
+                while (reader.ReadToFollowing("wire"))
+                {
+                    reader.MoveToFirstAttribute();
+                    string f_ip = reader.Value;
+                    reader.MoveToNextAttribute();
+                    string f_port = reader.Value;
+                    reader.MoveToNextAttribute();
+                    string s_ip = reader.Value;
+                    reader.MoveToNextAttribute();
+                    string s_port = reader.Value;
+
+                    fib.add(new Wire(   new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)), 
+                                        new IPEndPoint(IPAddress.Parse(s_ip), Convert.ToInt32(s_port))   )   );
+                }
+            }
+        }
+
+
+        private ArrayList findingPorts()
+        {
+            ArrayList tmp = new ArrayList();
+            for (int i = 0; i < fib.Wires.Count; i++)
+            {
+                Wire w = fib.Wires[i] as Wire;
+                if (address.Equals(w.One.Address.ToString()))
+                {
+                    tmp.Add(w.One.Port);
+                }
+                if (address.Equals(w.Two.Address.ToString()))
+                {
+                    tmp.Add(w.Two.Port);
+                }
+            }
+            return tmp;
+        }
+
+        public Client(string ip)
+        {
+            address = ip;
+            ArrayList ports = findingPorts();
+            sockets = new ArrayList();
             cloudEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
-            localSocket.Bind(endPoint);
-            localRecieveSocket.Bind(endPoint2);
-            localSocket.BeginConnect(cloudEP,
-                    new AsyncCallback(ConnectCallback), localSocket);
+            for (int i = 0; i < ports.Count; i++)
+            {
+                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(address), Convert.ToInt32(ports[i]));
+                Socket tmp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                tmp.Bind(endPoint);
+                tmp.BeginConnect(cloudEP, new AsyncCallback(ConnectCallback), tmp);
+                sockets.Add(tmp);
+            }
             connectDone.WaitOne();
             Thread t = new Thread(Run);
             t.Start();
@@ -45,8 +96,11 @@ namespace FinalClient
                 while (true)
                 {
                     allReceive.Reset();
-                    Console.WriteLine("Waiting for data...");
-                    Receive();
+                    for (int i = 0; i < sockets.Count; i++)
+                    {
+                        Socket s = sockets[i] as Socket;
+                        Receive(s);
+                    }
                     allReceive.WaitOne();
                 }
 
@@ -79,15 +133,38 @@ namespace FinalClient
             }
         }
 
-        public void Send(String data)
+        public void Send(String data, String targetIP)
         {
+            Socket s = findTarget(targetIP);
             // Convert the string data to byte data using ASCII encoding.
             byte[] byteData = Encoding.ASCII.GetBytes(data);
 
             // Begin sending the data to the remote device.
-            localSocket.BeginSend(byteData, 0, byteData.Length, 0,
-                new AsyncCallback(SendCallback), localSocket);
+            s.BeginSend(byteData, 0, byteData.Length, 0,
+                new AsyncCallback(SendCallback), s);
             sendDone.WaitOne();
+        }
+
+        private Socket findTarget(String target)
+        {
+            for (int i = 0; i < fib.Wires.Count; i++)
+            {
+                Wire w = fib.Wires[i] as Wire;
+                if ((address.Equals(w.One.Address.ToString()) && target.Equals(w.Two.Address.ToString())) ||
+                    (address.Equals(w.Two.Address.ToString()) && target.Equals(w.One.Address.ToString())))
+                {
+                    int port;
+                    if (address.Equals(w.One.Address.ToString())) port = w.One.Port;
+                    else port = w.Two.Port;
+                    IPEndPoint iep = new IPEndPoint(IPAddress.Parse(address), port);
+                    for (int j = 0; j < sockets.Count; j++)
+                    {
+                        Socket so = sockets[j] as Socket;
+                        if (so.LocalEndPoint.Equals(iep)) return so;
+                    }                    
+                }
+            }
+            return null;
         }
 
         private void SendCallback(IAsyncResult ar)
@@ -110,16 +187,16 @@ namespace FinalClient
             }
         }
 
-        public void Receive()
+        public void Receive(Socket soc)
         {
             try
             {
                 // Create the state object.
                 StateObject state = new StateObject();
-                state.workSocket = localSocket;
+                state.workSocket = soc;
                 //response = String.Empty;
                 // Begin receiving the data from the remote device.
-                localSocket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                soc.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReceiveCallback), state);
             }
             catch (Exception e)
