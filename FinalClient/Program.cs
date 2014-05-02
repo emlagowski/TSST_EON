@@ -20,7 +20,11 @@ namespace FinalClient
 
             clientOne.Send("testOne<EOF>", "127.0.0.20");
             Thread.Sleep(1000);
-            clientOne.Send("testOne<EOF>", "127.0.0.30");
+            clientOne.Send("testTwo<EOF>", "127.0.0.30");
+            Thread.Sleep(1000);
+            clientTwo.Send("testThree<EOF>", "127.0.0.10");
+            Thread.Sleep(1000);
+            clientFive.Send("testFour<EOF>", "127.0.0.40");
 
 
 
