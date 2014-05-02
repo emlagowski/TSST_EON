@@ -17,7 +17,7 @@ namespace FinalClient
     {
         public static XmlDocument wires;
         public static FIB fib;
-        String address;
+        public String address;
         IPEndPoint cloudEP;
         ArrayList sockets;
         private ManualResetEvent connectDone = new ManualResetEvent(false);

@@ -14,7 +14,7 @@ namespace FinalClient
         {
             Client.readFIB();
             Client clientOne = new Client("127.0.0.10");
-            //Application.Run(new Form1(clientOne));
+            Application.Run(new Form1(clientOne));
             Client clientTwo = new Client("127.0.0.20");
             Client clientThree = new Client("127.0.0.30");
             Client clientFour = new Client("127.0.0.40");
