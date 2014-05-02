@@ -1,0 +1,8 @@
+<wires>
+  <wire FirstAddress="127.0.0.10" FirstPort="8020" SecondAddress="127.0.0.20" SecondPort="8010">One</wire>  
+  <wire FirstAddress="127.0.0.10" FirstPort="8030" SecondAddress="127.0.0.30" SecondPort="8010">Two</wire> 
+  <wire FirstAddress="127.0.0.10" FirstPort="8050" SecondAddress="127.0.0.50" SecondPort="8010">Three</wire> 
+  <wire FirstAddress="127.0.0.30" FirstPort="8050" SecondAddress="127.0.0.50" SecondPort="8030">Four</wire> 
+  <wire FirstAddress="127.0.0.30" FirstPort="8040" SecondAddress="127.0.0.40" SecondPort="8030">Five</wire>
+  <wire FirstAddress="127.0.0.40" FirstPort="8050" SecondAddress="127.0.0.50" SecondPort="8040">Six</wire> 
+</wires>
