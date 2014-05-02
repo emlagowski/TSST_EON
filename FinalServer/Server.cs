@@ -259,9 +259,12 @@ namespace FinalServer
         public FIB()
         {
             _wires = new ArrayList();
-            _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.10"), 8010), new IPEndPoint(IPAddress.Parse("127.0.0.20"), 8020)));
-            _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.30"), 8030), new IPEndPoint(IPAddress.Parse("127.0.0.40"), 8040)));
-            _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.50"), 8050), new IPEndPoint(IPAddress.Parse("127.0.0.60"), 8060)));
+            _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.10"), 8020), new IPEndPoint(IPAddress.Parse("127.0.0.20"), 8010)));
+            _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.10"), 8030), new IPEndPoint(IPAddress.Parse("127.0.0.30"), 8010)));
+            _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.10"), 8050), new IPEndPoint(IPAddress.Parse("127.0.0.50"), 8010)));
+            _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.30"), 8050), new IPEndPoint(IPAddress.Parse("127.0.0.50"), 8030)));
+            _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.30"), 8040), new IPEndPoint(IPAddress.Parse("127.0.0.40"), 8030)));
+            _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.40"), 8050), new IPEndPoint(IPAddress.Parse("127.0.0.50"), 8040)));
         }
     }
 
