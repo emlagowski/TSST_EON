@@ -10,14 +10,26 @@ using System.Windows.Forms;
 
 namespace FinalClient
 {
-    public partial class Form1 : Form
+    public partial class ClientForm : Form
     {
         Client _client;
-        public Form1(Client client)
+        public ClientForm(Client client)
         {
             _client = client;
             InitializeComponent();
-            labelName.Text = _client.address;
+            LabelText = _client.address;
+        }
+
+        public string LabelText
+        {
+            get
+            {
+                return this.labelName.Text;
+            }
+            set
+            {
+                this.labelName.Text = value;
+            }
         }
 
         private void label2_Click(object sender, EventArgs e)
