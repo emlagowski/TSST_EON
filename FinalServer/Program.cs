@@ -12,7 +12,7 @@ namespace FinalServer
         static void Main(string[] args)
         {
             Server server = new Server("127.0.0.1", 8000);
-            //Application.Run(new Form1(server));
+            Application.Run(new Form1(server));
             Console.ReadLine();
         }
     }

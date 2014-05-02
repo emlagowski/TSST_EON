@@ -19,6 +19,7 @@ namespace FinalServer
         ArrayList sockets;
         FIB fib;
         public ManualResetEvent allDone = new ManualResetEvent(false);
+        String xmlFileName = "log.xml";
         XmlDocument xmlDoc;
         XmlNode rootNode;
 
@@ -50,6 +51,7 @@ namespace FinalServer
             userNode.Attributes.Append(to);
             userNode.InnerText = d;
             rootNode.AppendChild(userNode);
+            xmlDoc.Save(xmlFileName);
         }
 
         public XmlDocument Doc
