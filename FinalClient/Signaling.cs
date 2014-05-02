@@ -16,6 +16,8 @@ namespace FinalClient
        Socket signalingSocket;
        private ManualResetEvent signalingReceive = new ManualResetEvent(false);
        private ManualResetEvent connectDone = new ManualResetEvent(false);
+       private ManualResetEvent receiveDone = new ManualResetEvent(false);
+       private String response = String.Empty;
 
 
        private List<WireBand> AvalaibleBandIN;
@@ -50,6 +52,81 @@ namespace FinalClient
                    signalingReceive.WaitOne();
                }
 
+           }
+           catch (Exception e)
+           {
+               Console.WriteLine(e.ToString());
+           }
+       }
+        public void Receive()
+        {
+            try
+            {
+                // Create the state object.
+                StateObject state = new StateObject();
+                state.workSocket = signalingSocket;
+                //response = String.Empty;
+                // Begin receiving the data from the remote device.
+                signalingSocket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    new AsyncCallback(ReceiveCallback), state);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        private void ReceiveCallback(IAsyncResult ar)
+        {
+            try
+            {
+                // Retrieve the state object and the client socket 
+                // from the asynchronous state object.
+                StateObject state = (StateObject)ar.AsyncState;
+                Socket client = state.workSocket;
+
+                // Read data from the remote device.
+                int bytesRead = client.EndReceive(ar);
+
+                if (bytesRead > 0)
+                {
+                    // There might be more data, so store the data received so far.
+                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+
+                    // Get the rest of the data.
+                    client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                        new AsyncCallback(ReceiveCallback), state);
+                }
+                else
+                {
+                    // All the data has arrived; put it in response.
+                    if (state.sb.Length > 1)
+                    {
+                        response = state.sb.ToString();
+                    }
+                    // Signal that all bytes have been received.
+                    receiveDone.Set();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+       private void ConnectCallback(IAsyncResult ar)
+       {
+           try
+           {
+               // Retrieve the socket from the state object.
+               Socket client = (Socket)ar.AsyncState;
+
+               // Complete the connection.
+               client.EndConnect(ar);
+
+               Console.WriteLine("{0} Socket connected to {1}", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
+
+               // Signal that the connection has been made.
+               connectDone.Set();
            }
            catch (Exception e)
            {
