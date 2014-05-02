@@ -13,7 +13,7 @@ using System.Collections;
 
 namespace FinalClient
 {
-    class Client
+    public class Client
     {
         public static XmlDocument wires;
         public static FIB fib;
