@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -108,29 +110,38 @@ namespace User
 
                 // Read data from the remote device.
                 int bytesRead = client.EndReceive(ar);
+                BinaryFormatter formattor = new BinaryFormatter();
 
-                //if (bytesRead > 0)
-                //{
-                // There might be more data, so store the data received so far.
-                state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                MemoryStream ms = new MemoryStream(state.buffer);
 
-                // Get the rest of the data.
-                client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                    new AsyncCallback(ReceiveCallback), state);
-                //}
-                //else
-                // {
-                // All the data has arrived; put it in response.
-                if (state.sb.Length > 1)
-                {
-                    response = state.sb.ToString();
-                }
-                // Signal that all bytes have been received.
+                state.dt = (Data)formattor.Deserialize(ms);
+                /*  //if (bytesRead > 0)
+                  //{
+                  // There might be more data, so store the data received so far.
+                  state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+
+                  // Get the rest of the data.
+                  client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                      new AsyncCallback(ReceiveCallback), state);
+                  //}
+                  //else
+                  // {
+                  // All the data has arrived; put it in response.
+                  if (state.sb.Length > 1)
+                  {
+                      response = state.sb.ToString();
+                  }
+                  // Signal that all bytes have been received.
+                  receiveDone.Set();
+                  allReceive.Set();
+                  //}
+                  Console.WriteLine("User {0} Received '{1}'[{2} bytes] from router {3}.", client.LocalEndPoint.ToString(),
+                          response, response.Length, client.RemoteEndPoint.ToString());*/
                 receiveDone.Set();
                 allReceive.Set();
-                //}
                 Console.WriteLine("User {0} Received '{1}'[{2} bytes] from router {3}.", client.LocalEndPoint.ToString(),
-                        response, response.Length, client.RemoteEndPoint.ToString());
+                          state.dt.ToString(), bytesRead, client.RemoteEndPoint.ToString());
+
             }
             catch (Exception e)
             {
@@ -138,13 +149,28 @@ namespace User
             }
         }
 
-        public void Send(String data, String targetIP)
+        public void Send(String targetIP, int bandwidth, String data, int id)
         {
             // Convert the string data to byte data using ASCII encoding.
-            byte[] byteData = Encoding.ASCII.GetBytes(targetIP+"|"+data);
+          /*  byte[] byteData = Encoding.ASCII.GetBytes(targetIP+"|"+data);
 
             // Begin sending the data to the remote device.
             socket.BeginSend(byteData, 0, byteData.Length, 0,
+                new AsyncCallback(SendCallback), socket);
+            sendDone.WaitOne();*/
+
+            MemoryStream fs = new MemoryStream();
+
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            formatter.Serialize(fs, new Data(targetIP, bandwidth, data, id));
+
+            byte[] buffer = fs.ToArray();
+
+
+
+            // Begin sending the data to the remote device.
+            socket.BeginSend(buffer, 0, buffer.Length, 0,
                 new AsyncCallback(SendCallback), socket);
             sendDone.WaitOne();
         }
@@ -175,10 +201,10 @@ namespace User
         // Client socket.
         public Socket workSocket = null;
         // Size of receive buffer.
-        public const int BufferSize = 256;
+        public const int BufferSize = 1024*5;
         // Receive buffer.
         public byte[] buffer = new byte[BufferSize];
         // Received data string.
-        public StringBuilder sb = new StringBuilder();
+        public Data dt;
     }
 }

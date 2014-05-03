@@ -9,11 +9,13 @@ using System.Threading;
 using System.IO;
 using System.Collections;
 using System.Xml;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace FinalServer
 {
     public class Server
     {
+        public Signaling signaling;
         IPEndPoint endPoint;
         Socket localSocket;
         ArrayList sockets;
@@ -25,6 +27,7 @@ namespace FinalServer
 
         public Server(string ip, int port)
         {
+            signaling = new Signaling();
             fib = new FIB();
             xmlDoc = new XmlDocument();
             rootNode = xmlDoc.CreateElement("cloud-log");
@@ -153,8 +156,25 @@ namespace FinalServer
 
             // Read data from the client socket. 
             int bytesRead = handler.EndReceive(ar);
+            BinaryFormatter formattor = new BinaryFormatter();
 
-            if (bytesRead > 0)
+            MemoryStream ms = new MemoryStream(state.buffer);
+
+            state.dt = (Data)formattor.Deserialize(ms);
+
+            Console.WriteLine("Read '{0}'[{1} bytes] from socket {2}.",
+                      state.dt.ToString(), bytesRead, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
+            addLog("Receive", handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString(), state.dt.ToString());
+
+            Socket s = findTarget((IPEndPoint)handler.RemoteEndPoint);
+            StateObject newState = new StateObject();
+            newState.workSocket = handler;
+
+            Send(s, state.dt);
+
+            handler.BeginReceive(newState.buffer, 0, StateObject.BufferSize, 0,
+                new AsyncCallback(ReadCallback), newState);
+           /* if (bytesRead > 0)
             {
                 // There  might be more data, so store the data received so far.
                 state.sb.Append(Encoding.ASCII.GetString(
@@ -186,7 +206,7 @@ namespace FinalServer
                     handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReadCallback), state);
                 }
-            }
+            }*/
         }
 
         private Socket findTarget(IPEndPoint iPEndPoint)
@@ -215,14 +235,32 @@ namespace FinalServer
             return null;
         }
 
-        private void Send(Socket handler, String data)
+        private void Send(Socket handler, Data data)
         {
-            // Convert the string data to byte data using ASCII encoding.
+           /* // Convert the string data to byte data using ASCII encoding.
             byte[] byteData = Encoding.ASCII.GetBytes(data);
 
             // Begin sending the data to the remote device.
             handler.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), handler);
+            */
+            if (signaling.checkIfConnEstablished(data.connectionID))
+            {
+                MemoryStream fs = new MemoryStream();
+
+                BinaryFormatter formatter = new BinaryFormatter();
+
+                formatter.Serialize(fs, data);
+
+                byte[] buffer = fs.ToArray();
+
+
+
+                // Begin sending the data to the remote device.
+                handler.BeginSend(buffer, 0, buffer.Length, 0,
+                    new AsyncCallback(SendCallback), handler);
+                
+            }
         }
 
         private void SendCallback(IAsyncResult ar)
@@ -258,19 +296,42 @@ namespace FinalServer
 
         public FIB()
         {
-            _wires = new ArrayList();
-            _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.10"), 8020), new IPEndPoint(IPAddress.Parse("127.0.0.20"), 8010)));
+             _wires = new ArrayList();
+           /* _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.10"), 8020), new IPEndPoint(IPAddress.Parse("127.0.0.20"), 8010)));
             _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.10"), 8030), new IPEndPoint(IPAddress.Parse("127.0.0.30"), 8010)));
             _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.10"), 8050), new IPEndPoint(IPAddress.Parse("127.0.0.50"), 8010)));
             _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.30"), 8050), new IPEndPoint(IPAddress.Parse("127.0.0.50"), 8030)));
             _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.30"), 8040), new IPEndPoint(IPAddress.Parse("127.0.0.40"), 8030)));
             _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.40"), 8050), new IPEndPoint(IPAddress.Parse("127.0.0.50"), 8040)));
+           */ 
+            String xmlString = File.ReadAllText("wires.xml");
+            using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
+            {
+                while (reader.ReadToFollowing("wire"))
+                {
+                    reader.MoveToFirstAttribute();
+                    string f_ip = reader.Value;
+                    reader.MoveToNextAttribute();
+                    string f_port = reader.Value;
+                    reader.MoveToNextAttribute();
+                    string s_ip = reader.Value;
+                    reader.MoveToNextAttribute();
+                    string s_port = reader.Value;
+                    reader.MoveToNextAttribute();
+                    string id = reader.Value;
+
+                    _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
+                                        new IPEndPoint(IPAddress.Parse(s_ip), Convert.ToInt32(s_port)),
+                                        Convert.ToInt32(id)));
+                }
+            }
         }
     }
 
     public class Wire
     {
         IPEndPoint _one, _two;
+        int ID;
 
         public IPEndPoint One
         {
@@ -282,10 +343,11 @@ namespace FinalServer
             get { return _two; }
         }
 
-        public Wire(IPEndPoint first, IPEndPoint second)
+        public Wire(IPEndPoint first, IPEndPoint second, int id)
         {
             _one = first;
             _two = second;
+            ID = id;
         }
     }
 
@@ -294,10 +356,10 @@ namespace FinalServer
         // Client  socket.
         public Socket workSocket = null;
         // Size of receive buffer.
-        public const int BufferSize = 1024;
+        public const int BufferSize = 1024*5;
         // Receive buffer.
         public byte[] buffer = new byte[BufferSize];
         // Received data string.
-        public StringBuilder sb = new StringBuilder();
+        public Data dt;
     }
 }

@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FinalClient
+namespace FinalServer
 {
     public class WireBand
     {
        public int wireID;
-      public int lambdaCapactity;
-        public Boolean[] lambdas;
-        public int distance;
+        int lambdaCapactity;
+      public Boolean[] lambdas;
+        int distance;
         public WireBand(int id, int capacity, int distance)
         {
             wireID = id;

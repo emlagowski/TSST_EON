@@ -10,7 +10,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
 
-namespace FinalClient
+namespace FinalServer
 {
     public class Signaling
     {
@@ -198,7 +198,7 @@ namespace FinalClient
 
             AvalaibleBandIN = new List<WireBand>();
             AvalaibleBandOUT = new List<WireBand>();
-            Connections = new List<Connection>();
+
 
             String xmlString = File.ReadAllText("wires.xml");
             using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
@@ -213,7 +213,6 @@ namespace FinalClient
                     string distance = reader.Value;
 
                     AvalaibleBandIN.Add(new WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
-                    AvalaibleBandOUT.Add(new WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
 
 
                 }
@@ -224,8 +223,9 @@ namespace FinalClient
         public Boolean checkIfConnEstablished(int id)
         {
             Boolean b = false;
-            Connections.ForEach(delegate(Connection c) {
-               if( c.connectionID == id) b = true;
+            Connections.ForEach(delegate(Connection c)
+            {
+                if (c.connectionID == id) b = true;
             });
             return b;
         }

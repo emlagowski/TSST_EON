@@ -11,13 +11,26 @@ namespace FinalClient
     public class Connection
     {
         IPEndPoint EPIn, EPOut;
-        [NonSerialized()]
-        int[] InLambdaIDs;
-        int[] OutLambdaIDs;
-        int InWireID, OutWireID, Bandwidth;
 
+        [NonSerialized()] public int[] InLambdaIDs;
+        public int[] OutLambdaIDs;
+        [NonSerialized()] int InWireID;
+        public int OutWireID, Bandwidth;
+        public int connectionID; // musi byc jakas wiekksza losowa liczba zeby nie bylo ze dwie maja takie samo id
 
-        public Connection(IPEndPoint inEP, IPEndPoint outEP, int inWire, int outWire, int[] inLambdas, int[] outLambdas, int band)
+        public Connection(int[] inLambdas, int[] outLambdas, int band, int cID) 
+        {
+            EPIn = null;
+            EPOut = null;
+            InWireID = -1;
+            OutWireID = -1;
+            InLambdaIDs = null;
+            OutLambdaIDs = null;
+            Bandwidth = band;
+            connectionID = cID;
+        
+        }
+        public Connection(IPEndPoint inEP, IPEndPoint outEP, int inWire, int outWire, int[] inLambdas, int[] outLambdas, int band, int cID)
         {
             EPIn = inEP;
             EPOut = outEP;
@@ -26,12 +39,13 @@ namespace FinalClient
             InLambdaIDs = inLambdas;
             OutLambdaIDs = outLambdas;
             Bandwidth = band;
+            connectionID = cID;
 
         }
         public override String ToString()
         {
-            String result = String.Format("EPIn: {0} EPOut: {1} InWireID: {2} OutWireID: {3} Bandwidth: {4}",
-                EPIn, EPOut, InWireID, OutWireID, Bandwidth);
+            String result = String.Format("EPIn: {0} EPOut: {1} InWireID: {2} OutWireID: {3} Bandwidth: {4} Connection ID: {5}",
+                EPIn, EPOut, InWireID, OutWireID, Bandwidth, connectionID);
             return result;
         }
     }
