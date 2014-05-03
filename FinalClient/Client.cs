@@ -83,9 +83,12 @@ namespace FinalClient
                     string s_ip = reader.Value;
                     reader.MoveToNextAttribute();
                     string s_port = reader.Value;
+                    reader.MoveToNextAttribute();
+                    string id = reader.Value;
 
                     fib.add(new Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
-                                        new IPEndPoint(IPAddress.Parse(s_ip), Convert.ToInt32(s_port))));
+                                        new IPEndPoint(IPAddress.Parse(s_ip), Convert.ToInt32(s_port)),
+                                        Convert.ToInt32(id)));
                 }
             }
         }
