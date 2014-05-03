@@ -21,19 +21,51 @@ namespace FinalClient
         XmlNode rootNodeLog, rootNodeWires;
         public String logName, wiresName;
         public String address;
-        IPEndPoint cloudEP;
+        IPEndPoint cloudEP, clientEP;
+        Socket clientSocket, client; // clientSocket is just for listening
         ArrayList sockets;
+        private String response = String.Empty;
+
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
         public ManualResetEvent allDone = new ManualResetEvent(false);
         public ManualResetEvent allReceive = new ManualResetEvent(false);
-        //private List<WireBand> AvalaibleBandIN;
-        //private List<WireBand> AvalaibleBandOUT;
-        //private List<Connection> Connections;
 
-        
-        private String response = String.Empty;
+
+        public Client(string ip)
+        {
+            xmlLog = new XmlDocument();
+            rootNodeLog = xmlLog.CreateElement("router-log");
+            xmlLog.AppendChild(rootNodeLog);
+            xmlWires = new XmlDocument();
+            rootNodeWires = xmlWires.CreateElement("wires");
+            xmlWires.AppendChild(rootNodeWires);
+            address = ip;
+            logName = address + ".xml";
+            wiresName = address + ".Wires.xml";
+            ArrayList ports = findingPorts();
+            sockets = new ArrayList();
+            cloudEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
+            clientEP = new IPEndPoint(IPAddress.Parse(address), 7000);
+            clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            clientSocket.Bind(clientEP);
+            new Thread(WaitingForClient).Start();
+            for (int i = 0; i < ports.Count; i++)
+            {
+                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(address), Convert.ToInt32(ports[i]));
+                Socket tmp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                tmp.Bind(endPoint);
+                tmp.BeginConnect(cloudEP, new AsyncCallback(ConnectCallback), tmp);
+                sockets.Add(tmp);
+                String samp = findTargetIP(endPoint);
+                addWires(samp);
+            }
+            connectDone.WaitOne();
+            Thread t = new Thread(Run);
+            t.Start();
+        }
+
 
         public static void readFIB()
         {
@@ -54,9 +86,9 @@ namespace FinalClient
                     reader.MoveToNextAttribute();
                     string id = reader.Value;
 
-                    fib.add(new Wire(   new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)), 
+                    fib.add(new Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
                                         new IPEndPoint(IPAddress.Parse(s_ip), Convert.ToInt32(s_port)),
-                                        Convert.ToInt32(id))   );
+                                        Convert.ToInt32(id)));
                 }
             }
         }
@@ -110,34 +142,6 @@ namespace FinalClient
             return tmp;
         }
 
-        public Client(string ip)
-        {
-            xmlLog = new XmlDocument();
-            rootNodeLog = xmlLog.CreateElement("router-log");
-            xmlLog.AppendChild(rootNodeLog);
-            xmlWires = new XmlDocument();
-            rootNodeWires = xmlWires.CreateElement("wires");
-            xmlWires.AppendChild(rootNodeWires);
-            address = ip;
-            logName = address + ".xml";
-            wiresName = address + ".Wires.xml";
-            ArrayList ports = findingPorts();
-            sockets = new ArrayList();
-            cloudEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
-            for (int i = 0; i < ports.Count; i++)
-            {
-                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(address), Convert.ToInt32(ports[i]));
-                Socket tmp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                tmp.Bind(endPoint);
-                tmp.BeginConnect(cloudEP, new AsyncCallback(ConnectCallback), tmp);
-                sockets.Add(tmp);
-                String samp = findTargetIP(endPoint);
-                addWires(samp);
-            }
-            connectDone.WaitOne();
-            Thread t = new Thread(Run);
-            t.Start();
-        }
 
         void Run()
         {
@@ -161,6 +165,60 @@ namespace FinalClient
             }
         }
 
+        void WaitingForClient()
+        {
+            try
+            {
+                clientSocket.Listen(100);
+
+                while (true)
+                {
+                    // Set the event to nonsignaled state.
+                    allDone.Reset();
+
+                    // Start an asynchronous socket to listen for connections.
+                    clientSocket.BeginAccept(new AsyncCallback(AcceptCallback), clientSocket);
+
+                    // Wait until a connection is made before continuing.
+                    allDone.WaitOne();
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            Console.WriteLine("\nPress ENTER to continue...");
+            Console.Read();
+        }
+
+        public void AcceptCallback(IAsyncResult ar)
+        {
+            // Signal the main thread to continue.
+            allDone.Set();
+
+            // Get the socket that handles the client request.
+            Socket listener = (Socket)ar.AsyncState;
+            Socket handler = listener.EndAccept(ar);
+            client = handler;
+            addWires(handler.RemoteEndPoint.ToString());
+            Console.WriteLine("User [{0}] {1} - {2} was added to sockets list", sockets.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
+
+            // Create the state object.
+            StateObject state = new StateObject();
+            state.workSocket = handler;
+            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                new AsyncCallback(ReadCallback), state);
+        }
+
+        public void ReadCallback(IAsyncResult ar)
+        {
+            /***
+             * 
+             * tu trzeba zrobic tak aby od usera odczytywać pakiet(adres ip celu) i wysylac do chmury
+             * 
+             **/            
+        }
 
         private void ConnectCallback(IAsyncResult ar)
         {
@@ -188,7 +246,7 @@ namespace FinalClient
             Socket s = findTarget(targetIP);
             // Convert the string data to byte data using ASCII encoding.
             byte[] byteData = Encoding.ASCII.GetBytes(data);
-            //  CHECK IF CONNECTION IS ESTABLISHED WITH BANDWIDTH NEEDED
+
             // Begin sending the data to the remote device.
             s.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), s);
@@ -270,7 +328,7 @@ namespace FinalClient
             {
                 Console.WriteLine(e.ToString());
             }
-        }
+        }   
 
         private void ReceiveCallback(IAsyncResult ar)
         {

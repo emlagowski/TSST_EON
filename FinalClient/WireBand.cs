@@ -11,12 +11,10 @@ namespace FinalClient
         int wireID;
         int lambdaCapactity;
         Boolean[] lambdas;
-        int distance;
-        public WireBand(int id, int capacity, int distance)
+        public WireBand(int id, int capacity)
         {
             wireID = id;
             lambdaCapactity = capacity;
-            this.distance = distance;
             lambdas = new Boolean[capacity];
             for (int i = 0; i < lambdas.Length; i++)
             {

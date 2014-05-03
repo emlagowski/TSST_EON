@@ -10,7 +10,6 @@ namespace FinalClient
     public class Wire
     {
         IPEndPoint _one, _two;
-        int ID{get;set;}
 
         public IPEndPoint One
         {
@@ -22,11 +21,10 @@ namespace FinalClient
             get { return _two; }
         }
 
-        public Wire(IPEndPoint first, IPEndPoint second, int id)
+        public Wire(IPEndPoint first, IPEndPoint second)
         {
             _one = first;
             _two = second;
-            ID = id;
         }
     }
 }
