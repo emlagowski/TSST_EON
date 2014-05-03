@@ -11,5 +11,11 @@ namespace FinalClient
         String EndAddress;
         int bandwidthNeeded;
         String info;
+        public Data(String address, int band, String inf)
+        {
+            EndAddress = address;
+            bandwidthNeeded = band;
+            info = inf;
+        }
     }
 }
