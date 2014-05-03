@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FinalClient
+public class ExtrernalItems
 {
     [Serializable()]
     public class Data
     {
-        public String EndAddress{get;set;}
+        public String EndAddress { get; set; }
         public int bandwidthNeeded { get; set; }
-        public String info{get; set;}
+        public String info { get; set; }
         public int connectionID { get; set; }
         public Data(String address, int band, String inf, int cID)
         {
@@ -26,4 +22,4 @@ namespace FinalClient
             return result;
         }
     }
-}//ff
+}

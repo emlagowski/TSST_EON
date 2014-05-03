@@ -270,6 +270,7 @@ namespace FinalClient
 
         public void Send(Data data, String targetIP)
         {
+            // tu mozna wyrzucic targetIP z argumentow bo ip docelowe jest w pakiecie data
             Socket s = findTarget(targetIP);
             // Convert the string data to byte data using ASCII encoding.
         /*    byte[] byteData = Encoding.ASCII.GetBytes(data);
