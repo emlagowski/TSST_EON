@@ -259,8 +259,10 @@ namespace FinalServer
                 // Begin sending the data to the remote device.
                 handler.BeginSend(buffer, 0, buffer.Length, 0,
                     new AsyncCallback(SendCallback), handler);
-                
+
             }
+            else { Console.WriteLine("Connection must be established first at SERVER"); }
+            
         }
 
         private void SendCallback(IAsyncResult ar)
