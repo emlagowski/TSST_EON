@@ -244,6 +244,7 @@ namespace FinalServer
             handler.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), handler);
             */
+            IPEndPoint ep = handler.RemoteEndPoint as IPEndPoint;
             if (signaling.checkIfConnEstablished(data.connectionID))
             {
                 MemoryStream fs = new MemoryStream();
@@ -261,7 +262,7 @@ namespace FinalServer
                     new AsyncCallback(SendCallback), handler);
 
             }
-            else { Console.WriteLine("Connection must be established first at SERVER"); }
+            else { Console.WriteLine("Connection [ID:{0}] must be established first at SERVER to {1}", data.connectionID, ep.Address.ToString()); }
             
         }
 
