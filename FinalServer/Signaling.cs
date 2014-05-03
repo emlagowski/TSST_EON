@@ -198,7 +198,7 @@ namespace FinalServer
 
             AvalaibleBandIN = new List<WireBand>();
             AvalaibleBandOUT = new List<WireBand>();
-
+            Connections = new List<Connection>();
 
             String xmlString = File.ReadAllText("wires.xml");
             using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))

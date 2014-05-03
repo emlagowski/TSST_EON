@@ -296,7 +296,7 @@ namespace FinalClient
                     new AsyncCallback(SendCallback), s);
                 sendDone.WaitOne();
             }
-            else { Console.WriteLine("Connection must be established first"); }
+            else { Console.WriteLine("Connection must be established first at: {0}", address); }
         }
 
         private Socket findTarget(String target)
