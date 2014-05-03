@@ -65,6 +65,7 @@
             this.button1.TabIndex = 2;
             this.button1.Text = "Refresh";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label2
             // 
@@ -85,6 +86,7 @@
             this.labelName.Size = new System.Drawing.Size(196, 31);
             this.labelName.TabIndex = 4;
             this.labelName.Text = "127.0.0.1:8000";
+            this.labelName.Click += new System.EventHandler(this.labelName_Click);
             // 
             // dataGridView2
             // 
@@ -103,7 +105,7 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "Connected wires";
             // 
-            // Form1
+            // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -115,7 +117,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label1);
-            this.Name = "Form1";
+            this.Name = "ClientForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

@@ -17,6 +17,9 @@ namespace FinalClient
     {
         public static XmlDocument wires;
         public static FIB fib;
+        XmlDocument xmlLog, xmlWires;
+        XmlNode rootNodeLog, rootNodeWires;
+        public String logName, wiresName;
         public String address;
         IPEndPoint cloudEP;
         ArrayList sockets;
@@ -55,6 +58,36 @@ namespace FinalClient
             }
         }
 
+        void addLog(String t, String f_ip, String t_ip, String d)
+        {
+            XmlNode userNode = xmlLog.CreateElement("event");
+            XmlAttribute type = xmlLog.CreateAttribute("type");
+            XmlAttribute from = xmlLog.CreateAttribute("from");
+            XmlAttribute to = xmlLog.CreateAttribute("to");
+            type.Value = t;
+            from.Value = f_ip;
+            to.Value = t_ip;
+            userNode.Attributes.Append(type);
+            userNode.Attributes.Append(from);
+            userNode.Attributes.Append(to);
+            userNode.InnerText = d;
+            rootNodeLog.AppendChild(userNode);
+            xmlLog.Save(logName);
+        }
+
+        void addWires(String _ip)
+        {
+            XmlNode userNode = xmlWires.CreateElement("wire");
+            XmlAttribute ip = xmlWires.CreateAttribute("ip");
+            ip.Value = _ip;
+            userNode.Attributes.Append(ip);
+            //userNode.InnerText = _ip;
+            rootNodeWires.AppendChild(userNode);
+            lock (xmlWires)
+            {
+                xmlWires.Save(wiresName);
+            }
+        }
 
         private ArrayList findingPorts()
         {
@@ -76,7 +109,15 @@ namespace FinalClient
 
         public Client(string ip)
         {
+            xmlLog = new XmlDocument();
+            rootNodeLog = xmlLog.CreateElement("router-log");
+            xmlLog.AppendChild(rootNodeLog);
+            xmlWires = new XmlDocument();
+            rootNodeWires = xmlWires.CreateElement("wires");
+            xmlWires.AppendChild(rootNodeWires);
             address = ip;
+            logName = address + ".xml";
+            wiresName = address + ".Wires.xml";
             ArrayList ports = findingPorts();
             sockets = new ArrayList();
             cloudEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
@@ -87,6 +128,8 @@ namespace FinalClient
                 tmp.Bind(endPoint);
                 tmp.BeginConnect(cloudEP, new AsyncCallback(ConnectCallback), tmp);
                 sockets.Add(tmp);
+                String samp = findTargetIP(endPoint);
+                addWires(samp);
             }
             connectDone.WaitOne();
             Thread t = new Thread(Run);
@@ -171,6 +214,23 @@ namespace FinalClient
             return null;
         }
 
+        private String findTargetIP(IPEndPoint iep)
+        {
+            for (int i = 0; i < fib.Wires.Count; i++)
+            {
+                Wire w = fib.Wires[i] as Wire;
+                if (iep.Equals(w.Two))
+                {
+                    return w.One.Address.ToString();
+                }
+                if (iep.Equals(w.One))
+                {
+                    return w.Two.Address.ToString();
+                }
+            }
+            return null;
+        }
+
         private void SendCallback(IAsyncResult ar)
         {
             try
@@ -181,7 +241,7 @@ namespace FinalClient
                 // Complete sending the data to the remote device.
                 int bytesSent = client.EndSend(ar);
                 Console.WriteLine("Sent {0} bytes from {1} to server {2}.", bytesSent, client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
-
+                addLog("Send", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString(), "none");
                 // Signal that all bytes have been sent.
                 sendDone.Set();
             }
@@ -243,6 +303,7 @@ namespace FinalClient
                 //}
                 Console.WriteLine("Socket {0} Read '{1}'[{2} bytes] from socket {3}.", client.LocalEndPoint.ToString(),
                         response, response.Length, client.RemoteEndPoint.ToString());
+                addLog("Receive", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString(), response);
             }
             catch (Exception e)
             {
