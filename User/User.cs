@@ -114,7 +114,7 @@ namespace User
 
                 MemoryStream ms = new MemoryStream(state.buffer);
 
-                state.dt = (Data)formattor.Deserialize(ms);
+                state.dt = (ExtSrc.Data)formattor.Deserialize(ms);
                 /*  //if (bytesRead > 0)
                   //{
                   // There might be more data, so store the data received so far.
@@ -163,7 +163,7 @@ namespace User
 
             BinaryFormatter formatter = new BinaryFormatter();
 
-            formatter.Serialize(fs, new Data(targetIP, bandwidth, data, id));
+            formatter.Serialize(fs, new ExtSrc.Data(targetIP, bandwidth, data, id));
 
             byte[] buffer = fs.ToArray();
 
@@ -205,6 +205,6 @@ namespace User
         // Receive buffer.
         public byte[] buffer = new byte[BufferSize];
         // Received data string.
-        public Data dt;
+        public ExtSrc.Data dt;
     }
 }

@@ -160,7 +160,7 @@ namespace FinalServer
 
             MemoryStream ms = new MemoryStream(state.buffer);
 
-            state.dt = (Data)formattor.Deserialize(ms);
+            state.dt = (ExtSrc.Data)formattor.Deserialize(ms);
 
             Console.WriteLine("Read '{0}'[{1} bytes] from socket {2}.",
                       state.dt.ToString(), bytesRead, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
@@ -235,7 +235,7 @@ namespace FinalServer
             return null;
         }
 
-        private void Send(Socket handler, Data data)
+        private void Send(Socket handler, ExtSrc.Data data)
         {
            /* // Convert the string data to byte data using ASCII encoding.
             byte[] byteData = Encoding.ASCII.GetBytes(data);
@@ -360,6 +360,6 @@ namespace FinalServer
         // Receive buffer.
         public byte[] buffer = new byte[BufferSize];
         // Received data string.
-        public Data dt;
+        public ExtSrc.Data dt;
     }
 }

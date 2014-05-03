@@ -68,10 +68,10 @@ namespace FinalClient
           //  new Connection(2, 987);
            // new Connection(1, 543);
 
-            Data d1 = new Data("127.0.0.20", 5, "testOne<EOF>", 172);
+            ExtSrc.Data d1 = new ExtSrc.Data("127.0.0.20", 5, "testOne<EOF>", 172);
             //Data d2 = new Data("127.0.0.30", 6, "testTwo<EOF>", 235);
             //Data d3 = new Data("127.0.0.10", 2, "testThree<EOF>", 987);
-            Data d4 = new Data("127.0.0.20", 1, "testFour<EOF>", 543);
+            ExtSrc.Data d4 = new ExtSrc.Data("127.0.0.20", 1, "testFour<EOF>", 543);
 
             clientOne.Send(d1, "127.0.0.20");
             Thread.Sleep(1000);

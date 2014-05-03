@@ -229,7 +229,7 @@ namespace FinalClient
 
                 MemoryStream ms = new MemoryStream(state.buffer);
 
-                state.dt = (Data)formattor.Deserialize(ms);
+                state.dt = (ExtSrc.Data)formattor.Deserialize(ms);
 
                 receiveDone.Set();
                 allReceive.Set();
@@ -268,7 +268,7 @@ namespace FinalClient
             }
         }
 
-        public void Send(Data data, String targetIP)
+        public void Send(ExtSrc.Data data, String targetIP)
         {
             // tu mozna wyrzucic targetIP z argumentow bo ip docelowe jest w pakiecie data
             Socket s = findTarget(targetIP);
@@ -391,7 +391,7 @@ namespace FinalClient
 
                 MemoryStream ms = new MemoryStream(state.buffer);
 
-                state.dt = (Data)formattor.Deserialize(ms);
+                state.dt = (ExtSrc.Data)formattor.Deserialize(ms);
           /*      //if (bytesRead > 0)
                 //{
                     // There might be more data, so store the data received so far.
@@ -443,6 +443,6 @@ namespace FinalClient
         public byte[] buffer = new byte[BufferSize];
         // Received data string.
        // public StringBuilder sb = new StringBuilder();
-        public Data dt;
+        public ExtSrc.Data dt;
     }
 }

@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="Connection.cs" />
-    <Compile Include="Data.cs" />
     <Compile Include="FIB.cs" />
     <Compile Include="ClientForm.cs">
       <SubType>Form</SubType>
@@ -71,9 +70,9 @@
     <Content Include="wires.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExternalSource\ExternalSource.csproj">
-      <Project>{6a17a10a-6cc1-4c8d-90c5-9d2ac3a3cc5a}</Project>
-      <Name>ExternalSource</Name>
+    <ProjectReference Include="..\ExtSrc\ExtSrc.csproj">
+      <Project>{bcf244c3-aca3-492d-9a52-71edfab8cc61}</Project>
+      <Name>ExtSrc</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
