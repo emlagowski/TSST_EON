@@ -188,7 +188,7 @@ namespace FinalClient
             Socket s = findTarget(targetIP);
             // Convert the string data to byte data using ASCII encoding.
             byte[] byteData = Encoding.ASCII.GetBytes(data);
-
+            //  CHECK IF CONNECTION IS ESTABLISHED WITH BANDWIDTH NEEDED
             // Begin sending the data to the remote device.
             s.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), s);

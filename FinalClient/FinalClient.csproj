@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="Connection.cs" />
+    <Compile Include="Data.cs" />
     <Compile Include="FIB.cs" />
     <Compile Include="ClientForm.cs">
       <SubType>Form</SubType>

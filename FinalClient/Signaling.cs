@@ -8,6 +8,7 @@ using System.Net;
 using System.Threading;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml;
 
 namespace FinalClient
 {
@@ -29,9 +30,10 @@ namespace FinalClient
 
        public Signaling()
        {
-           initWireBand();//signaling
-           //signaling
-           signalingEP = new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666);
+           initWireBand();
+           //NARAZIE ZAKOMENTOWANE BO TO DO 2 ETAPU
+
+        /*   signalingEP = new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666);
            cloudSignalingEP = new IPEndPoint(IPAddress.Parse("127.6.6.5"), 6666);
            signalingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
            signalingSocket.Bind(signalingEP);
@@ -40,7 +42,7 @@ namespace FinalClient
            connectDone.WaitOne();
 
            Thread t0 = new Thread(RunSignaling);
-           t0.Start();
+           t0.Start();*/
        }
 
        private void RunSignaling()
@@ -193,19 +195,36 @@ namespace FinalClient
 
        private void initWireBand()
        {
-           //z pliku xml musi byc
-
-           //TEST
+                      
            AvalaibleBandIN = new List<WireBand>();
            AvalaibleBandOUT = new List<WireBand>();
 
-           AvalaibleBandIN.Add(new WireBand(1, 12, 600));
-           AvalaibleBandIN.Add(new WireBand(2, 10, 1000));
-           AvalaibleBandOUT.Add(new WireBand(1, 6, 200));
-           AvalaibleBandOUT.Add(new WireBand(2, 8, 100));
+          
+           String xmlString = File.ReadAllText("wires.xml");
+           using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
+           {
+               while (reader.ReadToFollowing("wire"))
+               {
+                   reader.MoveToAttribute("Id");
+                   string id = reader.Value;
+                   reader.MoveToNextAttribute();
+                   string capacity = reader.Value;
+                   reader.MoveToNextAttribute();
+                   string distance = reader.Value;
 
+                   AvalaibleBandIN.Add(new WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
+
+                   
+               }
+           }
 
        }
+
+       public void checkIfConnEstablished() 
+       {
+
+       }
+
         private void updateLambdas()
         {
 
