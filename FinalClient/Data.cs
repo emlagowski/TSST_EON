@@ -18,4 +18,4 @@ namespace FinalClient
             info = inf;
         }
     }
-}
+}//ff
