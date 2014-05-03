@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace FinalClient
 {
@@ -17,6 +18,8 @@ namespace FinalClient
        private ManualResetEvent signalingReceive = new ManualResetEvent(false);
        private ManualResetEvent connectDone = new ManualResetEvent(false);
        private ManualResetEvent receiveDone = new ManualResetEvent(false);
+       private ManualResetEvent sendDone = new ManualResetEvent(false);
+
        private String response = String.Empty;
 
 
@@ -47,7 +50,7 @@ namespace FinalClient
                while (true)
                {
                    signalingReceive.Reset();
-                   Console.WriteLine("Waiting for signaling data...");
+                   Console.WriteLine("SIGNALING: Waiting for signaling data...");
                    Receive();
                    signalingReceive.WaitOne();
                }
@@ -63,7 +66,7 @@ namespace FinalClient
             try
             {
                 // Create the state object.
-                StateObject state = new StateObject();
+                SignalingStateObject state = new SignalingStateObject();
                 state.workSocket = signalingSocket;
                 //response = String.Empty;
                 // Begin receiving the data from the remote device.
@@ -81,16 +84,31 @@ namespace FinalClient
             {
                 // Retrieve the state object and the client socket 
                 // from the asynchronous state object.
-                StateObject state = (StateObject)ar.AsyncState;
+                SignalingStateObject state = (SignalingStateObject)ar.AsyncState;
                 Socket client = state.workSocket;
+
+               // byte[] clientData = new byte[1024 * 1024 * 50];
+
+               // int receivedBytesLen = clientSock.Receive(clientData);
 
                 // Read data from the remote device.
                 int bytesRead = client.EndReceive(ar);
 
-                if (bytesRead > 0)
+                BinaryFormatter formattor = new BinaryFormatter();
+
+                MemoryStream ms = new MemoryStream(state.buffer);
+
+                state.conn = (Connection)formattor.Deserialize(ms);
+
+                Connections.Add(state.conn);
+                //TUTAJ JESCZE TRZEBA BEDZIE DOROBIC ZE JAK OTRZYMA OBIEKT TO MUSI ZAALOKOWAC OBPOWIEDNIE PASMA W POLACZENIACH IN I OUT.
+               
+
+               /* if (bytesRead > 0)
                 {
                     // There might be more data, so store the data received so far.
-                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                    //state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                    System.arraycopy(state.buffer, 0, state.result, 0, state.buffer.length);
 
                     // Get the rest of the data.
                     client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
@@ -105,7 +123,8 @@ namespace FinalClient
                     }
                     // Signal that all bytes have been received.
                     receiveDone.Set();
-                }
+                }*/
+                receiveDone.Set();
             }
             catch (Exception e)
             {
@@ -123,7 +142,7 @@ namespace FinalClient
                // Complete the connection.
                client.EndConnect(ar);
 
-               Console.WriteLine("{0} Socket connected to {1}", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
+               Console.WriteLine("SIGNALING: {0} Socket connected to {1}", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
 
                // Signal that the connection has been made.
                connectDone.Set();
@@ -133,21 +152,73 @@ namespace FinalClient
                Console.WriteLine(e.ToString());
            }
        }
+       private void Send(Socket client, Connection conn)
+       {
+           MemoryStream fs = new MemoryStream();
+
+           BinaryFormatter formatter = new BinaryFormatter();
+
+           formatter.Serialize(fs, conn);
+
+           byte[] buffer = fs.ToArray();  
+
+          
+
+           // Begin sending the data to the remote device.
+           client.BeginSend(buffer, 0, buffer.Length, 0,
+               new AsyncCallback(SendCallback), client);
+           sendDone.WaitOne();
+       }
+
+       private void SendCallback(IAsyncResult ar)
+       {
+           try
+           {
+               // Retrieve the socket from the state object.
+               Socket client = (Socket)ar.AsyncState;
+
+               // Complete sending the data to the remote device.
+               int bytesSent = client.EndSend(ar);
+               Console.WriteLine("SIGNALING: Sent {0} bytes to server.", bytesSent);
+
+               // Signal that all bytes have been sent.
+               sendDone.Set();
+           }
+           catch (Exception e)
+           {
+               Console.WriteLine(e.ToString());
+           }
+       }
+
 
        private void initWireBand()
        {
-           //trzeba dorobic potem
+           //z pliku xml musi byc
+
            //TEST
            AvalaibleBandIN = new List<WireBand>();
            AvalaibleBandOUT = new List<WireBand>();
 
-           AvalaibleBandIN.Add(new WireBand(1, 12));
-           AvalaibleBandIN.Add(new WireBand(2, 10));
-           AvalaibleBandOUT.Add(new WireBand(1, 6));
-           AvalaibleBandOUT.Add(new WireBand(2, 8));
+           AvalaibleBandIN.Add(new WireBand(1, 12, 600));
+           AvalaibleBandIN.Add(new WireBand(2, 10, 1000));
+           AvalaibleBandOUT.Add(new WireBand(1, 6, 200));
+           AvalaibleBandOUT.Add(new WireBand(2, 8, 100));
 
 
        }
-    }
+        private void updateLambdas()
+        {
 
+        }
+    }
+    public class SignalingStateObject
+    {
+        // Client socket.
+        public Socket workSocket = null;
+        // Size of receive buffer.
+        public const int BufferSize = 256;
+        // Receive buffer.
+        public byte[] buffer = new byte[BufferSize];
+        public Connection conn { get; set; }
+    }
 }
