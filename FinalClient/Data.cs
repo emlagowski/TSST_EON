@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FinalClient
 {
-    class Data
+    public class Data
     {
         String EndAddress;
         int bandwidthNeeded;

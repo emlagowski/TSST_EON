@@ -7,18 +7,33 @@ using System.Threading.Tasks;
 
 namespace FinalClient
 {
-    class Connection
+    [Serializable()]
+    public class Connection
     {
         IPEndPoint EPIn, EPOut;
-        int InWireID, OutWireID, InLambdaID, OutLambdaID;
-        public Connection(IPEndPoint inEP, IPEndPoint outEP, int inWire, int outWire, int inLambda, int outLambda)
+        [NonSerialized()]
+        int[] InLambdaIDs;
+        int[] OutLambdaIDs;
+        int InWireID, OutWireID, Bandwidth;
+
+
+        public Connection(IPEndPoint inEP, IPEndPoint outEP, int inWire, int outWire, int[] inLambdas, int[] outLambdas, int band)
         {
             EPIn = inEP;
             EPOut = outEP;
             InWireID = inWire;
             OutWireID = outWire;
-            InLambdaID = inLambda;
-            OutLambdaID = outLambda;
+            InLambdaIDs = inLambdas;
+            OutLambdaIDs = outLambdas;
+            Bandwidth = band;
+
+        }
+        public override String ToString()
+        {
+            String result = String.Format("EPIn: {0} EPOut: {1} InWireID: {2} OutWireID: {3} Bandwidth: {4}",
+                EPIn, EPOut, InWireID, OutWireID, Bandwidth);
+            return result;
         }
     }
 }
+
