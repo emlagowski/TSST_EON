@@ -15,9 +15,11 @@ namespace Agent
         public Form1()
         {
             InitializeComponent();
-            ExtSrc.AgentData.routers.ForEach(delegate(String s)
+            Communication comm = new Communication();
+
+            comm.agentData.ForEach(delegate(ExtSrc.AgentData adt)
             {
-                comboBox1.Items.Add(s);
+                comboBox1.Items.Add(adt.routerAddress);
             });
         }
 

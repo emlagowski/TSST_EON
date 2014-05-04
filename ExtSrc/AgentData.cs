@@ -11,6 +11,14 @@ namespace ExtSrc
        public String routerAddress;
        public FIB fib;
        public UnexpectedFIB unFib;
+
+       public AgentData(String address, FIB fib, UnexpectedFIB ufib) 
+       {
+           routerAddress = address;
+           this.fib = fib;
+           unFib = ufib;
+       
+       }
        
     }
 }

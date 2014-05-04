@@ -17,6 +17,7 @@ namespace FinalClient
     public class Client
     {
         public Signaling signaling;
+        public AgentCommunication agentCom;
         public static XmlDocument wires;
         public static ExtSrc.FIB fib;
         XmlDocument xmlLog, xmlWires;
@@ -27,7 +28,7 @@ namespace FinalClient
         Socket clientSocket, client; // clientSocket is just for listening
         ArrayList sockets;
         private String response = String.Empty;
-        ExtSrc.UnexpectedFIB unFib;
+        public ExtSrc.UnexpectedFIB unFib;
 
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
@@ -41,6 +42,7 @@ namespace FinalClient
             address = ip;
             unFib = new ExtSrc.UnexpectedFIB();
             readUnFIB();
+            agentCom = new AgentCommunication(address);
             signaling = new Signaling();
             xmlLog = new XmlDocument();
             rootNodeLog = xmlLog.CreateElement("router-log");

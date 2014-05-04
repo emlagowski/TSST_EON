@@ -67,21 +67,21 @@ namespace FinalClient
             //ExtSrc.AgentData.routers = routers;
 
 
-            int[] lambdasOut_c1 = {1,2,3,4,5 };
+          //  int[] lambdasOut_c1 = {1,2,3,4,5 };
 
-            int[] lambdasIn_c2 = { 1, 2, 3, 4, 5 };
+          //  int[] lambdasIn_c2 = { 1, 2, 3, 4, 5 };
             //int[] lambdas_c2 = { 1, 2, 3, 4, 5 };
 
             
             
            
-            clientOne.signaling.addConnection(new ExtSrc.Connection(null, lambdasOut_c1, 2, 5, 172), 2);
-            clientThree.signaling.addConnection(new ExtSrc.Connection(lambdasOut_c1, null, 5, 5, 172), 5);
+           // clientOne.signaling.addConnection(new ExtSrc.Connection(null, lambdasOut_c1, 2, 5, 172), 2);
+           // clientThree.signaling.addConnection(new ExtSrc.Connection(lambdasOut_c1, null, 5, 5, 172), 5);
 
           //  new Connection(2, 987);
            // new Connection(1, 543);
 
-            ExtSrc.Data d1 = new ExtSrc.Data("127.0.0.40", 5, "testOne<EOF>", 172);
+           // ExtSrc.Data d1 = new ExtSrc.Data("127.0.0.40", 5, "testOne<EOF>", 172);
             //Data d2 = new Data("127.0.0.30", 6, "testTwo<EOF>", 235);
             //Data d3 = new Data("127.0.0.10", 2, "testThree<EOF>", 987);
            // ExtSrc.Data d4 = new ExtSrc.Data("127.0.0.20", 1, "testFour<EOF>", 543);
@@ -94,7 +94,13 @@ namespace FinalClient
           //  Thread.Sleep(1000);
              // clientFive.Send(d4, "127.0.0.40");
 
-
+            clientOne.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientOne.address, Client.fib, clientOne.unFib));
+            clientTwo.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientTwo.address, Client.fib, clientTwo.unFib));
+            clientThree.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientThree.address, Client.fib, clientThree.unFib));
+            clientFour.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientFour.address, Client.fib, clientFour.unFib));
+            clientFive.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientFive.address, Client.fib, clientFive.unFib));
+            
+            
 
             Console.ReadLine();
         }
