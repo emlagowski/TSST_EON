@@ -34,7 +34,7 @@ namespace ExtSrc
             }
             return result;
         }
-
+    [Serializable()]
         class AddressPair
         {
             public String addresOne, addressTwo;
