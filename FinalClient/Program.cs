@@ -75,8 +75,8 @@ namespace FinalClient
             
             
            
-            clientOne.signaling.addConnection(new Connection(null, lambdasOut_c1, 5, 172), 1);
-            clientTwo.signaling.addConnection(new Connection(lambdasOut_c1, null, 6, 235), 1);
+            clientOne.signaling.addConnection(new Connection(null, lambdasOut_c1, 5, 172), 2);
+            clientThree.signaling.addConnection(new Connection(lambdasOut_c1, null, 5, 172), 5);
 
           //  new Connection(2, 987);
            // new Connection(1, 543);

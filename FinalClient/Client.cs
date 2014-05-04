@@ -300,7 +300,8 @@ namespace FinalClient
             s.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), s);
             sendDone.WaitOne();*/
-            if (signaling.checkIfConnEstablished(data.connectionID))
+            int id = findWireID(data.EndAddress);
+            if (signaling.checkIfConnEstablished(data.connectionID), id)
             {
                 MemoryStream fs = new MemoryStream();
 
@@ -320,6 +321,26 @@ namespace FinalClient
             else { Console.WriteLine("Connection must be established first at: {0}", address); }
         }
 
+        private int findWireID(String target)
+        {
+            for (int i = 0; i < fib.Wires.Count; i++)
+            {
+                Wire w = fib.Wires[i] as Wire;
+                if ((address.Equals(w.One.Address.ToString()) && target.Equals(w.Two.Address.ToString())) ||
+                    (address.Equals(w.Two.Address.ToString()) && target.Equals(w.One.Address.ToString())))
+                {
+                    return w.ID;
+                }
+            }
+
+            // jesli nie znalazlo bezposredniego polaczenia!
+            String unexpectedIP = unFib.findTarget(target);
+            int unID = findWireID(unexpectedIP);
+            return unID;
+        }
+        
+        
+        
         private Socket findTarget(String target)
         {
             for (int i = 0; i < fib.Wires.Count; i++)

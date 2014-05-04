@@ -221,11 +221,11 @@ namespace FinalClient
 
         }
 
-        public Boolean checkIfConnEstablished(int id)
+        public Boolean checkIfConnEstablished(int id, int wireID)
         {
             Boolean b = false;
             Connections.ForEach(delegate(Connection c) {
-               if( c.connectionID == id) b = true;
+               if( c.connectionID == id && c.OutWireID == wireID) b = true;
             });
             return b;
         }

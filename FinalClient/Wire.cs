@@ -10,7 +10,7 @@ namespace FinalClient
     public class Wire
     {
         IPEndPoint _one, _two;
-        int ID;
+       public int ID;
 
         public IPEndPoint One
         {

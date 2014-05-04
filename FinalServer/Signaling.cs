@@ -213,6 +213,7 @@ namespace FinalServer
                     string distance = reader.Value;
 
                     AvalaibleBandIN.Add(new WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
+                    AvalaibleBandOUT.Add(new WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
 
 
                 }
@@ -220,12 +221,12 @@ namespace FinalServer
 
         }
 
-        public Boolean checkIfConnEstablished(int id)
+        public Boolean checkIfConnEstablished(int id, int wireID)
         {
             Boolean b = false;
             Connections.ForEach(delegate(Connection c)
             {
-                if (c.connectionID == id) b = true;
+                if (c.connectionID == id && c.OutWireID == wireID) b = true;
             });
             return b;
         }
