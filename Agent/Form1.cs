@@ -16,11 +16,16 @@ namespace Agent
         {
             InitializeComponent();
             Communication comm = new Communication();
-
+            while (comm.agentData == null)
+            {
+              //  Application.DoEvents();
+            }
             comm.agentData.ForEach(delegate(ExtSrc.AgentData adt)
             {
                 comboBox1.Items.Add(adt.routerAddress);
+                Console.WriteLine(adt.routerAddress);
             });
+            comboBox1.Update();
         }
 
         private void button1_Click(object sender, EventArgs e)
