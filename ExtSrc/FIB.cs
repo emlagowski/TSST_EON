@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ExtSrc
-{
+{   [Serializable()]
     public class FIB
     {
         ArrayList _wires;

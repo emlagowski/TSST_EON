@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ExtSrc
-{
+{   [Serializable()]
     public class UnexpectedFIB
     {
         List<AddressPair> addressList;
