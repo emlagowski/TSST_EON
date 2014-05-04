@@ -77,7 +77,7 @@ namespace FinalClient
            
             clientOne.signaling.addConnection(new Connection(null, lambdasOut_c1,2, 5, 172), 2);
             clientThree.signaling.addConnection(new Connection(lambdasOut_c1, null,5, 5, 172), 5);
-
+            
           //  new Connection(2, 987);
            // new Connection(1, 543);
 
@@ -86,8 +86,8 @@ namespace FinalClient
             //Data d3 = new Data("127.0.0.10", 2, "testThree<EOF>", 987);
            // ExtSrc.Data d4 = new ExtSrc.Data("127.0.0.20", 1, "testFour<EOF>", 543);
 
-            clientOne.Send(d1);
-            Thread.Sleep(1000);
+            //clientOne.Send(d1);
+           // Thread.Sleep(1000);
           //  clientOne.Send(d2, "127.0.0.30");
           //  Thread.Sleep(1000);
           //  clientTwo.Send(d3, "127.0.0.10");
