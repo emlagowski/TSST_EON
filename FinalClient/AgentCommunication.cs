@@ -26,6 +26,8 @@ namespace FinalClient
             agentEP = new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666);
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(localEP);
+            socket.ReceiveBufferSize = 1024 * 100;
+
             socket.BeginConnect(agentEP,
                     new AsyncCallback(ConnectCallback), socket);
             connectDone.WaitOne();
@@ -79,7 +81,7 @@ namespace FinalClient
             try
             {
                 // Create the state object.
-                SignalingStateObject state = new SignalingStateObject();
+                AgentStateObject state = new AgentStateObject();
                 state.workSocket = socket;
                 //response = String.Empty;
                 // Begin receiving the data from the remote device.
