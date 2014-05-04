@@ -12,8 +12,10 @@ namespace FinalClient
     {
         static void Main(string[] args)
         {
+            List<String> routers = new List<string>();
             Client.readFIB();
             Client clientOne = new Client("127.0.0.10");
+            routers.Add("127.0.0.10");
             Thread t = new Thread(delegate()
                 {
                     ClientForm cf = new ClientForm(clientOne);
@@ -22,6 +24,8 @@ namespace FinalClient
                 });
             t.Start();
             Client clientTwo = new Client("127.0.0.20");
+            routers.Add("127.0.0.20");
+
             Thread t2 = new Thread(delegate()
             {
                 ClientForm cf = new ClientForm(clientTwo);
@@ -30,6 +34,8 @@ namespace FinalClient
             });
             t2.Start();
             Client clientThree = new Client("127.0.0.30");
+            routers.Add("127.0.0.30");
+
             Thread t3 = new Thread(delegate()
             {
                 ClientForm cf = new ClientForm(clientThree);
@@ -38,6 +44,8 @@ namespace FinalClient
             });
             t3.Start();
             Client clientFour = new Client("127.0.0.40");
+            routers.Add("127.0.0.40");
+
             Thread t4 = new Thread(delegate()
             {
                 ClientForm cf = new ClientForm(clientFour);
@@ -46,6 +54,8 @@ namespace FinalClient
             });
             t4.Start();
             Client clientFive = new Client("127.0.0.50");
+            routers.Add("127.0.0.50");
+
             Thread t5 = new Thread(delegate()
             {
                 ClientForm cf = new ClientForm(clientFive);
@@ -53,6 +63,9 @@ namespace FinalClient
                 Application.Run();
             });
             t5.Start();
+
+            ExtSrc.AgentData.routers = routers;
+
 
             int[] lambdasOut_c1 = {1,2,3,4,5 };
 

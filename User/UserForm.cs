@@ -46,5 +46,10 @@ namespace User
         {
             _user.Send("127.0.0." + this.targetAddress.Text, Convert.ToInt32(this.band.Text), this.message.Text, Guid.NewGuid().GetHashCode());
         }
+
+        private void band_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
