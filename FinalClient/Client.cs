@@ -27,6 +27,7 @@ namespace FinalClient
         Socket clientSocket, client; // clientSocket is just for listening
         ArrayList sockets;
         private String response = String.Empty;
+        UnexpectedFIB unFib;
 
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
@@ -37,6 +38,9 @@ namespace FinalClient
 
         public Client(string ip)
         {
+            address = ip;
+            unFib = new UnexpectedFIB();
+            readUnFIB();
             signaling = new Signaling();
             xmlLog = new XmlDocument();
             rootNodeLog = xmlLog.CreateElement("router-log");
@@ -44,7 +48,6 @@ namespace FinalClient
             xmlWires = new XmlDocument();
             rootNodeWires = xmlWires.CreateElement("wires");
             xmlWires.AppendChild(rootNodeWires);
-            address = ip;
             logName = address + ".xml";
             wiresName = address + ".Wires.xml";
             ArrayList ports = findingPorts();
@@ -92,6 +95,24 @@ namespace FinalClient
                     fib.add(new Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
                                         new IPEndPoint(IPAddress.Parse(s_ip), Convert.ToInt32(s_port)),
                                         Convert.ToInt32(id)));
+                }
+            }
+        }
+
+        public void readUnFIB()
+        {
+            String xmlString = File.ReadAllText("unexpectedFIB.xml");
+            using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
+            {
+                reader.ReadToFollowing(String.Concat("w",address.Replace(".","")));
+                while (reader.ReadToFollowing("wire"))
+                {
+                    reader.MoveToFirstAttribute();
+                    string first = reader.Value;
+                    reader.MoveToNextAttribute();
+                    string second = reader.Value;
+                    //czy on czyta tylko w calejklamrze address??
+                    unFib.addNext(first, second);
                 }
             }
         }
@@ -318,7 +339,11 @@ namespace FinalClient
                     }                    
                 }
             }
-            return null;
+
+            // jesli nie znalazlo bezposredniego polaczenia!
+            String unexpectedIP = unFib.findTarget(target);
+            Socket unSo = findTarget(unexpectedIP);
+            return unSo;
         }
 
         private String findTargetIP(IPEndPoint iep)

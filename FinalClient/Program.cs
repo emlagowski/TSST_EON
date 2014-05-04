@@ -73,7 +73,7 @@ namespace FinalClient
             //Data d3 = new Data("127.0.0.10", 2, "testThree<EOF>", 987);
             ExtSrc.Data d4 = new ExtSrc.Data("127.0.0.20", 1, "testFour<EOF>", 543);
 
-            clientOne.Send(d1, "127.0.0.20");
+            clientOne.Send(d1, "127.0.0.40");
             Thread.Sleep(1000);
           //  clientOne.Send(d2, "127.0.0.30");
           //  Thread.Sleep(1000);
