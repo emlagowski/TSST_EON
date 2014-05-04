@@ -55,6 +55,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Signaling.cs" />
+    <Compile Include="UnexpectedFIB.cs" />
     <Compile Include="WireBand.cs" />
     <Compile Include="Wire.cs" />
   </ItemGroup>
@@ -67,6 +68,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="unexpectedFIB.xml" />
     <Content Include="wires.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace User
 {
@@ -18,8 +19,6 @@ namespace User
             _user = user;
             InitializeComponent();
             labelName.Text = _user.localAddress;
-            //connectButton, sendButton
-            //routerAddres, targetAddres, message, labelName
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -47,9 +46,31 @@ namespace User
             _user.Send("127.0.0." + this.targetAddress.Text, Convert.ToInt32(this.band.Text), this.message.Text, Guid.NewGuid().GetHashCode());
         }
 
-        private void band_TextChanged(object sender, EventArgs e)
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                XmlReader xmlFile;
+                xmlFile = XmlReader.Create(_user.logName, new XmlReaderSettings());
+                DataSet ds = new DataSet();
+                ds.ReadXml(xmlFile);
+                dataGridView1.DataSource = ds.Tables[0];
+                xmlFile.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            } 
         }
     }
 }

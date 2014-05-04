@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace User
 {
@@ -24,13 +25,38 @@ namespace User
 
         private String response = String.Empty;
 
+        public String logName;
+        XmlDocument xmlLog;
+        XmlNode rootNodeLog;
+
 
         public User(String ip)
         {
+            logName= ip + ".xml";
+            xmlLog = new XmlDocument();
+            rootNodeLog = xmlLog.CreateElement("user-log");
+            xmlLog.AppendChild(rootNodeLog);
             localAddress = ip;
             localEndPoint = new IPEndPoint(IPAddress.Parse(localAddress), 7000);
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(localEndPoint);
+        }
+
+        void addLog(String t, String f_ip, String t_ip, String d)
+        {
+            XmlNode userNode = xmlLog.CreateElement("event");
+            XmlAttribute type = xmlLog.CreateAttribute("type");
+            XmlAttribute from = xmlLog.CreateAttribute("from");
+            XmlAttribute to = xmlLog.CreateAttribute("to");
+            type.Value = t;
+            from.Value = f_ip;
+            to.Value = t_ip;
+            userNode.Attributes.Append(type);
+            userNode.Attributes.Append(from);
+            userNode.Attributes.Append(to);
+            userNode.InnerText = d;
+            rootNodeLog.AppendChild(userNode);
+            xmlLog.Save(logName);
         }
 
         public void connect(String router_ip)
@@ -142,6 +168,7 @@ namespace User
                 allReceive.Set();
                 Console.WriteLine("User {0} Received '{1}'[{2} bytes] from router {3}.", client.LocalEndPoint.ToString(),
                           state.dt.ToString(), bytesRead, client.RemoteEndPoint.ToString());
+                addLog("Receive", client.RemoteEndPoint.ToString(), client.LocalEndPoint.ToString(), state.dt.ToString());
 
             }
             catch (Exception e)
@@ -173,6 +200,7 @@ namespace User
             // Begin sending the data to the remote device.
             socket.BeginSend(buffer, 0, buffer.Length, 0,
                 new AsyncCallback(SendCallback), socket);
+            addLog("Send", localAddress, targetIP, data);
             sendDone.WaitOne();
         }
 
