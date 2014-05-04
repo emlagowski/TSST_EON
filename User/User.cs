@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace User
 {
-    class User
+    public class User
     {
-        String localAddress, remoteAddress;
+        public String localAddress, remoteAddress;
         IPEndPoint localEndPoint, remoteEndPoint;
         Socket socket;
 
@@ -25,19 +25,20 @@ namespace User
         private String response = String.Empty;
 
 
-        public User(String ip, String router_ip)
+        public User(String ip)
         {
             localAddress = ip;
             localEndPoint = new IPEndPoint(IPAddress.Parse(localAddress), 7000);
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            remoteAddress = router_ip;
-            remoteEndPoint = new IPEndPoint(IPAddress.Parse(remoteAddress), 7000);
             socket.Bind(localEndPoint);
-            Thread t = new Thread(Run);
-            t.Start();
         }
 
-        public void connect(){
+        public void connect(String router_ip)
+        {
+            remoteAddress = router_ip;
+            remoteEndPoint = new IPEndPoint(IPAddress.Parse(remoteAddress), 7000);
+            Thread t = new Thread(Run);
+            t.Start();
             socket.BeginConnect(remoteEndPoint, new AsyncCallback(ConnectCallback), socket);
             connectDone.WaitOne();
         }
