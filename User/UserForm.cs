@@ -43,8 +43,8 @@ namespace User
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            _user.Send("127.0.0." + this.targetAddress.Text, Convert.ToInt32(this.band.Text), this.message.Text, Guid.NewGuid().GetHashCode());
-        }
+            _user.Send("127.0.0." + this.targetAddress.Text, Convert.ToInt32(this.band.Text), this.message.Text, Convert.ToInt32(this.connectionBox.Text));
+        } // Guid.NewGuid().GetHashCode() // unique ID
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {

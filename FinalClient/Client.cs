@@ -300,25 +300,35 @@ namespace FinalClient
             s.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), s);
             sendDone.WaitOne();*/
-            int id = findWireID(data.EndAddress);
-            if (signaling.checkIfConnEstablished(data.connectionID, id))
+            if (client != null && !s.Equals(client))
+            {
+                 int id = findWireID(data.EndAddress);
+                 if (signaling.checkIfConnEstablished(data.connectionID, id))
+                 {
+                     MemoryStream fs = new MemoryStream();
+                     BinaryFormatter formatter = new BinaryFormatter();
+                     formatter.Serialize(fs, data);
+                     byte[] buffer = fs.ToArray();
+
+                     // Begin sending the data to the remote device.
+                     s.BeginSend(buffer, 0, buffer.Length, 0,
+                         new AsyncCallback(SendCallback), s);
+                     sendDone.WaitOne();
+                 }
+                 else { Console.WriteLine("Connection must be established first at: {0}", address); }
+            }
+            else
             {
                 MemoryStream fs = new MemoryStream();
-
                 BinaryFormatter formatter = new BinaryFormatter();
-
                 formatter.Serialize(fs, data);
-
                 byte[] buffer = fs.ToArray();
-
-
 
                 // Begin sending the data to the remote device.
                 s.BeginSend(buffer, 0, buffer.Length, 0,
                     new AsyncCallback(SendCallback), s);
                 sendDone.WaitOne();
             }
-            else { Console.WriteLine("Connection must be established first at: {0}", address); }
         }
 
         private int findWireID(String target)
@@ -360,6 +370,9 @@ namespace FinalClient
                     }                    
                 }
             }
+            // jesli jest to docelowy ruter z dolaczonym userem.
+            IPEndPoint tmpEP = new IPEndPoint(IPAddress.Parse(target), 7000);
+            if (client != null) if (client.RemoteEndPoint.Equals(tmpEP)) return client;
 
             // jesli nie znalazlo bezposredniego polaczenia!
             String unexpectedIP = unFib.findTarget(target);

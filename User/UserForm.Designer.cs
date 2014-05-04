@@ -46,6 +46,8 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.connectionBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -131,7 +133,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label6.Location = new System.Drawing.Point(185, 25);
+            this.label6.Location = new System.Drawing.Point(142, 25);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(65, 17);
             this.label6.TabIndex = 9;
@@ -141,7 +143,7 @@
             // 
             this.message.Location = new System.Drawing.Point(127, 49);
             this.message.Name = "message";
-            this.message.Size = new System.Drawing.Size(172, 20);
+            this.message.Size = new System.Drawing.Size(140, 20);
             this.message.TabIndex = 10;
             // 
             // sendButton
@@ -168,6 +170,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.connectionBox);
+            this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.band);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.label6);
@@ -228,6 +232,22 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(269, 25);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(31, 13);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "C_ID";
+            // 
+            // connectionBox
+            // 
+            this.connectionBox.Location = new System.Drawing.Point(274, 48);
+            this.connectionBox.Name = "connectionBox";
+            this.connectionBox.Size = new System.Drawing.Size(26, 20);
+            this.connectionBox.TabIndex = 15;
+            // 
             // UserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -273,5 +293,7 @@
         private System.Windows.Forms.TextBox band;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox connectionBox;
+        private System.Windows.Forms.Label label7;
     }
 }

@@ -29,6 +29,7 @@ namespace ExtSrc
                 if (addressList[i].addresOne == ip)
                 {
                     result = addressList[i].addressTwo;
+                    return result;
                 }
             }
             return result;
