@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExtSrc
 {
+    [Serializable()]
    public class AgentData
     {
        public String routerAddress;
