@@ -18,12 +18,12 @@ namespace FinalClient
         public int OutWireID, Bandwidth;
         public int connectionID; // musi byc jakas wiekksza losowa liczba zeby nie bylo ze dwie maja takie samo id
 
-        public Connection(int[] inLambdas, int[] outLambdas, int band, int cID) 
+        public Connection(int[] inLambdas, int[] outLambdas,int wireID, int band, int cID) 
         {
             EPIn = null;
             EPOut = null;
             InWireID = -1;
-            OutWireID = -1;
+            OutWireID = wireID;
             InLambdaIDs = null;
             OutLambdaIDs = null;
             Bandwidth = band;

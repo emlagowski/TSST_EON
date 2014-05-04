@@ -301,7 +301,7 @@ namespace FinalClient
                 new AsyncCallback(SendCallback), s);
             sendDone.WaitOne();*/
             int id = findWireID(data.EndAddress);
-            if (signaling.checkIfConnEstablished(data.connectionID), id)
+            if (signaling.checkIfConnEstablished(data.connectionID, id))
             {
                 MemoryStream fs = new MemoryStream();
 
