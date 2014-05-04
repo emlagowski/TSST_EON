@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace ExtSrc
 {
-   public static class AgentData
+   public class AgentData
     {
-       public static List<String> routers;
+       public String routerAddress;
+       public FIB fib;
+       public UnexpectedFIB unFib;
+       
     }
 }

@@ -64,7 +64,7 @@ namespace FinalClient
             });
             t5.Start();
 
-            ExtSrc.AgentData.routers = routers;
+            //ExtSrc.AgentData.routers = routers;
 
 
             int[] lambdasOut_c1 = {1,2,3,4,5 };
@@ -72,11 +72,11 @@ namespace FinalClient
             int[] lambdasIn_c2 = { 1, 2, 3, 4, 5 };
             //int[] lambdas_c2 = { 1, 2, 3, 4, 5 };
 
-            
-            
-           
-            clientOne.signaling.addConnection(new Connection(null, lambdasOut_c1,2, 5, 172), 2);
-            clientThree.signaling.addConnection(new Connection(lambdasOut_c1, null,5, 5, 172), 5);
+
+
+
+            clientOne.signaling.addConnection(new ExtSrc.Connection(null, lambdasOut_c1, 2, 5, 172), 2);
+            clientThree.signaling.addConnection(new ExtSrc.Connection(lambdasOut_c1, null, 5, 5, 172), 5);
 
           //  new Connection(2, 987);
            // new Connection(1, 543);

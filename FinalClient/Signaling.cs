@@ -24,9 +24,9 @@ namespace FinalClient
         private String response = String.Empty;
 
 
-        private List<WireBand> AvalaibleBandIN;
-        private List<WireBand> AvalaibleBandOUT;
-        private List<Connection> Connections;
+        private List<ExtSrc.WireBand> AvalaibleBandIN;
+        private List<ExtSrc.WireBand> AvalaibleBandOUT;
+        private List<ExtSrc.Connection> Connections;
 
         public Signaling()
         {
@@ -100,7 +100,7 @@ namespace FinalClient
 
                 MemoryStream ms = new MemoryStream(state.buffer);
 
-                state.conn = (Connection)formattor.Deserialize(ms);
+                state.conn = (ExtSrc.Connection)formattor.Deserialize(ms);
 
                 Connections.Add(state.conn);
                 //TUTAJ JESCZE TRZEBA BEDZIE DOROBIC ZE JAK OTRZYMA OBIEKT TO MUSI ZAALOKOWAC OBPOWIEDNIE PASMA W POLACZENIACH IN I OUT.
@@ -154,7 +154,7 @@ namespace FinalClient
                 Console.WriteLine(e.ToString());
             }
         }
-        private void Send(Socket client, Connection conn)
+        private void Send(Socket client, ExtSrc.Connection conn)
         {
             MemoryStream fs = new MemoryStream();
 
@@ -196,9 +196,9 @@ namespace FinalClient
         private void initWireBand()
         {
 
-            AvalaibleBandIN = new List<WireBand>();
-            AvalaibleBandOUT = new List<WireBand>();
-            Connections = new List<Connection>();
+            AvalaibleBandIN = new List<ExtSrc.WireBand>();
+            AvalaibleBandOUT = new List<ExtSrc.WireBand>();
+            Connections = new List<ExtSrc.Connection>();
 
             String xmlString = File.ReadAllText("wires.xml");
             using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
@@ -212,8 +212,8 @@ namespace FinalClient
                     reader.MoveToNextAttribute();
                     string distance = reader.Value;
 
-                    AvalaibleBandIN.Add(new WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
-                    AvalaibleBandOUT.Add(new WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
+                    AvalaibleBandIN.Add(new ExtSrc.WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
+                    AvalaibleBandOUT.Add(new ExtSrc.WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
 
 
                 }
@@ -224,25 +224,26 @@ namespace FinalClient
         public Boolean checkIfConnEstablished(int id, int wireID)
         {
             Boolean b = false;
-            Connections.ForEach(delegate(Connection c) {
+            Connections.ForEach(delegate(ExtSrc.Connection c)
+            {
                if( c.connectionID == id && c.OutWireID == wireID) b = true;
             });
             return b;
         }
-        public WireBand findWireIN(int wireID)
+        public ExtSrc.WireBand findWireIN(int wireID)
         {
-            WireBand result = null;
-            AvalaibleBandIN.ForEach(delegate(WireBand wb)
+            ExtSrc.WireBand result = null;
+            AvalaibleBandIN.ForEach(delegate(ExtSrc.WireBand wb)
             {
                 if (wb.wireID == wireID) result = wb;
             });
             return result;
 
         }
-        public WireBand findWireOut(int wireID)
+        public ExtSrc.WireBand findWireOut(int wireID)
         {
-            WireBand result = null;
-            AvalaibleBandOUT.ForEach(delegate(WireBand wb)
+            ExtSrc.WireBand result = null;
+            AvalaibleBandOUT.ForEach(delegate(ExtSrc.WireBand wb)
             {
                 if (wb.wireID == wireID) result = wb;
             });
@@ -252,7 +253,7 @@ namespace FinalClient
 
         public Boolean allocateConnection() { return false; }
 
-        public void addConnection(Connection c, int wireID)
+        public void addConnection(ExtSrc.Connection c, int wireID)
         {
             //NIE SPRAWDZA CZY JUZ SA ZAJETE LAMBDY 
             if (c.InLambdaIDs != null)
@@ -281,7 +282,7 @@ namespace FinalClient
         public const int BufferSize = 256;
         // Receive buffer.
         public byte[] buffer = new byte[BufferSize];
-        public Connection conn { get; set; }
+        public ExtSrc.Connection conn { get; set; }
     }
 }
 

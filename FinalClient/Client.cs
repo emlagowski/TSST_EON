@@ -18,7 +18,7 @@ namespace FinalClient
     {
         public Signaling signaling;
         public static XmlDocument wires;
-        public static FIB fib;
+        public static ExtSrc.FIB fib;
         XmlDocument xmlLog, xmlWires;
         XmlNode rootNodeLog, rootNodeWires;
         public String logName, wiresName;
@@ -27,7 +27,7 @@ namespace FinalClient
         Socket clientSocket, client; // clientSocket is just for listening
         ArrayList sockets;
         private String response = String.Empty;
-        UnexpectedFIB unFib;
+        ExtSrc.UnexpectedFIB unFib;
 
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
@@ -39,7 +39,7 @@ namespace FinalClient
         public Client(string ip)
         {
             address = ip;
-            unFib = new UnexpectedFIB();
+            unFib = new ExtSrc.UnexpectedFIB();
             readUnFIB();
             signaling = new Signaling();
             xmlLog = new XmlDocument();
@@ -75,7 +75,7 @@ namespace FinalClient
 
         public static void readFIB()
         {
-            fib = new FIB();
+            fib = new ExtSrc.FIB();
             String xmlString = File.ReadAllText("wires.xml");
             using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
             {
@@ -92,7 +92,7 @@ namespace FinalClient
                     reader.MoveToNextAttribute();
                     string id = reader.Value;
 
-                    fib.add(new Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
+                    fib.add(new ExtSrc.Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
                                         new IPEndPoint(IPAddress.Parse(s_ip), Convert.ToInt32(s_port)),
                                         Convert.ToInt32(id)));
                 }
@@ -153,7 +153,7 @@ namespace FinalClient
             ArrayList tmp = new ArrayList();
             for (int i = 0; i < fib.Wires.Count; i++)
             {
-                Wire w = fib.Wires[i] as Wire;
+                ExtSrc.Wire w = fib.Wires[i] as ExtSrc.Wire;
                 if (address.Equals(w.One.Address.ToString()))
                 {
                     tmp.Add(w.One.Port);
@@ -325,7 +325,7 @@ namespace FinalClient
         {
             for (int i = 0; i < fib.Wires.Count; i++)
             {
-                Wire w = fib.Wires[i] as Wire;
+                ExtSrc.Wire w = fib.Wires[i] as ExtSrc.Wire;
                 if ((address.Equals(w.One.Address.ToString()) && target.Equals(w.Two.Address.ToString())) ||
                     (address.Equals(w.Two.Address.ToString()) && target.Equals(w.One.Address.ToString())))
                 {
@@ -345,7 +345,7 @@ namespace FinalClient
         {
             for (int i = 0; i < fib.Wires.Count; i++)
             {
-                Wire w = fib.Wires[i] as Wire;
+                ExtSrc.Wire w = fib.Wires[i] as ExtSrc.Wire;
                 if ((address.Equals(w.One.Address.ToString()) && target.Equals(w.Two.Address.ToString())) ||
                     (address.Equals(w.Two.Address.ToString()) && target.Equals(w.One.Address.ToString())))
                 {
@@ -371,7 +371,7 @@ namespace FinalClient
         {
             for (int i = 0; i < fib.Wires.Count; i++)
             {
-                Wire w = fib.Wires[i] as Wire;
+                ExtSrc.Wire w = fib.Wires[i] as ExtSrc.Wire;
                 if (iep.Equals(w.Two))
                 {
                     return w.One.Address.ToString();

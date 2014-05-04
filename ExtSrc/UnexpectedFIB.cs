@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FinalClient
+namespace ExtSrc
 {
-    class UnexpectedFIB
+    public class UnexpectedFIB
     {
         List<AddressPair> addressList;
 

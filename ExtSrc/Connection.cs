@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FinalClient
+namespace ExtSrc
 {
     [Serializable()]
     public class Connection
