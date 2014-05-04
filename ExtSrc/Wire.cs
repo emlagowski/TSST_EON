@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 //bla
 namespace ExtSrc
 {
+    [Serializable()]
     public class Wire
     {
         IPEndPoint _one, _two;
