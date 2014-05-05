@@ -44,6 +44,26 @@ namespace ExtSrc
             this.AvalaibleBandOUT = AvalaibleBandOUT;
             this.Connections = Connections;
         }
+        public ExtSrc.WireBand findWireIN(int wireID)
+        {
+            ExtSrc.WireBand result = null;
+            AvalaibleBandIN.ForEach(delegate(ExtSrc.WireBand wb)
+            {
+                if (wb.wireID == wireID) result = wb;
+            });
+            return result;
+
+        }
+        public ExtSrc.WireBand findWireOut(int wireID)
+        {
+            ExtSrc.WireBand result = null;
+            AvalaibleBandOUT.ForEach(delegate(ExtSrc.WireBand wb)
+            {
+                if (wb.wireID == wireID) result = wb;
+            });
+            return result;//CZYto zwraca mi referencje???????????
+
+        }
 
     }
 }
