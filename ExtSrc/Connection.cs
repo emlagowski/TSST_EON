@@ -18,6 +18,15 @@ namespace ExtSrc
         public int OutWireID, Bandwidth;
         public int connectionID; // musi byc jakas wiekksza losowa liczba zeby nie bylo ze dwie maja takie samo id
 
+        public int[] InLambdaIdsP { get { return InLambdaIDs; } }
+        public int[] OutLambdaIDsP { get { return OutLambdaIDs; } }
+        public int InWireIDP { get { return InWireID; } }
+        public int OutWireIDP { get { return OutWireID; } }
+        public int BandwidthP { get { return Bandwidth; } }
+        public int connectionIDP { get { return connectionID; } }
+
+
+
         public Connection(int[] inLambdas, int[] outLambdas,int wireID, int band, int cID) 
         {
             EPIn = null;

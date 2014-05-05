@@ -29,6 +29,21 @@ namespace ExtSrc
             set { fib = value; }
         }
 
+        public List<ExtSrc.WireBand> AbIN
+        {
+            get { return AvalaibleBandIN; }
+        }
+
+        public List<ExtSrc.WireBand> AbOUT
+        {
+            get { return AvalaibleBandOUT; }
+        }
+
+        public List<ExtSrc.Connection> Conn
+        {
+            get { return Connections; }
+        }
+
         public UnexpectedFIB unFibTable
         {
             get { return unFib; }

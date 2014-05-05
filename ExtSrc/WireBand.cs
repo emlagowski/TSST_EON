@@ -9,10 +9,19 @@ namespace ExtSrc
     [Serializable()]
     public class WireBand
     {
-       public int wireID;
-      public int lambdaCapactity;
+        public int wireID;
+        public int lambdaCapactity;
         public Boolean[] lambdas;
         public int distance;
+
+        public int wID { get { return wireID; } }
+
+        public int lambCap { get { return lambdaCapactity; } }
+
+        public Boolean[] lamb { get { return lambdas; } }
+
+        public int dist { get { return distance; } }
+
         public WireBand(int id, int capacity, int distance)
         {
             wireID = id;

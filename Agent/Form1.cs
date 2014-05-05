@@ -76,6 +76,13 @@ namespace Agent
             comboBox3.DisplayMember = "IDD";
             comboBox3.ValueMember = "IDD";
 
+            ExtSrc.AgentData agTmp3 = comboBox1.SelectedItem as ExtSrc.AgentData;
+
+            dataGridView1.DataSource = agTmp3.fibTable.Wires;
+            dataGridView2.DataSource = agTmp3.AbIN;
+            dataGridView3.DataSource = agTmp3.AbOUT;
+            dataGridView4.DataSource = agTmp3.Conn;
+
 
             this.Refresh();
         }
@@ -214,6 +221,11 @@ namespace Agent
 
             }
             this.Refresh(); 
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
