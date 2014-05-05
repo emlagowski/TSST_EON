@@ -23,6 +23,11 @@ namespace ExtSrc
             get { return _two; }
         }
 
+        public int IDD
+        {
+            get { return ID; }
+        }
+
         public Wire(IPEndPoint first, IPEndPoint second, int id)
         {
             _one = first;

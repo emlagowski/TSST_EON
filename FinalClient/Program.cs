@@ -93,12 +93,15 @@ namespace FinalClient
           //  clientTwo.Send(d3, "127.0.0.10");
           //  Thread.Sleep(1000);
              // clientFive.Send(d4, "127.0.0.40");
-
-            clientOne.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientOne.address, Client.fib, clientOne.unFib));
-            clientTwo.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientTwo.address, Client.fib, clientTwo.unFib));
-            clientThree.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientThree.address, Client.fib, clientThree.unFib));
-            clientFour.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientFour.address, Client.fib, clientFour.unFib));
-            clientFive.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientFive.address, Client.fib, clientFive.unFib));
+            clientOne.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientOne.address, Client.fib, clientOne.unFib, clientOne.signaling.AvBaIN, clientOne.signaling.AvBaOUT, clientOne.signaling.Conn));
+            Thread.Sleep(1000);
+            clientTwo.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientTwo.address, Client.fib, clientTwo.unFib, clientTwo.signaling.AvBaIN, clientTwo.signaling.AvBaOUT, clientTwo.signaling.Conn));
+            Thread.Sleep(1000);
+            clientThree.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientThree.address, Client.fib, clientThree.unFib, clientThree.signaling.AvBaIN, clientThree.signaling.AvBaOUT, clientThree.signaling.Conn));
+            Thread.Sleep(1000);
+            clientFour.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientFour.address, Client.fib, clientFour.unFib, clientFour.signaling.AvBaIN, clientFour.signaling.AvBaOUT, clientFour.signaling.Conn));
+            Thread.Sleep(1000);
+            clientFive.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientFive.address, Client.fib, clientFive.unFib, clientFive.signaling.AvBaIN, clientFive.signaling.AvBaOUT, clientFive.signaling.Conn));
             
             
 

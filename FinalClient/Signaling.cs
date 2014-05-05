@@ -28,6 +28,21 @@ namespace FinalClient
         private List<ExtSrc.WireBand> AvalaibleBandOUT;
         private List<ExtSrc.Connection> Connections;
 
+        public List<ExtSrc.WireBand> AvBaIN
+        {
+            get { return AvalaibleBandIN; }
+        }
+
+        public List<ExtSrc.WireBand> AvBaOUT
+        {
+            get { return AvalaibleBandOUT; }
+        }
+
+        public List<ExtSrc.Connection> Conn
+        {
+            get { return Connections; }
+        }
+
         public Signaling()
         {
             initWireBand();

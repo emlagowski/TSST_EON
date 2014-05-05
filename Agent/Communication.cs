@@ -11,12 +11,19 @@ using System.Threading.Tasks;
 
 namespace Agent
 {
-    class Communication
+    public class Communication
     {
         Socket socket;
         public ManualResetEvent allDone = new ManualResetEvent(false);
         List<Socket> sockets;
         public List<ExtSrc.AgentData> agentData;
+
+        public List<ExtSrc.AgentData> DataList
+        {
+            get { return agentData; }
+            set { agentData = value; }
+        }
+
         public Communication()
         {
             sockets = new List<Socket>();
