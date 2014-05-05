@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Agent
 {
@@ -15,7 +16,10 @@ namespace Agent
     {
         Socket socket;
         public ManualResetEvent allDone = new ManualResetEvent(false);
-        List<Socket> sockets;
+        public ManualResetEvent sendDone = new ManualResetEvent(false);
+
+       // List<Socket> sockets;
+        Dictionary<String,Socket> sockets;
         public List<ExtSrc.AgentData> agentData;
 
         public List<ExtSrc.AgentData> DataList
@@ -26,7 +30,7 @@ namespace Agent
 
         public Communication()
         {
-            sockets = new List<Socket>();
+            sockets = new Dictionary<String, Socket>();
             agentData = new List<ExtSrc.AgentData>();
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666));
@@ -72,7 +76,7 @@ namespace Agent
             // Get the socket that handles the client request.
             Socket listener = (Socket)ar.AsyncState;
             Socket handler = listener.EndAccept(ar);
-            sockets.Add(handler);
+            sockets.Add(Convert.ToString((handler.RemoteEndPoint as IPEndPoint).Address), handler);
             //addConnection(handler.RemoteEndPoint.ToString());
             Console.WriteLine("Socket [{0}] {1} - {2} was added to sockets list", sockets.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
 
@@ -112,6 +116,50 @@ namespace Agent
             handler.BeginReceive(newState.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), newState);
            
+        }
+
+        public void Send(String ip, ExtSrc.AgentData adata)
+        {
+            Socket client;
+            if (!sockets.TryGetValue(ip, out client))
+            {
+                MessageBox.Show("Error in finding socket , method Send().", "ERROR");
+
+            }
+            MemoryStream fs = new MemoryStream();
+
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            formatter.Serialize(fs, adata);
+
+            byte[] buffer = fs.ToArray();
+
+
+
+            // Begin sending the data to the remote device.
+            client.BeginSend(buffer, 0, buffer.Length, 0,
+                new AsyncCallback(SendCallback), client);
+            sendDone.WaitOne();
+        }
+
+        private void SendCallback(IAsyncResult ar)
+        {
+            try
+            {
+                // Retrieve the socket from the state object.
+                Socket client = (Socket)ar.AsyncState;
+
+                // Complete sending the data to the remote device.
+                int bytesSent = client.EndSend(ar);
+                Console.WriteLine("Agent: Sent {0} bytes to Router.", bytesSent);
+
+                // Signal that all bytes have been sent.
+                sendDone.Set();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
     }
     public class StateObject

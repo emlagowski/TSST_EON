@@ -92,11 +92,34 @@ namespace Agent
             //Form2 form2 = new Form2();
             //DialogResult dialogresult = form2.ShowDialog();
             //form2.Dispose();
-
-            foreach (int indexChecked in checkedListBox1.CheckedIndices) 
-            { 
-                
+            if (checkedListBox1.CheckedItems.Count != checkedListBox2.CheckedItems.Count) 
+            {
+                MessageBox.Show("Bandwidth IN and OUT must be the same.", "ERROR");
+                return;
             }
+
+            int[] lambdasOut = new int[checkedListBox1.CheckedItems.Count];
+            int[] lambdasIn = new int[checkedListBox2.CheckedItems.Count];
+
+             
+            checkedListBox1.CheckedIndices.CopyTo(lambdasOut, 0);
+            checkedListBox2.CheckedIndices.CopyTo(lambdasIn, 0);
+            int InWireID = (comboBox3.SelectedItem as ExtSrc.Wire).ID;
+            int OutWireID = (comboBox2.SelectedItem as ExtSrc.Wire).ID;
+            int Bandwidth = checkedListBox2.CheckedItems.Count;
+            int cID;
+            try
+            {
+                cID = Convert.ToInt32(textBox1.Text);
+            }
+            catch (Exception ex) 
+            { 
+                MessageBox.Show("Wrong Connection ID format. Must be Int32 value.", "ERROR");
+                return;            
+            }
+            
+            comm.Send((comboBox1.SelectedItem as ExtSrc.AgentData).address, 
+                new ExtSrc.AgentData(new ExtSrc.Connection(lambdasIn, lambdasOut, InWireID, OutWireID, Bandwidth, cID)));
 
         }
 
