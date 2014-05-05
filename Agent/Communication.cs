@@ -30,6 +30,8 @@ namespace Agent
             agentData = new List<ExtSrc.AgentData>();
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666));
+            socket.ReceiveBufferSize = 1024 * 100;
+
             Thread t = new Thread(Run);
             t.Start();
         }
