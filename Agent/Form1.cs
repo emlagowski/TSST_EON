@@ -71,6 +71,7 @@ namespace Agent
             comboBox2.DisplayMember = "IDD";
             comboBox2.ValueMember = "IDD";
 
+            comboBox3.BindingContext = new BindingContext();
             comboBox3.DataSource = bs3.DataSource;
             comboBox3.DisplayMember = "IDD";
             comboBox3.ValueMember = "IDD";
