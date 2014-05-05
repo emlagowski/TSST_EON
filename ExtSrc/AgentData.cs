@@ -50,6 +50,16 @@ namespace ExtSrc
             set { unFib = value; }
         }
 
+        public AgentData(Connection conn)
+        {
+            this.routerAddress = null;
+            this.fib = null;
+            this.unFib = null;
+            this.AvalaibleBandIN = null;
+            this.AvalaibleBandOUT = null;
+            this.Connections = new List<ExtSrc.Connection>(){conn};
+        }
+
         public AgentData(String address, FIB fib, UnexpectedFIB ufib, List<ExtSrc.WireBand> AvalaibleBandIN, List<ExtSrc.WireBand> AvalaibleBandOUT, List<ExtSrc.Connection> Connections)
         {
             this.routerAddress = address;
@@ -59,6 +69,7 @@ namespace ExtSrc
             this.AvalaibleBandOUT = AvalaibleBandOUT;
             this.Connections = Connections;
         }
+
         public ExtSrc.WireBand findWireIN(int wireID)
         {
             ExtSrc.WireBand result = null;

@@ -15,13 +15,15 @@ namespace FinalClient
     {
         IPEndPoint localEP, agentEP;
         public static Socket socket;
+        private Signaling sgnl;
         private ManualResetEvent signalingReceive = new ManualResetEvent(false);
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
         
-        public AgentCommunication(String ip) 
+        public AgentCommunication(String ip, Signaling s) 
         {
+            sgnl = s;
             localEP = new IPEndPoint(IPAddress.Parse(ip), 6666);
             agentEP = new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666);
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -111,13 +113,21 @@ namespace FinalClient
 
                 state.ad = (ExtSrc.AgentData)formattor.Deserialize(ms);
 
-                
+                ProcessAgentData(state.ad);
                              
                 receiveDone.Set();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+            }
+        }
+
+        private void ProcessAgentData(ExtSrc.AgentData agentData)
+        {
+            foreach (ExtSrc.Connection conn in agentData.Connections)
+            {
+                sgnl.addConnection(conn);
             }
         }
 

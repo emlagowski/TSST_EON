@@ -12,9 +12,9 @@ namespace ExtSrc
     {
         IPEndPoint EPIn, EPOut;
 
-        [NonSerialized()] public int[] InLambdaIDs;
+        public int[] InLambdaIDs;
         public int[] OutLambdaIDs;
-        [NonSerialized()] int InWireID;
+        public int InWireID;
         public int OutWireID, Bandwidth;
         public int connectionID; // musi byc jakas wiekksza losowa liczba zeby nie bylo ze dwie maja takie samo id
 
@@ -33,11 +33,24 @@ namespace ExtSrc
             EPOut = null;
             InWireID = -1;
             OutWireID = wireID;
-            InLambdaIDs = null;
-            OutLambdaIDs = null;
+            InLambdaIDs = inLambdas;
+            OutLambdaIDs = outLambdas;
             Bandwidth = band;
             connectionID = cID;
         
+        }
+
+        public Connection(int[] inLambdas, int[] outLambdas, int inWireID, int outWireID, int band, int cID)
+        {
+            EPIn = null;
+            EPOut = null;
+            InWireID = inWireID;
+            OutWireID = outWireID;
+            InLambdaIDs = inLambdas;
+            OutLambdaIDs = outLambdas;
+            Bandwidth = band;
+            connectionID = cID;
+
         }
         public Connection(IPEndPoint inEP, IPEndPoint outEP, int inWire, int outWire, int[] inLambdas, int[] outLambdas, int band, int cID)
         {

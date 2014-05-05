@@ -268,18 +268,18 @@ namespace FinalClient
 
         public Boolean allocateConnection() { return false; }
 
-        public void addConnection(ExtSrc.Connection c, int wireID)
+        public void addConnection(ExtSrc.Connection c)
         {
             //NIE SPRAWDZA CZY JUZ SA ZAJETE LAMBDY 
             if (c.InLambdaIDs != null)
             {
                 for (int i = 0; i < c.InLambdaIDs.Length; i++)
-                    findWireIN(wireID).lambdas[c.InLambdaIDs[i]] = false; // bedzie blad jak findwire zwroci null
+                    findWireIN(c.InWireID).lambdas[c.InLambdaIDs[i]] = false; // bedzie blad jak findwire zwroci null
             }
             if (c.OutLambdaIDs != null)
             {
                 for (int i = 0; i < c.OutLambdaIDs.Length; i++)
-                    findWireOut(wireID).lambdas[c.OutLambdaIDs[i]] = false;
+                    findWireOut(c.OutWireID).lambdas[c.OutLambdaIDs[i]] = false;
             }
             Connections.Add(c); // nie sprawdza czy id sie roznia
 
