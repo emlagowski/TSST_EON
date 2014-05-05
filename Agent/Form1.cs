@@ -117,10 +117,16 @@ namespace Agent
                 MessageBox.Show("Wrong Connection ID format. Must be Int32 value.", "ERROR");
                 return;            
             }
-            
-            comm.Send((comboBox1.SelectedItem as ExtSrc.AgentData).address, 
-                new ExtSrc.AgentData(new ExtSrc.Connection(lambdasIn, lambdasOut, InWireID, OutWireID, Bandwidth, cID)));
+            ExtSrc.Connection connection = new ExtSrc.Connection(lambdasIn, lambdasOut, InWireID, OutWireID, Bandwidth, cID);
+            comm.Send((comboBox1.SelectedItem as ExtSrc.AgentData).address, new ExtSrc.AgentData(connection));
 
+            //update local agent data
+            foreach (ExtSrc.AgentData a in comm.agentData)
+            {
+                if(a.address == (comboBox1.SelectedItem as ExtSrc.AgentData).address)
+                a.addConnection(connection);
+            }
+            myTimer.Start();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)

@@ -16,6 +16,7 @@ namespace FinalClient
         IPEndPoint localEP, agentEP;
         public static Socket socket;
         private Signaling sgnl;
+        String address;
         private ManualResetEvent signalingReceive = new ManualResetEvent(false);
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
@@ -23,6 +24,7 @@ namespace FinalClient
         
         public AgentCommunication(String ip, Signaling s) 
         {
+            address = ip;
             sgnl = s;
             localEP = new IPEndPoint(IPAddress.Parse(ip), 6666);
             agentEP = new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666);
@@ -128,6 +130,7 @@ namespace FinalClient
             foreach (ExtSrc.Connection conn in agentData.Connections)
             {
                 sgnl.addConnection(conn);
+                Console.WriteLine("Connection ID: {0} was added by AGENT at {1}", conn.connectionID, address);
             }
         }
 

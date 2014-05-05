@@ -42,8 +42,8 @@ namespace FinalClient
             address = ip;
             unFib = new ExtSrc.UnexpectedFIB();
             readUnFIB();
-            agentCom = new AgentCommunication(address, signaling);
             signaling = new Signaling();
+            agentCom = new AgentCommunication(address, signaling);
             xmlLog = new XmlDocument();
             rootNodeLog = xmlLog.CreateElement("router-log");
             xmlLog.AppendChild(rootNodeLog);
