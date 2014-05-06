@@ -354,8 +354,30 @@ namespace Agent
             int IN = (comboBox2.SelectedItem as ExtSrc.Wire).distance;
             int OUT = (comboBox3.SelectedItem as ExtSrc.Wire).distance;
             int band = comboBox4.SelectedIndex + 1;
-            IN_label.Text = (2 * band).ToString();
-            OUT_label.Text = (2 * band).ToString();
+
+            if (IN < 1000 && OUT < 1000)
+            {
+                IN_label.Text = band.ToString();
+                OUT_label.Text = band.ToString();
+            }
+            else
+            {
+                if (IN < OUT)
+                {
+                    IN_label.Text = band.ToString();
+                    OUT_label.Text = (2 * band).ToString();
+                }
+                else if (OUT < IN)
+                {
+                    IN_label.Text = (2 * band).ToString();
+                    OUT_label.Text = band.ToString();
+                }
+                else
+                {
+                    IN_label.Text = (2 * band).ToString();
+                    OUT_label.Text = (2 * band).ToString();
+                }
+            }
             IN_label.Refresh();
             OUT_label.Refresh();
         }
