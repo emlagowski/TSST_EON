@@ -19,7 +19,8 @@ namespace FinalClient
         public Signaling signaling;
         public AgentCommunication agentCom;
         public static XmlDocument wires;
-        public static ExtSrc.PhysicalWires physicalWires;
+        public static ExtSrc.PhysicalWires globalPhysicalWires;
+        public ExtSrc.PhysicalWires localPhysicalWires;
         XmlDocument xmlLog, xmlWires;
         XmlNode rootNodeLog, rootNodeWires;
         public String logName, wiresName;
@@ -41,6 +42,8 @@ namespace FinalClient
         {
             address = ip;
             fib = new ExtSrc.FIB();
+            localPhysicalWires = new ExtSrc.PhysicalWires();
+            readLocalPhysicalWires();
             readFIB();
             signaling = new Signaling();
             agentCom = new AgentCommunication(address, signaling);
@@ -73,18 +76,28 @@ namespace FinalClient
             Thread t = new Thread(Run);
             t.Start();
 
-            agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(address, Client.physicalWires, fib, signaling.AvBaIN, signaling.AvBaOUT, signaling.Conn));
+            agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(address, localPhysicalWires, fib, signaling.AvBaIN, signaling.AvBaOUT, signaling.Conn));
         }
 
-
+        private void readLocalPhysicalWires()
+        {
+            foreach (ExtSrc.Wire w in globalPhysicalWires.Wires) 
+            {
+                if ((w.One.Address as IPAddress).ToString() == address || (w.Two.Address as IPAddress).ToString() == address) 
+                {
+                    localPhysicalWires.add(w);
+                }         
+            }
+        }
         public static void readPhysicalWires() // now PhysicalWires
         {
-            physicalWires = new ExtSrc.PhysicalWires();
+            globalPhysicalWires = new ExtSrc.PhysicalWires();
             String xmlString = File.ReadAllText("wires.xml");
             using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
             {
                 while (reader.ReadToFollowing("wire"))
                 {
+                    
                     reader.MoveToFirstAttribute();
                     string f_ip = reader.Value;
                     reader.MoveToNextAttribute();
@@ -95,10 +108,11 @@ namespace FinalClient
                     string s_port = reader.Value;
                     reader.MoveToNextAttribute();
                     string id = reader.Value;
-
-                    physicalWires.add(new ExtSrc.Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
+                    
+                    globalPhysicalWires.add(new ExtSrc.Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
                                         new IPEndPoint(IPAddress.Parse(s_ip), Convert.ToInt32(s_port)),
                                         Convert.ToInt32(id)));
+                    
                 }
             }
         }
@@ -158,9 +172,9 @@ namespace FinalClient
         private ArrayList findingPorts()
         {
             ArrayList tmp = new ArrayList();
-            for (int i = 0; i < physicalWires.Wires.Count; i++)
+            for (int i = 0; i < globalPhysicalWires.Wires.Count; i++)
             {
-                ExtSrc.Wire w = physicalWires.Wires[i] as ExtSrc.Wire;
+                ExtSrc.Wire w = globalPhysicalWires.Wires[i] as ExtSrc.Wire;
                 if (address.Equals(w.One.Address.ToString()))
                 {
                     tmp.Add(w.One.Port);
@@ -343,9 +357,9 @@ namespace FinalClient
 
         private int findWireID(String target)
         {
-            for (int i = 0; i < physicalWires.Wires.Count; i++)
+            for (int i = 0; i < globalPhysicalWires.Wires.Count; i++)
             {
-                ExtSrc.Wire w = physicalWires.Wires[i] as ExtSrc.Wire;
+                ExtSrc.Wire w = globalPhysicalWires.Wires[i] as ExtSrc.Wire;
                 if ((address.Equals(w.One.Address.ToString()) && target.Equals(w.Two.Address.ToString())) ||
                     (address.Equals(w.Two.Address.ToString()) && target.Equals(w.One.Address.ToString())))
                 {
@@ -363,9 +377,9 @@ namespace FinalClient
         
         private Socket findTarget(String target)
         {
-            for (int i = 0; i < physicalWires.Wires.Count; i++)
+            for (int i = 0; i < globalPhysicalWires.Wires.Count; i++)
             {
-                ExtSrc.Wire w = physicalWires.Wires[i] as ExtSrc.Wire;
+                ExtSrc.Wire w = globalPhysicalWires.Wires[i] as ExtSrc.Wire;
                 if ((address.Equals(w.One.Address.ToString()) && target.Equals(w.Two.Address.ToString())) ||
                     (address.Equals(w.Two.Address.ToString()) && target.Equals(w.One.Address.ToString())))
                 {
@@ -392,9 +406,9 @@ namespace FinalClient
 
         private String findTargetIP(IPEndPoint iep)
         {
-            for (int i = 0; i < physicalWires.Wires.Count; i++)
+            for (int i = 0; i < globalPhysicalWires.Wires.Count; i++)
             {
-                ExtSrc.Wire w = physicalWires.Wires[i] as ExtSrc.Wire;
+                ExtSrc.Wire w = globalPhysicalWires.Wires[i] as ExtSrc.Wire;
                 if (iep.Equals(w.Two))
                 {
                     return w.One.Address.ToString();
