@@ -23,7 +23,7 @@ namespace FinalClient
 
         private String response = String.Empty;
 
-
+        private String clientAddress;
         private List<ExtSrc.WireBand> AvalaibleBandIN;
         private List<ExtSrc.WireBand> AvalaibleBandOUT;
         private List<ExtSrc.Connection> Connections;
@@ -43,8 +43,9 @@ namespace FinalClient
             get { return Connections; }
         }
 
-        public Signaling()
+        public Signaling(String clientAddress)
         {
+            this.clientAddress = clientAddress;
             initWireBand();
             //NARAZIE ZAKOMENTOWANE BO TO DO 2 ETAPU
 
@@ -226,10 +227,17 @@ namespace FinalClient
                     string capacity = reader.Value;
                     reader.MoveToNextAttribute();
                     string distance = reader.Value;
+                    reader.MoveToAttribute("FirstAddress");
+                    string fIp = reader.Value;
+                    reader.MoveToAttribute("SecondAddress");
+                    string sIp = reader.Value;
 
-                    AvalaibleBandIN.Add(new ExtSrc.WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
-                    AvalaibleBandOUT.Add(new ExtSrc.WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
 
+                    if ((clientAddress == fIp) || (clientAddress == sIp))
+                    {
+                        AvalaibleBandIN.Add(new ExtSrc.WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
+                        AvalaibleBandOUT.Add(new ExtSrc.WireBand(Convert.ToInt32(id), Convert.ToInt32(capacity), Convert.ToInt32(distance)));
+                    }
 
                 }
             }

@@ -45,7 +45,7 @@ namespace FinalClient
             localPhysicalWires = new ExtSrc.PhysicalWires();
             readLocalPhysicalWires();
             readFIB();
-            signaling = new Signaling();
+            signaling = new Signaling(address);
             agentCom = new AgentCommunication(address, signaling);
             xmlLog = new XmlDocument();
             rootNodeLog = xmlLog.CreateElement("router-log");
