@@ -105,10 +105,9 @@ namespace FinalClient
 
         public void readFIB() // now FIB
         {
-            String xmlString = File.ReadAllText("unexpectedFIB.xml");
+            String xmlString = File.ReadAllText(address+".FIB.xml");
             using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
             {
-                reader.ReadToFollowing(String.Concat("w",address.Replace(".","")));
                 while (reader.ReadToFollowing("wire"))
                 {
                     reader.MoveToFirstAttribute();
