@@ -13,7 +13,7 @@ namespace FinalClient
         static void Main(string[] args)
         {
            // List<String> routers = new List<string>();
-            Client.readFIB();
+            Client.readPhysicalWires();
             Client clientOne = new Client("127.0.0.10");
           //  routers.Add("127.0.0.10");
             

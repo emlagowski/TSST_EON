@@ -19,7 +19,7 @@ namespace FinalClient
         public Signaling signaling;
         public AgentCommunication agentCom;
         public static XmlDocument wires;
-        public static ExtSrc.FIB fib;
+        public static ExtSrc.PhysicalWires physicalWires;
         XmlDocument xmlLog, xmlWires;
         XmlNode rootNodeLog, rootNodeWires;
         public String logName, wiresName;
@@ -28,7 +28,7 @@ namespace FinalClient
         Socket clientSocket, client; // clientSocket is just for listening
         ArrayList sockets;
         private String response = String.Empty;
-        public ExtSrc.UnexpectedFIB unFib;
+        public ExtSrc.FIB fib;
 
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
@@ -40,8 +40,8 @@ namespace FinalClient
         public Client(string ip)
         {
             address = ip;
-            unFib = new ExtSrc.UnexpectedFIB();
-            readUnFIB();
+            fib = new ExtSrc.FIB();
+            readFIB();
             signaling = new Signaling();
             agentCom = new AgentCommunication(address, signaling);
             xmlLog = new XmlDocument();
@@ -73,13 +73,13 @@ namespace FinalClient
             Thread t = new Thread(Run);
             t.Start();
 
-            agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(address, Client.fib, unFib, signaling.AvBaIN, signaling.AvBaOUT, signaling.Conn));
+            agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(address, Client.physicalWires, fib, signaling.AvBaIN, signaling.AvBaOUT, signaling.Conn));
         }
 
 
-        public static void readFIB()
+        public static void readPhysicalWires() // now PhysicalWires
         {
-            fib = new ExtSrc.FIB();
+            physicalWires = new ExtSrc.PhysicalWires();
             String xmlString = File.ReadAllText("wires.xml");
             using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
             {
@@ -96,14 +96,14 @@ namespace FinalClient
                     reader.MoveToNextAttribute();
                     string id = reader.Value;
 
-                    fib.add(new ExtSrc.Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
+                    physicalWires.add(new ExtSrc.Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
                                         new IPEndPoint(IPAddress.Parse(s_ip), Convert.ToInt32(s_port)),
                                         Convert.ToInt32(id)));
                 }
             }
         }
 
-        public void readUnFIB()
+        public void readFIB() // now FIB
         {
             String xmlString = File.ReadAllText("unexpectedFIB.xml");
             using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
@@ -116,7 +116,7 @@ namespace FinalClient
                     reader.MoveToNextAttribute();
                     string second = reader.Value;
                     //czy on czyta tylko w calejklamrze address??
-                    unFib.addNext(first, second);
+                    fib.addNext(first, second);
                 }
             }
         }
@@ -158,9 +158,9 @@ namespace FinalClient
         private ArrayList findingPorts()
         {
             ArrayList tmp = new ArrayList();
-            for (int i = 0; i < fib.Wires.Count; i++)
+            for (int i = 0; i < physicalWires.Wires.Count; i++)
             {
-                ExtSrc.Wire w = fib.Wires[i] as ExtSrc.Wire;
+                ExtSrc.Wire w = physicalWires.Wires[i] as ExtSrc.Wire;
                 if (address.Equals(w.One.Address.ToString()))
                 {
                     tmp.Add(w.One.Port);
@@ -343,9 +343,9 @@ namespace FinalClient
 
         private int findWireID(String target)
         {
-            for (int i = 0; i < fib.Wires.Count; i++)
+            for (int i = 0; i < physicalWires.Wires.Count; i++)
             {
-                ExtSrc.Wire w = fib.Wires[i] as ExtSrc.Wire;
+                ExtSrc.Wire w = physicalWires.Wires[i] as ExtSrc.Wire;
                 if ((address.Equals(w.One.Address.ToString()) && target.Equals(w.Two.Address.ToString())) ||
                     (address.Equals(w.Two.Address.ToString()) && target.Equals(w.One.Address.ToString())))
                 {
@@ -354,7 +354,7 @@ namespace FinalClient
             }
 
             // jesli nie znalazlo bezposredniego polaczenia!
-            String unexpectedIP = unFib.findTarget(target);
+            String unexpectedIP = fib.findTarget(target);
             int unID = findWireID(unexpectedIP);
             return unID;
         }
@@ -363,9 +363,9 @@ namespace FinalClient
         
         private Socket findTarget(String target)
         {
-            for (int i = 0; i < fib.Wires.Count; i++)
+            for (int i = 0; i < physicalWires.Wires.Count; i++)
             {
-                ExtSrc.Wire w = fib.Wires[i] as ExtSrc.Wire;
+                ExtSrc.Wire w = physicalWires.Wires[i] as ExtSrc.Wire;
                 if ((address.Equals(w.One.Address.ToString()) && target.Equals(w.Two.Address.ToString())) ||
                     (address.Equals(w.Two.Address.ToString()) && target.Equals(w.One.Address.ToString())))
                 {
@@ -385,16 +385,16 @@ namespace FinalClient
             if (client != null) if (client.RemoteEndPoint.Equals(tmpEP)) return client;
 
             // jesli nie znalazlo bezposredniego polaczenia!
-            String unexpectedIP = unFib.findTarget(target);
+            String unexpectedIP = fib.findTarget(target);
             Socket unSo = findTarget(unexpectedIP);
             return unSo;
         }
 
         private String findTargetIP(IPEndPoint iep)
         {
-            for (int i = 0; i < fib.Wires.Count; i++)
+            for (int i = 0; i < physicalWires.Wires.Count; i++)
             {
-                ExtSrc.Wire w = fib.Wires[i] as ExtSrc.Wire;
+                ExtSrc.Wire w = physicalWires.Wires[i] as ExtSrc.Wire;
                 if (iep.Equals(w.Two))
                 {
                     return w.One.Address.ToString();

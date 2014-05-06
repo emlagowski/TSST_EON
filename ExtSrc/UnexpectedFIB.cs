@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ExtSrc
 {   [Serializable()]
-    public class UnexpectedFIB
+    public class FIB
     {
         List<AddressPair> addressList;
 
-        public UnexpectedFIB()
+        public FIB()
         {
             addressList = new List<AddressPair>();
         }

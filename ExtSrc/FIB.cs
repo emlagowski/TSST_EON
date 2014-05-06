@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ExtSrc
 {   [Serializable()]
-    public class FIB
+    public class PhysicalWires
     {
         ArrayList _wires;
 
@@ -17,7 +17,7 @@ namespace ExtSrc
             get { return _wires; }
         }
 
-        public FIB()
+        public PhysicalWires()
         {
             _wires = new ArrayList();
         }
