@@ -42,7 +42,7 @@ namespace FinalServer
             Thread t = new Thread(Run);
             t.Start();
         }
-
+        
         void addLog(String t, String f_ip, String t_ip, String d)
         {
             XmlNode userNode = xmlDoc.CreateElement("event");
@@ -57,6 +57,7 @@ namespace FinalServer
             userNode.Attributes.Append(to);
             userNode.InnerText = d;
             rootNode.AppendChild(userNode);
+            lock(this)
             xmlDoc.Save(xmlFileName);
         }
 

@@ -72,6 +72,8 @@ namespace FinalClient
             connectDone.WaitOne();
             Thread t = new Thread(Run);
             t.Start();
+
+            agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(address, Client.fib, unFib, signaling.AvBaIN, signaling.AvBaOUT, signaling.Conn));
         }
 
 
@@ -118,24 +120,27 @@ namespace FinalClient
                 }
             }
         }
-
         void addLog(String t, String f_ip, String t_ip, String d)
         {
-            XmlNode userNode = xmlLog.CreateElement("event");
-            XmlAttribute type = xmlLog.CreateAttribute("type");
-            XmlAttribute from = xmlLog.CreateAttribute("from");
-            XmlAttribute to = xmlLog.CreateAttribute("to");
-            type.Value = t;
-            from.Value = f_ip;
-            to.Value = t_ip;
-            userNode.Attributes.Append(type);
-            userNode.Attributes.Append(from);
-            userNode.Attributes.Append(to);
-            userNode.InnerText = d;
-            rootNodeLog.AppendChild(userNode);
-            xmlLog.Save(logName);
-        }
+            lock (this)
+            {
 
+                XmlNode userNode = xmlLog.CreateElement("event");
+                XmlAttribute type = xmlLog.CreateAttribute("type");
+                XmlAttribute from = xmlLog.CreateAttribute("from");
+                XmlAttribute to = xmlLog.CreateAttribute("to");
+                type.Value = t;
+                from.Value = f_ip;
+                to.Value = t_ip;
+                userNode.Attributes.Append(type);
+                userNode.Attributes.Append(from);
+                userNode.Attributes.Append(to);
+                userNode.InnerText = d;
+                rootNodeLog.AppendChild(userNode);
+                xmlLog.Save(logName);
+
+            }
+        }
         void addWires(String _ip)
         {
             XmlNode userNode = xmlWires.CreateElement("wire");
@@ -217,6 +222,7 @@ namespace FinalClient
             Console.WriteLine("\nPress ENTER to continue...");
             Console.Read();
         }
+        
 
         public void AcceptCallback(IAsyncResult ar)
         {
@@ -233,8 +239,10 @@ namespace FinalClient
             // Create the state object.
             StateObject state = new StateObject();
             state.workSocket = handler;
-            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                new AsyncCallback(ReadCallback), state);
+            sockets.Add(handler);
+            allReceive.Set();
+            //handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+              //  new AsyncCallback(ReadCallback), state);
         }
 
         public void ReadCallback(IAsyncResult ar)
@@ -409,6 +417,7 @@ namespace FinalClient
                 // Complete sending the data to the remote device.
                 int bytesSent = client.EndSend(ar);
                 Console.WriteLine("Sent {0} bytes from {1} to server {2}.", bytesSent, client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
+                //lock (this)
                 addLog("Send", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString(), "none");
                 // Signal that all bytes have been sent.
                 sendDone.Set();
@@ -486,7 +495,8 @@ namespace FinalClient
                 allReceive.Set();
                 Console.WriteLine("Socket {0} Read '{1}'[{2} bytes] from socket {3}.", client.LocalEndPoint.ToString(),
                         state.dt.ToString(), bytesRead, client.RemoteEndPoint.ToString());
-                    addLog("Receive", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString(), state.dt.ToString());
+                //lock(xmlLog)
+                addLog("Receive", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString(), state.dt.ToString());
                 if (!flag) Send(state.dt);               
 
             }
