@@ -303,8 +303,8 @@ namespace Agent
                 else { checkedListBox1.SetItemCheckState(i, CheckState.Unchecked); }
 
             }
-            this.Refresh(); 
-
+            this.Refresh();
+            refreshLabels();
 
         }
 
@@ -336,7 +336,8 @@ namespace Agent
                 else { checkedListBox2.SetItemCheckState(i, CheckState.Unchecked); }
 
             }
-            this.Refresh(); 
+            this.Refresh();
+            refreshLabels();
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -351,6 +352,12 @@ namespace Agent
 
         private void comboBox4_SelectedIndexChanged_1(object sender, EventArgs e)
         {
+            refreshLabels();
+        }
+
+        public void refreshLabels()
+        {
+            if (comboBox4.SelectedIndex < 0) return;
             int IN = (comboBox2.SelectedItem as ExtSrc.Wire).distance;
             int OUT = (comboBox3.SelectedItem as ExtSrc.Wire).distance;
             int band = comboBox4.SelectedIndex + 1;
