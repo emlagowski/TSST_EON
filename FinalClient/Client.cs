@@ -108,10 +108,12 @@ namespace FinalClient
                     string s_port = reader.Value;
                     reader.MoveToNextAttribute();
                     string id = reader.Value;
+                    reader.MoveToAttribute("Distance");
+                    string dista = reader.Value;
                     
                     globalPhysicalWires.add(new ExtSrc.Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
                                         new IPEndPoint(IPAddress.Parse(s_ip), Convert.ToInt32(s_port)),
-                                        Convert.ToInt32(id)));
+                                        Convert.ToInt32(id), Convert.ToInt32(dista)));
                     
                 }
             }

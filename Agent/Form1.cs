@@ -92,10 +92,88 @@ namespace Agent
             //Form2 form2 = new Form2();
             //DialogResult dialogresult = form2.ShowDialog();
             //form2.Dispose();
-            if (checkedListBox1.CheckedItems.Count != checkedListBox2.CheckedItems.Count) 
+
+            if (comboBox4.SelectedIndex < 0)
             {
-                MessageBox.Show("Bandwidth IN and OUT must be the same.", "ERROR");
+                MessageBox.Show("You have to chose bandwidth!", "ERROR");
                 return;
+            }
+            int band = comboBox4.SelectedIndex +1;
+            int IN = (comboBox2.SelectedItem as ExtSrc.Wire).distance;
+            int OUT = (comboBox2.SelectedItem as ExtSrc.Wire).distance;
+
+            int checkedCount1 = 0;
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                var state = checkedListBox1.GetItemCheckState(i);
+
+                if (state == CheckState.Checked) 
+                {
+                    checkedCount1++;
+                }
+            }
+            int checkedCount2 = 0;
+            for (int i = 0; i < checkedListBox2.Items.Count; i++)
+            {
+                var state = checkedListBox2.GetItemCheckState(i);
+
+                if (state == CheckState.Checked)
+                {
+                    checkedCount2++;
+                }
+            }
+
+            if (IN < 1000 && OUT < 1000)
+            {
+                if ((checkedCount1 != checkedCount2) || (checkedCount1!=band))
+                {
+                    MessageBox.Show(String.Format("Number of IN/OUT checked boxes must be equal to {0}.", band), "ERROR");
+                    return;
+                }
+                IN_label.Text = band.ToString();
+                OUT_label.Text = band.ToString();
+                IN_label.Refresh();
+                OUT_label.Refresh();
+            }
+            else
+            {
+
+                if (IN < OUT)
+                {
+                    if (checkedCount1 != 2 * checkedCount2 || checkedCount1!=band)
+                    {
+                        MessageBox.Show(String.Format("Number of IN checked boxes must be equal to {0}.\nNumber of OUT checked boxes must be equal to {1} ", band, 2 * band), "ERROR");
+                        return;
+                    }
+                    IN_label.Text = band.ToString();
+                    OUT_label.Text = (2 * band).ToString();
+                    IN_label.Refresh();
+                    OUT_label.Refresh();
+                }
+                else if (OUT < IN)
+                {
+                    if (2 * checkedCount1 != checkedCount2 || checkedCount2 != band)
+                    {
+                        MessageBox.Show(String.Format("Number of IN checked boxes must be equal to {0}.\nNumber of OUT checked boxes must be equal to {1} ", 2 * band, band), "ERROR");
+                        return;
+                    }
+                    IN_label.Text = (2*band).ToString();
+                    OUT_label.Text = band.ToString();
+                    IN_label.Refresh();
+                    OUT_label.Refresh();
+                }
+                else
+                {
+                    if (checkedCount1 != checkedCount2 || checkedCount1 != band*2)
+                    {
+                        MessageBox.Show(String.Format("Number of IN/OUT checked boxes must be equal to {0}.", 2 * band), "ERROR");
+                        return;
+                    }
+                    IN_label.Text = (2 * band).ToString();
+                    OUT_label.Text = (2 * band).ToString();
+                    IN_label.Refresh();
+                    OUT_label.Refresh();
+                }
             }
 
             int[] lambdasOut = new int[checkedListBox1.CheckedItems.Count];
@@ -137,6 +215,7 @@ namespace Agent
             dataGridView2.DataSource = agTmp3.AbIN;
             dataGridView3.DataSource = agTmp3.AbOUT;
             dataGridView4.DataSource = agTmp3.Conn;
+            dataGridView5.DataSource = agTmp3.unFib.addressList;
         }
 
         private void button2_Click(object sender, EventArgs e)

@@ -8,7 +8,7 @@ namespace ExtSrc
 {   [Serializable()]
     public class FIB
     {
-        List<AddressPair> addressList;
+        public List<AddressPair> addressList { get; set; }
 
         public FIB()
         {
@@ -26,23 +26,24 @@ namespace ExtSrc
             String result = "";
             for (int i = 0; i < addressList.Count; i++)
             {
-                if (addressList[i].addresOne == ip)
+                if (addressList[i].TerminationPoint == ip)
                 {
-                    result = addressList[i].addressTwo;
+                    result = addressList[i].NextHop;
                     return result;
                 }
             }
             return result;
         }
     [Serializable()]
-        class AddressPair
+        public class AddressPair
         {
-            public String addresOne, addressTwo;
+        public String TerminationPoint { get; set; }
+        public String NextHop { get; set; }
 
             public AddressPair(String one, String two)
             {
-                addresOne = one;
-                addressTwo = two;
+                TerminationPoint = one;
+                NextHop = two;
             }
         }
     }

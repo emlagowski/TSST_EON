@@ -11,7 +11,8 @@ namespace ExtSrc
     public class Wire
     {
         IPEndPoint _one, _two;
-       public int ID;
+        public int ID;
+        public int distance { get; set; }
 
         public IPEndPoint One
         {
@@ -28,11 +29,12 @@ namespace ExtSrc
             get { return ID; }
         }
 
-        public Wire(IPEndPoint first, IPEndPoint second, int id)
+        public Wire(IPEndPoint first, IPEndPoint second, int id, int d)
         {
             _one = first;
             _two = second;
             ID = id;
+            distance = d;
         }
     }
 }

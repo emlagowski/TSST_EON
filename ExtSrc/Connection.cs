@@ -12,20 +12,12 @@ namespace ExtSrc
     {
         IPEndPoint EPIn, EPOut;
 
-        public int[] InLambdaIDs;
-        public int[] OutLambdaIDs;
-        public int InWireID;
-        public int OutWireID, Bandwidth;
-        public int connectionID; // musi byc jakas wiekksza losowa liczba zeby nie bylo ze dwie maja takie samo id
-
-        public int[] InLambdaIdsP { get { return InLambdaIDs; } }
-        public int[] OutLambdaIDsP { get { return OutLambdaIDs; } }
-        public int InWireIDP { get { return InWireID; } }
-        public int OutWireIDP { get { return OutWireID; } }
-        public int BandwidthP { get { return Bandwidth; } }
-        public int connectionIDP { get { return connectionID; } }
-
-
+        public int[] InLambdaIDs {get; set;}
+        public int[] OutLambdaIDs { get; set; }
+        public int InWireID { get; set; }
+        public int OutWireID {get; set;}
+        public int Bandwidth {get; set;}
+        public int connectionID{get; set;} // musi byc jakas wiekksza losowa liczba zeby nie bylo ze dwie maja takie samo id
 
         public Connection(int[] inLambdas, int[] outLambdas,int wireID, int band, int cID) 
         {
