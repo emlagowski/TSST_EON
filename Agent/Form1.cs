@@ -131,7 +131,7 @@ namespace Agent
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -236,15 +236,15 @@ namespace Agent
             ExtSrc.AgentData item1a = comboBox1.SelectedItem as ExtSrc.AgentData;
             ExtSrc.Wire item2a = comboBox3.SelectedItem as ExtSrc.Wire;
             int id1 = item2a.ID;
-            ExtSrc.WireBand wire = item1a.findWireIN(id1);
-            int band1 = wire.lambdaCapactity;
+            ExtSrc.WireBand wire1 = item1a.findWireIN(id1);
+            int band1 = wire1.lambdaCapactity;
             checkedListBox2.DataSource = bandItems.GetRange(0, band1);
 
 
-            for (int i = 0; i < wire.lambdas.Length; i++)
+            for (int i = 0; i < wire1.lambdas.Length; i++)
             {
 
-                if (wire.lambdas[i] == false)
+                if (wire1.lambdas[i] == false)
                     checkedListBox2.SetItemCheckState(i, CheckState.Indeterminate);
                 else { checkedListBox2.SetItemCheckState(i, CheckState.Unchecked); }
 

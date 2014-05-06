@@ -39,7 +39,7 @@ namespace ExtSrc
             connectionID = cID;
         
         }
-
+        ///Tego uzyjjjjjjjjjjjjjjjjj
         public Connection(int[] inLambdas, int[] outLambdas, int inWireID, int outWireID, int band, int cID)
         {
             EPIn = null;
