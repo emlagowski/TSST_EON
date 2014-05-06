@@ -2,24 +2,20 @@
 	<w1270010>
 		<wire TargetIp="127.0.0.40" TmpIp="127.0.0.30"></wire>
 	</w1270010>
-	
 	<w1270020>
 		<wire MyIp="127.0.0.30" TargetIp="127.0.0.10"></wire>
 		<wire MyIp="127.0.0.40" TargetIp="127.0.0.10"></wire>
 		<wire MyIp="127.0.0.50" TargetIp="127.0.0.10"></wire>
 	</w1270020>
-	
 	<w1270030>
 		<wire MyIp="127.0.0.20" TargetIp="127.0.0.10"></wire>
 	</w1270030>
-	
 	<w1270040>
 		<wire MyIp="127.0.0.10" TargetIp="127.0.0.30"></wire>
 	  <wire MyIp="127.0.0.20" TargetIp="127.0.0.30"></wire>
 	</w1270040>
-	
 	<w1270050>
 		<wire MyIp="127.0.0.20" TargetIp="127.0.0.10"></wire>
 	</w1270050>
-  
+
 </wires>
