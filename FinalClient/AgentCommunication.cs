@@ -49,8 +49,10 @@ namespace FinalClient
                 Socket client = (Socket)ar.AsyncState;
 
                 // Complete the connection.
-                client.EndConnect(ar);
-
+                lock (this)
+                {
+                    client.EndConnect(ar);
+                }
                 Console.WriteLine("SIGNALING: {0} Socket connected to {1}", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
 
                 // Signal that the connection has been made.
@@ -144,7 +146,7 @@ namespace FinalClient
 
             byte[] buffer = fs.ToArray();
 
-
+                
 
             // Begin sending the data to the remote device.
             client.BeginSend(buffer, 0, buffer.Length, 0,

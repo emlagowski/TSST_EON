@@ -14,10 +14,10 @@ namespace ExtSrc
 
         public int[] InLambdaIDs {get; set;}
         public int[] OutLambdaIDs { get; set; }
-        public int InWireID { get; set; }
-        public int OutWireID {get; set;}
-        public int Bandwidth {get; set;}
-        public int connectionID{get; set;} // musi byc jakas wiekksza losowa liczba zeby nie bylo ze dwie maja takie samo id
+        public int InWireID { get; set; }//{ get { return InWireID; } set { this.InWireID = value; } }
+        public int OutWireID { get; set; }//{ get { return OutWireID; } set { this.OutWireID = value; } }
+        public int Bandwidth { get; set; }//{ get { return Bandwidth; } set { this.Bandwidth = value; } }
+        public int connectionID { get; set; }//{ get { return connectionID; } set { this.connectionID = value; } } // musi byc jakas wiekksza losowa liczba zeby nie bylo ze dwie maja takie samo id
 
         public Connection(int[] inLambdas, int[] outLambdas,int wireID, int band, int cID) 
         {

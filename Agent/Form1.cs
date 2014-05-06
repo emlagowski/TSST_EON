@@ -50,7 +50,7 @@ namespace Agent
         private void TimerEventProcessor(Object myObject, EventArgs myEventArgs)
         {
             myTimer.Stop();
-            //myTimer.Interval = 1000;
+            myTimer.Interval = 1000;
 
             BindingSource bs = new BindingSource();
             bs.DataSource = comm.agentData;
@@ -81,7 +81,11 @@ namespace Agent
             dataGridView1.DataSource = agTmp3.fibTable.Wires;
             dataGridView2.DataSource = agTmp3.AbIN;
             dataGridView3.DataSource = agTmp3.AbOUT;
-            dataGridView4.DataSource = agTmp3.Conn;
+            BindingSource bs4 = new BindingSource();
+                bs4.DataSource = agTmp3.Conn;
+                dataGridView4.BindingContext = new BindingContext();
+
+            dataGridView4.DataSource = bs4.DataSource;
 
 
             this.Refresh();
