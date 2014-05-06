@@ -131,7 +131,12 @@ namespace Agent
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            ExtSrc.AgentData agTmp3 = comboBox1.SelectedItem as ExtSrc.AgentData;
+
+            dataGridView1.DataSource = agTmp3.fibTable.Wires;
+            dataGridView2.DataSource = agTmp3.AbIN;
+            dataGridView3.DataSource = agTmp3.AbOUT;
+            dataGridView4.DataSource = agTmp3.Conn;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -228,7 +233,6 @@ namespace Agent
         private void checkedListBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             
-
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -253,6 +257,11 @@ namespace Agent
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridView4_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

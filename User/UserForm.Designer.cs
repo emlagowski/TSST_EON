@@ -41,13 +41,13 @@
             this.sendButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.connectionBox = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.band = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
-            this.label7 = new System.Windows.Forms.Label();
-            this.connectionBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -187,6 +187,22 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Send a message";
             // 
+            // connectionBox
+            // 
+            this.connectionBox.Location = new System.Drawing.Point(274, 48);
+            this.connectionBox.Name = "connectionBox";
+            this.connectionBox.Size = new System.Drawing.Size(26, 20);
+            this.connectionBox.TabIndex = 15;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(269, 25);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(31, 13);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "C_ID";
+            // 
             // band
             // 
             this.band.Location = new System.Drawing.Point(310, 49);
@@ -232,22 +248,6 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(269, 25);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(31, 13);
-            this.label7.TabIndex = 14;
-            this.label7.Text = "C_ID";
-            // 
-            // connectionBox
-            // 
-            this.connectionBox.Location = new System.Drawing.Point(274, 48);
-            this.connectionBox.Name = "connectionBox";
-            this.connectionBox.Size = new System.Drawing.Size(26, 20);
-            this.connectionBox.TabIndex = 15;
-            // 
             // UserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -260,7 +260,7 @@
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.label1);
             this.Name = "UserForm";
-            this.Text = "Form1";
+            this.Text = "User";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
