@@ -100,7 +100,7 @@ namespace Agent
             }
             int band = comboBox4.SelectedIndex +1;
             int IN = (comboBox2.SelectedItem as ExtSrc.Wire).distance;
-            int OUT = (comboBox2.SelectedItem as ExtSrc.Wire).distance;
+            int OUT = (comboBox3.SelectedItem as ExtSrc.Wire).distance;
 
             int checkedCount1 = 0;
             for (int i = 0; i < checkedListBox1.Items.Count; i++)
@@ -343,6 +343,17 @@ namespace Agent
         private void dataGridView4_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void comboBox4_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            int IN = (comboBox2.SelectedItem as ExtSrc.Wire).distance;
+            int OUT = (comboBox3.SelectedItem as ExtSrc.Wire).distance;
+            int band = comboBox4.SelectedIndex + 1;
+            IN_label.Text = (2 * band).ToString();
+            OUT_label.Text = (2 * band).ToString();
+            IN_label.Refresh();
+            OUT_label.Refresh();
         }
     }
 }
