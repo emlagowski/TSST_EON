@@ -64,7 +64,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="unexpectedFIB.xml" />
+    <Content Include="127.0.0.10.FIB.xml" />
+    <Content Include="127.0.0.20.FIB.xml" />
+    <Content Include="127.0.0.30.FIB.xml" />
+    <Content Include="127.0.0.40.FIB.xml" />
+    <Content Include="127.0.0.50.FIB.xml" />
     <Content Include="wires.xml" />
   </ItemGroup>
   <ItemGroup>
