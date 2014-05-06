@@ -46,6 +46,7 @@ namespace FinalClient
             readLocalPhysicalWires();
             readFIB();
             signaling = new Signaling(address);
+
             agentCom = new AgentCommunication(address, signaling);
             xmlLog = new XmlDocument();
             rootNodeLog = xmlLog.CreateElement("router-log");
