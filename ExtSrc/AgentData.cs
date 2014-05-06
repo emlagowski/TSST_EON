@@ -10,7 +10,7 @@ namespace ExtSrc
     public class AgentData
     {
         public String routerAddress;
-        public PhysicalWires fib;
+        public PhysicalWires physWires;
         public FIB unFib;
         public List<ExtSrc.WireBand> AvalaibleBandIN;
         public List<ExtSrc.WireBand> AvalaibleBandOUT;
@@ -25,8 +25,8 @@ namespace ExtSrc
 
         public PhysicalWires fibTable
         {
-            get { return fib; }
-            set { fib = value; }
+            get { return physWires; }
+            set { physWires = value; }
         }
 
         public List<ExtSrc.WireBand> AbIN
@@ -53,7 +53,7 @@ namespace ExtSrc
         public AgentData(Connection conn)
         {
             this.routerAddress = null;
-            this.fib = null;
+            this.physWires = null;
             this.unFib = null;
             this.AvalaibleBandIN = null;
             this.AvalaibleBandOUT = null;
@@ -63,7 +63,7 @@ namespace ExtSrc
         public AgentData(String address, PhysicalWires fib, FIB ufib, List<ExtSrc.WireBand> AvalaibleBandIN, List<ExtSrc.WireBand> AvalaibleBandOUT, List<ExtSrc.Connection> Connections)
         {
             this.routerAddress = address;
-            this.fib = fib;
+            this.physWires = fib;
             this.unFib = ufib;
             this.AvalaibleBandIN = AvalaibleBandIN;
             this.AvalaibleBandOUT = AvalaibleBandOUT;

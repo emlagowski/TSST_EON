@@ -1,29 +1,49 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ExtSrc
 {   [Serializable()]
-    public class PhysicalWires
+    public class FIB
     {
-        ArrayList _wires;
+        List<AddressPair> addressList;
 
-        public ArrayList Wires
+        public FIB()
         {
-            get { return _wires; }
+            addressList = new List<AddressPair>();
         }
 
-        public PhysicalWires()
+        public void addNext(String one, String two)
         {
-            _wires = new ArrayList();
+            addressList.Add(new AddressPair(one, two));
         }
 
-        public void add(Wire w){
-            _wires.Add(w);
+
+        public String findTarget(String ip)
+        {
+            String result = "";
+            for (int i = 0; i < addressList.Count; i++)
+            {
+                if (addressList[i].addresOne == ip)
+                {
+                    result = addressList[i].addressTwo;
+                    return result;
+                }
+            }
+            return result;
+        }
+    [Serializable()]
+        class AddressPair
+        {
+            public String addresOne, addressTwo;
+
+            public AddressPair(String one, String two)
+            {
+                addresOne = one;
+                addressTwo = two;
+            }
         }
     }
 }
