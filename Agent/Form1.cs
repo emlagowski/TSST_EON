@@ -98,6 +98,21 @@ namespace Agent
             //DialogResult dialogresult = form2.ShowDialog();
             //form2.Dispose();
 
+            foreach (ExtSrc.AgentData ad in comm.agentData)
+            {
+                if (ad.address == (comboBox1.SelectedItem as ExtSrc.AgentData).address)
+                {
+                    foreach (ExtSrc.Connection c in ad.Connections)
+                    {
+                        if (c.connectionID == Convert.ToInt32(textBox1.Text))
+                        {
+                            MessageBox.Show("Connection with this ID already exists in this router.", "ERROR");
+                            return;
+                        }
+                    }
+                }
+            }
+
             if (comboBox4.SelectedIndex < 0)
             {
                 MessageBox.Show("You have to chose bandwidth!", "ERROR");
