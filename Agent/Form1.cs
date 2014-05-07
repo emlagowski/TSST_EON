@@ -14,6 +14,7 @@ namespace Agent
     public partial class Form1 : Form
     {
         Communication comm;
+        Boolean UserEvent = true;
         static System.Windows.Forms.Timer myTimer;
         List<String> bandItems = new List<string>(){"1 band", "2 band", "3 band", "4 band", "5 band", "6 band", "7 band", "8 band", "9 band", "10 band", "11 band", "12 band"};
         public Form1()
@@ -224,6 +225,8 @@ namespace Agent
                 if(a.address == (comboBox1.SelectedItem as ExtSrc.AgentData).address)
                 a.addConnection(connection);
             }
+            refreshAvalaibleBandIN();
+            refreshAvalaibleBandOUT();
             myTimer.Start();
         }
 
@@ -254,6 +257,9 @@ namespace Agent
             comboBox3.DataSource = bs3.DataSource;
             comboBox3.DisplayMember = "IDD";
             comboBox3.ValueMember = "IDD";
+
+            refreshAvalaibleBandIN();
+            refreshAvalaibleBandOUT();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -298,12 +304,14 @@ namespace Agent
             for(int i=0; i<wire.lambdas.Length; i++){
             if ((wire.lambdas[i] == false) && e.Index == i ) e.NewValue = state;
             }*/
-            if (e.CurrentValue == CheckState.Indeterminate) e.NewValue = e.CurrentValue;
+            if (e.CurrentValue == CheckState.Indeterminate && UserEvent) e.NewValue = e.CurrentValue;
 
         }
         private void checkedListBox2_ItemCheck(object sender, ItemCheckEventArgs e) 
         {
-            if (e.CurrentValue == CheckState.Indeterminate) e.NewValue = e.CurrentValue;
+           // MessageBox.Show(sender.ToString(), "info");
+           // string str = sender.GetType().Name;
+            if ((e.CurrentValue == CheckState.Indeterminate) && UserEvent) e.NewValue = e.CurrentValue;
             
         }
 
@@ -321,26 +329,9 @@ namespace Agent
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ExtSrc.AgentData item1 = comboBox1.SelectedItem as ExtSrc.AgentData;
-            ExtSrc.Wire item2 = comboBox2.SelectedItem as ExtSrc.Wire;
-            int id = item2.ID;
-            ExtSrc.WireBand wire = item1.findWireOut(id);
-            int band = wire.lambdaCapactity;
-            checkedListBox1.DataSource = bandItems.GetRange(0,band);
-           
-            
-            for (int i = 0; i < wire.lambdas.Length; i++)
-            {
-
-                if (wire.lambdas[i] == false)
-                    checkedListBox1.SetItemCheckState(i, CheckState.Indeterminate);
-                else { checkedListBox1.SetItemCheckState(i, CheckState.Unchecked); }
-
-            }
-            this.Refresh();
-            refreshLabels();
-
+            refreshAvalaibleBandOUT();
         }
+        
 
         private void label5_Click(object sender, EventArgs e)
         {
@@ -354,24 +345,7 @@ namespace Agent
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ExtSrc.AgentData item1a = comboBox1.SelectedItem as ExtSrc.AgentData;
-            ExtSrc.Wire item2a = comboBox3.SelectedItem as ExtSrc.Wire;
-            int id1 = item2a.ID;
-            ExtSrc.WireBand wire1 = item1a.findWireIN(id1);
-            int band1 = wire1.lambdaCapactity;
-            checkedListBox2.DataSource = bandItems.GetRange(0, band1);
-
-
-            for (int i = 0; i < wire1.lambdas.Length; i++)
-            {
-
-                if (wire1.lambdas[i] == false)
-                    checkedListBox2.SetItemCheckState(i, CheckState.Indeterminate);
-                else { checkedListBox2.SetItemCheckState(i, CheckState.Unchecked); }
-
-            }
-            this.Refresh();
-            refreshLabels();
+            refreshAvalaibleBandIN();
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -425,6 +399,56 @@ namespace Agent
 
         private void dataGridView3_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+
+        }
+        private void refreshAvalaibleBandIN()
+        {
+
+
+            ExtSrc.AgentData item1a = comboBox1.SelectedItem as ExtSrc.AgentData;
+            ExtSrc.Wire item2a = comboBox3.SelectedItem as ExtSrc.Wire;
+            int id1 = item2a.ID;
+            ExtSrc.WireBand wire1 = item1a.findWireIN(id1);
+            int band1 = wire1.lambdaCapactity;
+            checkedListBox2.DataSource = bandItems.GetRange(0, band1);
+
+            UserEvent = false;
+
+            for (int i = 0; i < wire1.lambdas.Length; i++)
+            {
+
+                if (wire1.lambdas[i] == false)
+                    checkedListBox2.SetItemCheckState(i, CheckState.Indeterminate);
+                else { checkedListBox2.SetItemCheckState(i, CheckState.Unchecked); }
+
+            }
+            this.Refresh();
+            refreshLabels();
+            UserEvent = true;
+        
+        }
+
+        private void refreshAvalaibleBandOUT()
+        {
+            ExtSrc.AgentData item1 = comboBox1.SelectedItem as ExtSrc.AgentData;
+            ExtSrc.Wire item2 = comboBox2.SelectedItem as ExtSrc.Wire;
+            int id = item2.ID;
+            ExtSrc.WireBand wire = item1.findWireOut(id);
+            int band = wire.lambdaCapactity;
+            checkedListBox1.DataSource = bandItems.GetRange(0, band);
+
+            UserEvent = false;
+            for (int i = 0; i < wire.lambdas.Length; i++)
+            {
+
+                if (wire.lambdas[i] == false)
+                    checkedListBox1.SetItemCheckState(i, CheckState.Indeterminate);
+                else { checkedListBox1.SetItemCheckState(i, CheckState.Unchecked); }
+
+            }
+            this.Refresh();
+            refreshLabels();
+            UserEvent = true;
 
         }
     }
