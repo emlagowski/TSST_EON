@@ -56,6 +56,11 @@ namespace ExtSrc
             connectionID = cID;
 
         }
+        public int CID
+        {
+            get { return connectionID; }
+            set { connectionID = value; }
+        }
         public override String ToString()
         {
             String result = String.Format("EPIn: {0} EPOut: {1} InWireID: {2} OutWireID: {3} Bandwidth: {4} Connection ID: {5}",

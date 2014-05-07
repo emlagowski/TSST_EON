@@ -54,19 +54,40 @@ namespace Agent
             myTimer.Interval = 1000;
 
             BindingSource bs = new BindingSource();
+            comboBox1.BindingContext = new BindingContext();
             bs.DataSource = comm.agentData;
-            comboBox1.DataSource = bs.DataSource;
+            int indx = comboBox1.SelectedIndex;
+            int count = comboBox1.Items.Count;
+            if (comboBox1.SelectedIndex >= 0)
+            {
+                if (indx == 0)
+                {
+                    comboBox1.SelectedIndex++;
+                    comboBox1.SelectedIndex--;
+                }
+                else
+                {
+                    comboBox1.SelectedIndex--;
+                    comboBox1.SelectedIndex++;
+                }
+
+            }
+                comboBox1.DataSource = bs.DataSource;
             comboBox1.DisplayMember = "address";
             comboBox1.ValueMember = "address";
 
             ExtSrc.AgentData agTmp = comboBox1.SelectedItem as ExtSrc.AgentData;
             ExtSrc.AgentData agTmp1 = comboBox1.SelectedItem as ExtSrc.AgentData;
+            ExtSrc.AgentData agTmp2 = comboBox1.SelectedItem as ExtSrc.AgentData;
+
 
 
             BindingSource bs2 = new BindingSource();
             bs2.DataSource = agTmp.fibTable.Wires;
             BindingSource bs3 = new BindingSource();
             bs3.DataSource = agTmp1.fibTable.Wires;
+            BindingSource bs6 = new BindingSource();
+            bs6.DataSource = agTmp2.Conn;
 
             comboBox2.BindingContext = new BindingContext();
             comboBox2.DataSource = bs2.DataSource;
@@ -77,6 +98,11 @@ namespace Agent
             comboBox3.DataSource = bs3.DataSource;
             comboBox3.DisplayMember = "IDD";
             comboBox3.ValueMember = "IDD";
+
+            comboBox5.BindingContext = new BindingContext();
+            comboBox5.DataSource = bs6.DataSource;           
+            comboBox5.DisplayMember = "CID";
+            comboBox5.ValueMember = "CID";
 
             ExtSrc.AgentData agTmp3 = comboBox1.SelectedItem as ExtSrc.AgentData;
 
@@ -225,6 +251,7 @@ namespace Agent
                 if(a.address == (comboBox1.SelectedItem as ExtSrc.AgentData).address)
                 a.addConnection(connection);
             }
+
             refreshAvalaibleBandIN();
             refreshAvalaibleBandOUT();
             myTimer.Start();
@@ -242,11 +269,15 @@ namespace Agent
 
             ExtSrc.AgentData agTmp = comboBox1.SelectedItem as ExtSrc.AgentData;
             ExtSrc.AgentData agTmp1 = comboBox1.SelectedItem as ExtSrc.AgentData;
+            ExtSrc.AgentData agTmp2 = comboBox1.SelectedItem as ExtSrc.AgentData;
+
 
             BindingSource bs2 = new BindingSource();
             bs2.DataSource = agTmp.fibTable.Wires;
             BindingSource bs3 = new BindingSource();
             bs3.DataSource = agTmp1.fibTable.Wires;
+            BindingSource bs4 = new BindingSource();
+            bs4.DataSource = agTmp2.Conn;
 
             comboBox2.BindingContext = new BindingContext();
             comboBox2.DataSource = bs2.DataSource;
@@ -257,6 +288,14 @@ namespace Agent
             comboBox3.DataSource = bs3.DataSource;
             comboBox3.DisplayMember = "IDD";
             comboBox3.ValueMember = "IDD";
+
+            comboBox5.BindingContext = new BindingContext();
+            comboBox5.DataSource = bs4.DataSource;
+           // if (agTmp2.Conn.Count != 0)
+            //{
+                comboBox5.DisplayMember = "CID";
+                comboBox5.ValueMember = "CID";
+            //}
 
             refreshAvalaibleBandIN();
             refreshAvalaibleBandOUT();
@@ -449,6 +488,11 @@ namespace Agent
             this.Refresh();
             refreshLabels();
             UserEvent = true;
+
+        }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
     }
