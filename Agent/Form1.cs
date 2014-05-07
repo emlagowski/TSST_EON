@@ -67,6 +67,7 @@ namespace Agent
             BindingSource bs3 = new BindingSource();
             bs3.DataSource = agTmp1.fibTable.Wires;
 
+            comboBox2.BindingContext = new BindingContext();
             comboBox2.DataSource = bs2.DataSource;
             comboBox2.DisplayMember = "IDD";
             comboBox2.ValueMember = "IDD";
@@ -220,6 +221,24 @@ namespace Agent
             dataGridView3.DataSource = agTmp3.AbOUT;
             dataGridView4.DataSource = agTmp3.Conn;
             dataGridView5.DataSource = agTmp3.unFib.addressList;
+
+            ExtSrc.AgentData agTmp = comboBox1.SelectedItem as ExtSrc.AgentData;
+            ExtSrc.AgentData agTmp1 = comboBox1.SelectedItem as ExtSrc.AgentData;
+
+            BindingSource bs2 = new BindingSource();
+            bs2.DataSource = agTmp.fibTable.Wires;
+            BindingSource bs3 = new BindingSource();
+            bs3.DataSource = agTmp1.fibTable.Wires;
+
+            comboBox2.BindingContext = new BindingContext();
+            comboBox2.DataSource = bs2.DataSource;
+            comboBox2.DisplayMember = "IDD";
+            comboBox2.ValueMember = "IDD";
+
+            comboBox3.BindingContext = new BindingContext();
+            comboBox3.DataSource = bs3.DataSource;
+            comboBox3.DisplayMember = "IDD";
+            comboBox3.ValueMember = "IDD";
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -387,6 +406,11 @@ namespace Agent
             }
             IN_label.Refresh();
             OUT_label.Refresh();
+        }
+
+        private void dataGridView3_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
