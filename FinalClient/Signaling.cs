@@ -244,12 +244,12 @@ namespace FinalClient
 
         }
 
-        public Boolean checkIfConnEstablished(int id, int wireID)
+        public Boolean checkIfConnEstablished(int id, int band, int wireID)
         {
             Boolean b = false;
             Connections.ForEach(delegate(ExtSrc.Connection c)
             {
-               if( c.connectionID == id && c.OutWireID == wireID) b = true;
+               if( c.connectionID == id && c.OutWireID == wireID && c.Bandwidth == band) b = true;
             });
             return b;
         }
