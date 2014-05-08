@@ -108,6 +108,8 @@ namespace FinalClient
                 AgentStateObject state = (AgentStateObject)ar.AsyncState;
                 Socket client = state.workSocket;
 
+                // to bardzo wazne przypisanie socketu, otrzymanego po zestawieniu polaczenia i nasluch ustawiany musi byc na tym sockecie!
+                socket = client;
               
                 int bytesRead = client.EndReceive(ar);
 
@@ -125,7 +127,7 @@ namespace FinalClient
             {
                 Console.WriteLine(e.ToString());
             }
-        }
+            }
 
         private void ProcessAgentData(ExtSrc.AgentData agentData)
         {
