@@ -274,7 +274,6 @@ namespace FinalClient
 
         }
 
-        public Boolean allocateConnection() { return false; }
 
         public void addConnection(ExtSrc.Connection c)
         {
@@ -292,10 +291,23 @@ namespace FinalClient
             Connections.Add(c); // nie sprawdza czy id sie roznia
 
         }
-        private void updateLambdas()
+        public void removeConnection(ExtSrc.Connection c)
         {
-
+            if (c.InLambdaIDs != null)
+            {
+                for (int i = 0; i < c.InLambdaIDs.Length; i++)
+                    findWireIN(c.InWireID).lambdas[c.InLambdaIDs[i]] = true; // bedzie blad jak findwire zwroci null
+            }
+            if (c.OutLambdaIDs != null)
+            {
+                for (int i = 0; i < c.OutLambdaIDs.Length; i++)
+                    findWireOut(c.OutWireID).lambdas[c.OutLambdaIDs[i]] = true;
+            }
+            Connections.Remove(c); // nie sprawdza czy id sie roznia
         }
+        
+
+        
     }
     public class SignalingStateObject
     {

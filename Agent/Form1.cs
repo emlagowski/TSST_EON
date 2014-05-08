@@ -112,8 +112,10 @@ namespace Agent
             BindingSource bs4 = new BindingSource();
                 bs4.DataSource = agTmp3.Conn;
                 dataGridView4.BindingContext = new BindingContext();
-
-            dataGridView4.DataSource = bs4.DataSource;
+                if ((bs4.DataSource as List<ExtSrc.Connection>).Count > 0)
+                    dataGridView4.DataSource = bs4.DataSource;
+                else
+                    dataGridView4.DataSource = "EMPTY";
 
 
             this.Refresh();
@@ -303,21 +305,37 @@ namespace Agent
 
         private void button2_Click(object sender, EventArgs e)
         {
-            BindingSource bs = new BindingSource();
-            bs.DataSource = comm.agentData;
-            comboBox1.DataSource = bs.DataSource;
-            comboBox1.DisplayMember = "address";
-            comboBox1.ValueMember = "address";
+            MessageBox.Show(comboBox5.Text, "ERROR");
 
-            ExtSrc.AgentData agTmp = comboBox1.SelectedItem as ExtSrc.AgentData;
+            int id = Convert.ToInt32(comboBox5.Text);
+            //
+            //ExtSrc.Connection connection;
+            foreach (ExtSrc.Connection con in (comboBox1.SelectedItem as ExtSrc.AgentData).Connections)
+            {
+                if (con.CID == id) 
+                {
+                    
+                    comm.Send((comboBox1.SelectedItem as ExtSrc.AgentData).address, new ExtSrc.AgentData(con, "REMOVE"));
+                    //update local agent data
+                    foreach (ExtSrc.AgentData a in comm.agentData)
+                    {
+                        if (a.address == (comboBox1.SelectedItem as ExtSrc.AgentData).address)
+                        {
+                            if (a.Connections.Count == 1) { dataGridView4.DataSource = "EMPTY"; }
+                            a.removeConnection(con);
+                        }
+                    }
+                    break; 
+                }
+            }
 
-            BindingSource bs2 = new BindingSource();
-            bs2.DataSource = agTmp.fibTable.Wires;
-            comboBox2.DataSource = bs2.DataSource;
-            comboBox2.DisplayMember = "IDD";
-            comboBox2.ValueMember = "IDD";
+          
 
-            this.Refresh();
+            refreshAvalaibleBandIN();
+            refreshAvalaibleBandOUT();
+            myTimer.Start();
+
+
         }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)

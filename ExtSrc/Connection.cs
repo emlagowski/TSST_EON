@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ExtSrc
 {
     [Serializable()]
-    public class Connection
+    public class Connection : IEquatable<Connection>
     {
         IPEndPoint EPIn, EPOut;
 
@@ -67,6 +67,13 @@ namespace ExtSrc
                 EPIn, EPOut, InWireID, OutWireID, Bandwidth, connectionID);
             return result;
         }
+        public bool Equals(Connection other)
+        {
+            if (other == null) return false;
+            return (this.InWireID.Equals(other.InWireID) && this.OutWireID.Equals(other.OutWireID) && this.InLambdaIDs.Equals(other.InLambdaIDs)
+                && this.OutLambdaIDs.Equals(other.OutLambdaIDs) && this.Bandwidth.Equals(other.Bandwidth) && this.connectionID.Equals(other.connectionID));
+        }
+
     }
 }
 

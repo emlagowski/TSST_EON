@@ -14,7 +14,8 @@ namespace ExtSrc
         public FIB unFib;
         public List<ExtSrc.WireBand> AvalaibleBandIN;
         public List<ExtSrc.WireBand> AvalaibleBandOUT;
-        public List<ExtSrc.Connection> Connections;
+        public List<ExtSrc.Connection> Connections { get; set; }
+        public String message;
 
 
         public String address
@@ -58,6 +59,17 @@ namespace ExtSrc
             this.AvalaibleBandIN = null;
             this.AvalaibleBandOUT = null;
             this.Connections = new List<ExtSrc.Connection>(){conn};
+            message = null;
+        }
+        public AgentData(Connection conn, String msg)
+        {
+            this.routerAddress = null;
+            this.physWires = null;
+            this.unFib = null;
+            this.AvalaibleBandIN = null;
+            this.AvalaibleBandOUT = null;
+            this.Connections = new List<ExtSrc.Connection>() { conn };
+            message = msg;
         }
 
         public AgentData(String address, PhysicalWires fib, FIB ufib, List<ExtSrc.WireBand> AvalaibleBandIN, List<ExtSrc.WireBand> AvalaibleBandOUT, List<ExtSrc.Connection> Connections)
@@ -68,6 +80,8 @@ namespace ExtSrc
             this.AvalaibleBandIN = AvalaibleBandIN;
             this.AvalaibleBandOUT = AvalaibleBandOUT;
             this.Connections = Connections;
+            message = null;
+
         }
 
         public ExtSrc.WireBand findWireIN(int wireID)
@@ -105,6 +119,20 @@ namespace ExtSrc
             }
             Connections.Add(c); // nie sprawdza czy id sie roznia
 
+        }
+        public void removeConnection(ExtSrc.Connection c)
+        {
+            if (c.InLambdaIDs != null)
+            {
+                for (int i = 0; i < c.InLambdaIDs.Length; i++)
+                    findWireIN(c.InWireID).lambdas[c.InLambdaIDs[i]] = true; // bedzie blad jak findwire zwroci null
+            }
+            if (c.OutLambdaIDs != null)
+            {
+                for (int i = 0; i < c.OutLambdaIDs.Length; i++)
+                    findWireOut(c.OutWireID).lambdas[c.OutLambdaIDs[i]] = true;
+            }
+            Connections.Remove(c); // nie sprawdza czy id sie roznia
         }
 
     }

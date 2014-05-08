@@ -17,7 +17,7 @@ namespace FinalClient
         public static Socket socket;
         private Signaling sgnl;
         String address;
-        private ManualResetEvent signalingReceive = new ManualResetEvent(false);
+      //  private ManualResetEvent allReceive = new ManualResetEvent(false);
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
@@ -70,10 +70,10 @@ namespace FinalClient
             {
                 while (true)
                 {
-                    signalingReceive.Reset();
+                    receiveDone.Reset();
                     Console.WriteLine("Waiting for data from AGENT...");
                     Receive();
-                    signalingReceive.WaitOne();
+                    receiveDone.WaitOne();
                 }
 
             }
@@ -131,8 +131,16 @@ namespace FinalClient
         {
             foreach (ExtSrc.Connection conn in agentData.Connections)
             {
-                sgnl.addConnection(conn);
-                Console.WriteLine("Connection ID: {0} was added by AGENT at {1}", conn.connectionID, address);
+                if (agentData.message == null)
+                {
+                    sgnl.addConnection(conn);
+                    Console.WriteLine("Connection ID: {0} was ADDED by AGENT at {1}", conn.connectionID, address);
+                }
+                else if (agentData.message.Equals("REMOVE")) 
+                {
+                    sgnl.removeConnection(conn);
+                    Console.WriteLine("Connection ID: {0} was REMOVED by AGENT at {1}", conn.connectionID, address);
+                }
             }
         }
 
