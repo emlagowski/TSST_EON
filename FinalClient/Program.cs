@@ -12,26 +12,26 @@ namespace FinalClient
     {
         static void Main(string[] args)
         {
-            String arg = args[0];
+           // String arg = args[0];
            // List<String> routers = new List<string>();
             Client.readPhysicalWires();
-            Client clientZero = new Client(arg);
-  //          Client clientOne = new Client("127.0.0.10");
+         //   Client clientZero = new Client(arg);
+            Client clientOne = new Client("127.0.0.10");
           //  routers.Add("127.0.0.10");
             
-  //          Client clientTwo = new Client("127.0.0.20");
+            Client clientTwo = new Client("127.0.0.20");
            // routers.Add("127.0.0.20");
 
            
- //           Client clientThree = new Client("127.0.0.30");
-          //  routers.Add("127.0.0.30");
+           Client clientThree = new Client("127.0.0.30");
+         //  routers.Add("127.0.0.30");
 
             
-   //         Client clientFour = new Client("127.0.0.40");
+            Client clientFour = new Client("127.0.0.40");
            // routers.Add("127.0.0.40");
 
             
-  //          Client clientFive = new Client("127.0.0.50");
+            Client clientFive = new Client("127.0.0.50");
           //  routers.Add("127.0.0.50");
 
            
@@ -81,14 +81,14 @@ namespace FinalClient
 
 
 
-            Thread t0 = new Thread(delegate()
+    /*        Thread t0 = new Thread(delegate()
             {
                 ClientForm cf = new ClientForm(clientZero);
                 cf.Show();
                 Application.Run();
             });
-            t0.Start();
-  /*          Thread t = new Thread(delegate()
+            t0.Start();*/
+            Thread t = new Thread(delegate()
                 {
                     ClientForm cf = new ClientForm(clientOne);
                     cf.Show();
@@ -125,7 +125,7 @@ namespace FinalClient
                 Application.Run();
             });
             t5.Start();
-   */
+   
             
 
             Console.ReadLine();

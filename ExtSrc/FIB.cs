@@ -19,6 +19,10 @@ namespace ExtSrc
         {
             addressList.Add(new AddressPair(one, two));
         }
+        public void remove(String one, String two)
+    {
+        addressList.Remove(new AddressPair(one, two));
+    }
 
 
         public String findTarget(String ip)
@@ -35,7 +39,7 @@ namespace ExtSrc
             return result;
         }
     [Serializable()]
-        public class AddressPair
+        public class AddressPair : IEquatable<AddressPair>
         {
         public String TerminationPoint { get; set; }
         public String NextHop { get; set; }
@@ -44,6 +48,11 @@ namespace ExtSrc
             {
                 TerminationPoint = one;
                 NextHop = two;
+            }
+            public bool Equals(AddressPair other)
+            {
+                if (other == null) return false;
+                return (this.TerminationPoint.Equals(other.TerminationPoint) && this.NextHop.Equals(other.NextHop) );
             }
         }
     }

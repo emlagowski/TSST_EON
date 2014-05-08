@@ -71,6 +71,16 @@ namespace ExtSrc
             this.Connections = new List<ExtSrc.Connection>() { conn };
             message = msg;
         }
+        public AgentData(ExtSrc.FIB fib, String msg)
+        {
+            this.routerAddress = null;
+            this.physWires = null;
+            this.unFib = fib;
+            this.AvalaibleBandIN = null;
+            this.AvalaibleBandOUT = null;
+            this.Connections = null;
+            message = msg;
+        }
 
         public AgentData(String address, PhysicalWires fib, FIB ufib, List<ExtSrc.WireBand> AvalaibleBandIN, List<ExtSrc.WireBand> AvalaibleBandOUT, List<ExtSrc.Connection> Connections)
         {

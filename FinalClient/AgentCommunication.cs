@@ -16,15 +16,17 @@ namespace FinalClient
         IPEndPoint localEP, agentEP;
         public static Socket socket;
         private Signaling sgnl;
+        private Client clnt;
         String address;
       //  private ManualResetEvent allReceive = new ManualResetEvent(false);
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
         
-        public AgentCommunication(String ip, Signaling s) 
+        public AgentCommunication(String ip, Signaling s, Client cl) 
         {
             address = ip;
+            clnt = cl;
             sgnl = s;
             localEP = new IPEndPoint(IPAddress.Parse(ip), 6666);
             agentEP = new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666);
@@ -131,17 +133,36 @@ namespace FinalClient
 
         private void ProcessAgentData(ExtSrc.AgentData agentData)
         {
-            foreach (ExtSrc.Connection conn in agentData.Connections)
+            if (agentData.Connections != null)
             {
-                if (agentData.message == null)
+                foreach (ExtSrc.Connection conn in agentData.Connections)
                 {
-                    sgnl.addConnection(conn);
-                    Console.WriteLine("Connection ID: {0} was ADDED by AGENT at {1}", conn.connectionID, address);
+                    if (agentData.message == null)
+                    {
+                        sgnl.addConnection(conn);
+                        Console.WriteLine("Connection ID: {0} was ADDED by AGENT at {1}", conn.connectionID, address);
+                    }
+                    else if (agentData.message.Equals("REMOVE"))
+                    {
+                        sgnl.removeConnection(conn);
+                        Console.WriteLine("Connection ID: {0} was REMOVED by AGENT at {1}", conn.connectionID, address);
+                    }
                 }
-                else if (agentData.message.Equals("REMOVE")) 
+            }
+            else if (agentData.message.Equals("ADD_FIB_ENTRY"))
+            {
+                foreach (ExtSrc.FIB.AddressPair a in agentData.unFib.addressList)
                 {
-                    sgnl.removeConnection(conn);
-                    Console.WriteLine("Connection ID: {0} was REMOVED by AGENT at {1}", conn.connectionID, address);
+                    clnt.fib.addNext(a.TerminationPoint, a.NextHop);
+                    Console.WriteLine("FIB entry {0}-{1} was ADDED by AGENT at {2}", a.TerminationPoint, a.NextHop, address);
+                }
+            }
+            else if (agentData.message.Equals("REMOVE_FIB_ENTRY"))
+            {
+                foreach (ExtSrc.FIB.AddressPair a in agentData.unFib.addressList)
+                {
+                    clnt.fib.remove(a.TerminationPoint, a.NextHop);
+                    Console.WriteLine("FIB entry {0}-{1} was REMOVED by AGENT at {2}", a.TerminationPoint, a.NextHop, address);
                 }
             }
         }

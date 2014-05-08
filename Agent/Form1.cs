@@ -518,5 +518,48 @@ namespace Agent
         {
 
         }
+
+        private void dataGridView5_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            String nexthop = String.Format("127.0.0.{0}", textBox3.Text);
+            String terminationp = String.Format("127.0.0.{0}", textBox2.Text);
+            ExtSrc.FIB fib = new ExtSrc.FIB();
+            fib.addNext(terminationp, nexthop);
+            comm.Send((comboBox1.SelectedItem as ExtSrc.AgentData).address, new ExtSrc.AgentData(fib, "ADD_FIB_ENTRY"));
+            foreach (ExtSrc.AgentData a in comm.agentData)
+            {
+                if (a.address == (comboBox1.SelectedItem as ExtSrc.AgentData).address)
+                    a.unFib.addNext(terminationp, nexthop);
+            }
+          //  ExtSrc.AgentData agTmp3 = comboBox1.SelectedItem as ExtSrc.AgentData;
+
+            //dataGridView5.DataSource = agTmp3.unFib.addressList;
+            myTimer.Start();
+
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            String nexthop = String.Format("127.0.0.{0}", textBox3.Text);
+            String terminationp = String.Format("127.0.0.{0}", textBox2.Text);
+            ExtSrc.FIB fib = new ExtSrc.FIB();
+            fib.addNext(terminationp, nexthop);
+            comm.Send((comboBox1.SelectedItem as ExtSrc.AgentData).address, new ExtSrc.AgentData(fib, "REMOVE_FIB_ENTRY"));
+            foreach (ExtSrc.AgentData a in comm.agentData)
+            {
+                if (a.address == (comboBox1.SelectedItem as ExtSrc.AgentData).address)
+                    a.unFib.remove(terminationp, nexthop);
+            }
+            //  ExtSrc.AgentData agTmp3 = comboBox1.SelectedItem as ExtSrc.AgentData;
+
+            //dataGridView5.DataSource = agTmp3.unFib.addressList;
+            myTimer.Start();
+        }
     }
 }

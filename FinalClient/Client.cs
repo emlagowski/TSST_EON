@@ -29,7 +29,7 @@ namespace FinalClient
         Socket clientSocket, client; // clientSocket is just for listening
         ArrayList sockets;
         private String response = String.Empty;
-        public ExtSrc.FIB fib;
+        public ExtSrc.FIB fib { get; set; }
 
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
@@ -47,7 +47,7 @@ namespace FinalClient
             readFIB();
             signaling = new Signaling(address);
 
-            agentCom = new AgentCommunication(address, signaling);
+            agentCom = new AgentCommunication(address, signaling, this);
             xmlLog = new XmlDocument();
             rootNodeLog = xmlLog.CreateElement("router-log");
             xmlLog.AppendChild(rootNodeLog);

@@ -12,7 +12,7 @@ namespace User
     {
         static void Main(string[] args)
         {
-            User user = new User(args[0]);
+            User user = new User("127.0.0.5");
             Thread t = new Thread(delegate()
             {
                 UserForm uf = new UserForm(user);
@@ -21,14 +21,14 @@ namespace User
             });
             t.Start();
 
-         /*   User user2 = new User("127.0.0.7");
+            User user2 = new User("127.0.0.7");
             Thread t2 = new Thread(delegate()
             {
                 UserForm uf = new UserForm(user2);
                 uf.Show();
                 Application.Run();
             });
-            t2.Start();*/
+            t2.Start();
         }
     }
 }
