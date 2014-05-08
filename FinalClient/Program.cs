@@ -12,24 +12,26 @@ namespace FinalClient
     {
         static void Main(string[] args)
         {
+            String arg = args[0];
            // List<String> routers = new List<string>();
             Client.readPhysicalWires();
-            Client clientOne = new Client("127.0.0.10");
+            Client clientZero = new Client(arg);
+  //          Client clientOne = new Client("127.0.0.10");
           //  routers.Add("127.0.0.10");
             
-            Client clientTwo = new Client("127.0.0.20");
+  //          Client clientTwo = new Client("127.0.0.20");
            // routers.Add("127.0.0.20");
 
            
-            Client clientThree = new Client("127.0.0.30");
+ //           Client clientThree = new Client("127.0.0.30");
           //  routers.Add("127.0.0.30");
 
             
-            Client clientFour = new Client("127.0.0.40");
+   //         Client clientFour = new Client("127.0.0.40");
            // routers.Add("127.0.0.40");
 
             
-            Client clientFive = new Client("127.0.0.50");
+  //          Client clientFive = new Client("127.0.0.50");
           //  routers.Add("127.0.0.50");
 
            
@@ -37,7 +39,7 @@ namespace FinalClient
             //ExtSrc.AgentData.routers = routers;
 
 
-            int[] lambdasOut_c1 = {1,2,3,4,5 };
+//            int[] lambdasOut_c1 = {1,2,3,4,5 };
 
           //  int[] lambdasIn_c2 = { 1, 2, 3, 4, 5 };
             //int[] lambdas_c2 = { 1, 2, 3, 4, 5 };
@@ -45,8 +47,8 @@ namespace FinalClient
             
             
            
-           clientOne.signaling.addConnection(new ExtSrc.Connection(null, lambdasOut_c1, 2, 2, 5, 172));
-           clientThree.signaling.addConnection(new ExtSrc.Connection(null, lambdasOut_c1, 5, 5, 5, 172));
+ //          clientOne.signaling.addConnection(new ExtSrc.Connection(null, lambdasOut_c1, 2, 2, 5, 172));
+  //         clientThree.signaling.addConnection(new ExtSrc.Connection(null, lambdasOut_c1, 5, 5, 5, 172));
 
 
            // clientThree.signaling.addConnection(new ExtSrc.Connection(lambdasOut_c1, null, 5, 5, 172), 5);
@@ -76,9 +78,17 @@ namespace FinalClient
             Thread.Sleep(200);
             clientFive.agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(clientFive.address, Client.fib, clientFive.unFib, clientFive.signaling.AvBaIN, clientFive.signaling.AvBaOUT, clientFive.signaling.Conn));
             **/
-            
-            
-            Thread t = new Thread(delegate()
+
+
+
+            Thread t0 = new Thread(delegate()
+            {
+                ClientForm cf = new ClientForm(clientZero);
+                cf.Show();
+                Application.Run();
+            });
+            t0.Start();
+  /*          Thread t = new Thread(delegate()
                 {
                     ClientForm cf = new ClientForm(clientOne);
                     cf.Show();
@@ -115,6 +125,7 @@ namespace FinalClient
                 Application.Run();
             });
             t5.Start();
+   */
             
 
             Console.ReadLine();

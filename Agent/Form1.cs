@@ -112,10 +112,10 @@ namespace Agent
             BindingSource bs4 = new BindingSource();
                 bs4.DataSource = agTmp3.Conn;
                 dataGridView4.BindingContext = new BindingContext();
-                if ((bs4.DataSource as List<ExtSrc.Connection>).Count > 0)
+             //   if ((bs4.DataSource as List<ExtSrc.Connection>).Count > 0)
                     dataGridView4.DataSource = bs4.DataSource;
-                else
-                    dataGridView4.DataSource = "EMPTY";
+               // else
+               //     dataGridView4.DataSource = "EMPTY";
 
 
             this.Refresh();
@@ -305,7 +305,7 @@ namespace Agent
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(comboBox5.Text, "ERROR");
+           // MessageBox.Show(comboBox5.Text, "ERROR");
 
             int id = Convert.ToInt32(comboBox5.Text);
             //
@@ -323,6 +323,11 @@ namespace Agent
                         {
                             if (a.Connections.Count == 1) { dataGridView4.DataSource = "EMPTY"; }
                             a.removeConnection(con);
+                            ExtSrc.AgentData agTmp3 = comboBox1.SelectedItem as ExtSrc.AgentData;
+                            BindingSource bs4 = new BindingSource();
+                            bs4.DataSource = agTmp3.Conn;
+                            dataGridView4.BindingContext = new BindingContext();
+                            dataGridView4.DataSource = bs4.DataSource;
                         }
                     }
                     break; 
