@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FinalClient
+namespace Router
 {
     class Program
     {
@@ -14,24 +14,24 @@ namespace FinalClient
         {
             //String arg = args[0];
            // List<String> routers = new List<string>();
-            Client.readPhysicalWires();
+            Router.readPhysicalWires();
          //  Client clientZero = new Client(arg);
-            Client clientOne = new Client("127.0.0.10");
+            Router clientOne = new Router("127.0.0.10");
           //  routers.Add("127.0.0.10");
             
-            Client clientTwo = new Client("127.0.0.20");
+            Router clientTwo = new Router("127.0.0.20");
            // routers.Add("127.0.0.20");
 
            
-           Client clientThree = new Client("127.0.0.30");
+           Router clientThree = new Router("127.0.0.30");
          //  routers.Add("127.0.0.30");
 
             
-           Client clientFour = new Client("127.0.0.40");
+           Router clientFour = new Router("127.0.0.40");
            // routers.Add("127.0.0.40");
 
             
-            Client clientFive = new Client("127.0.0.50");
+            Router clientFive = new Router("127.0.0.50");
           //  routers.Add("127.0.0.50");
 
            
@@ -90,7 +90,7 @@ namespace FinalClient
             t0.Start();*/
           Thread t = new Thread(delegate()
                 {
-                    ClientForm cf = new ClientForm(clientOne);
+                    RouterForm cf = new RouterForm(clientOne);
                     cf.Show();
                     Application.Run();
                 });
@@ -98,7 +98,7 @@ namespace FinalClient
 
             Thread t2 = new Thread(delegate()
             {
-                ClientForm cf = new ClientForm(clientTwo);
+                RouterForm cf = new RouterForm(clientTwo);
                 cf.Show();
                 Application.Run();
             });
@@ -106,21 +106,21 @@ namespace FinalClient
 
             Thread t3 = new Thread(delegate()
             {
-                ClientForm cf = new ClientForm(clientThree);
+                RouterForm cf = new RouterForm(clientThree);
                 cf.Show();
                 Application.Run();
             });
             t3.Start();
             Thread t4 = new Thread(delegate()
             {
-                ClientForm cf = new ClientForm(clientFour);
+                RouterForm cf = new RouterForm(clientFour);
                 cf.Show();
                 Application.Run();
             });
             t4.Start();
             Thread t5 = new Thread(delegate()
             {
-                ClientForm cf = new ClientForm(clientFive);
+                RouterForm cf = new RouterForm(clientFive);
                 cf.Show();
                 Application.Run();
             });

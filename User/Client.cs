@@ -10,9 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace User
+namespace Client
 {
-    public class User
+    public class Client
     {
         public String localAddress, remoteAddress;
         IPEndPoint localEndPoint, remoteEndPoint;
@@ -30,7 +30,7 @@ namespace User
         XmlNode rootNodeLog;
 
 
-        public User(String ip)
+        public Client(String ip)
         {
             logName= ip + ".xml";
             xmlLog = new XmlDocument();

@@ -1,4 +1,4 @@
-﻿namespace FinalServer
+﻿namespace Cloud
 {
     partial class Form1
     {
@@ -47,9 +47,9 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label1.Location = new System.Drawing.Point(183, 5);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(126, 31);
+            this.label1.Size = new System.Drawing.Size(85, 31);
             this.label1.TabIndex = 0;
-            this.label1.Text = "SERVER";
+            this.label1.Text = "Cloud";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // dataGridView1
@@ -99,7 +99,7 @@
             // 
             // serverBindingSource
             // 
-            this.serverBindingSource.DataSource = typeof(FinalServer.Server);
+            this.serverBindingSource.DataSource = typeof(Cloud);
             // 
             // Form1
             // 
@@ -113,7 +113,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Cloud";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.serverBindingSource)).EndInit();

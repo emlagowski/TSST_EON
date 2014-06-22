@@ -11,9 +11,9 @@ using System.Collections;
 using System.Xml;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace FinalServer
+namespace Cloud
 {
-    public class Server
+    public class Cloud
     {
         public Signaling signaling;
         IPEndPoint endPoint;
@@ -25,7 +25,7 @@ namespace FinalServer
         XmlDocument xmlDoc, xmlDocConnection;
         XmlNode rootNode, rootNodeConnection;
 
-        public Server(string ip, int port)
+        public Cloud(string ip, int port)
         {
             signaling = new Signaling();
             fib = new FIB();

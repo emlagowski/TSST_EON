@@ -561,5 +561,10 @@ namespace Agent
             //dataGridView5.DataSource = agTmp3.unFib.addressList;
             myTimer.Start();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

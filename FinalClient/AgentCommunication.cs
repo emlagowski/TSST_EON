@@ -9,21 +9,21 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FinalClient
+namespace Router
 {
     public class AgentCommunication
     {
         IPEndPoint localEP, agentEP;
         public static Socket socket;
         public Signaling sgnl {get; set; }
-        private Client clnt;
+        private Router clnt;
         String address;
       //  private ManualResetEvent allReceive = new ManualResetEvent(false);
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
         
-        public AgentCommunication(String ip, Signaling s, Client cl) 
+        public AgentCommunication(String ip, Signaling s, Router cl) 
         {
             address = ip;
             clnt = cl;
