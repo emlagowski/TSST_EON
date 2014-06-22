@@ -8,30 +8,30 @@ using System.Windows.Forms;
 
 namespace Router
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            //String arg = args[0];
+            String arg = args[0];
            // List<String> routers = new List<string>();
             Router.readPhysicalWires();
-         //  Client clientZero = new Client(arg);
-            Router clientOne = new Router("127.0.0.10");
+          Router clientZero = new Router(arg);
+            //Router clientOne = new Router("127.0.0.10");
           //  routers.Add("127.0.0.10");
             
-            Router clientTwo = new Router("127.0.0.20");
+           // Router clientTwo = new Router("127.0.0.20");
            // routers.Add("127.0.0.20");
 
            
-           Router clientThree = new Router("127.0.0.30");
+          // Router clientThree = new Router("127.0.0.30");
          //  routers.Add("127.0.0.30");
 
             
-           Router clientFour = new Router("127.0.0.40");
+          // Router clientFour = new Router("127.0.0.40");
            // routers.Add("127.0.0.40");
 
             
-            Router clientFive = new Router("127.0.0.50");
+           // Router clientFive = new Router("127.0.0.50");
           //  routers.Add("127.0.0.50");
 
            
@@ -81,14 +81,14 @@ namespace Router
 
 
 
-   /*          Thread t0 = new Thread(delegate()
+             Thread t0 = new Thread(delegate()
             {
-                ClientForm cf = new ClientForm(clientZero);
+                RouterForm cf = new RouterForm(clientZero);
                 cf.Show();
                 Application.Run();
             });
-            t0.Start();*/
-          Thread t = new Thread(delegate()
+            t0.Start();
+         /* Thread t = new Thread(delegate()
                 {
                     RouterForm cf = new RouterForm(clientOne);
                     cf.Show();
@@ -124,7 +124,7 @@ namespace Router
                 cf.Show();
                 Application.Run();
             });
-            t5.Start();
+            t5.Start();*/
    
             
 
