@@ -1,6 +1,6 @@
-﻿namespace User
+﻿namespace Client
 {
-    partial class UserForm
+    partial class ClientForm
     {
         /// <summary>
         /// Required designer variable.
@@ -60,9 +60,10 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label1.Location = new System.Drawing.Point(172, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(72, 31);
+            this.label1.Size = new System.Drawing.Size(84, 31);
             this.label1.TabIndex = 0;
-            this.label1.Text = "User";
+            this.label1.Text = "Client";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // labelName
             // 
@@ -248,7 +249,7 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
-            // UserForm
+            // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -259,8 +260,8 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.label1);
-            this.Name = "UserForm";
-            this.Text = "User";
+            this.Name = "ClientForm";
+            this.Text = "Client";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

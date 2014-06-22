@@ -6,25 +6,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace User
+namespace Client
 {
     class Program
     {
         static void Main(string[] args)
         {
-            User user = new User("127.0.0.5");
+            Client user = new Client("127.0.0.5");
             Thread t = new Thread(delegate()
             {
-                UserForm uf = new UserForm(user);
+                ClientForm uf = new ClientForm(user);
                 uf.Show();
                 Application.Run();
             });
             t.Start();
 
-            User user2 = new User("127.0.0.7");
+            Client user2 = new Client("127.0.0.7");
             Thread t2 = new Thread(delegate()
             {
-                UserForm uf = new UserForm(user2);
+                ClientForm uf = new ClientForm(user2);
                 uf.Show();
                 Application.Run();
             });

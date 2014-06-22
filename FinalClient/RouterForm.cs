@@ -9,16 +9,24 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace FinalClient
+namespace Router
 {
-    public partial class ClientForm : Form
+    public partial class RouterForm : Form
     {
-        Client _client;
-        public ClientForm(Client client)
+        Router _router;
+        public RouterForm(Router router)
         {
-            _client = client;
+
+            _router = router;
             InitializeComponent();
-            LabelText = _client.address;
+            LabelText = _router.address;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            
+            Console.WriteLine("papa");
         }
 
         public string LabelText
@@ -53,13 +61,13 @@ namespace FinalClient
             try
             {
                 XmlReader xmlFile;
-                xmlFile = XmlReader.Create(_client.logName, new XmlReaderSettings());
+                xmlFile = XmlReader.Create(_router.logName, new XmlReaderSettings());
                 DataSet ds = new DataSet();
                 ds.ReadXml(xmlFile);
                 dataGridView1.DataSource = ds.Tables[0];
                 xmlFile.Close();
                 XmlReader xmlFile2;
-                xmlFile2 = XmlReader.Create(_client.wiresName, new XmlReaderSettings());
+                xmlFile2 = XmlReader.Create(_router.wiresName, new XmlReaderSettings());
                 DataSet ds2 = new DataSet();
                 ds2.ReadXml(xmlFile2);
                 dataGridView2.DataSource = ds2.Tables[0];

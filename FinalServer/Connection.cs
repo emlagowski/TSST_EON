@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FinalServer
+namespace Cloud
 {
     [Serializable()]
     public class Connection

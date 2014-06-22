@@ -10,7 +10,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
 
-namespace FinalServer
+namespace Cloud
 {
     public class Signaling
     {

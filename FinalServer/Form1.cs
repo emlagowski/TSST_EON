@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace FinalServer
+namespace Cloud
 {
     public partial class Form1 : Form
     {
-        Server _server;
-        public Form1(Server server)
+        Cloud _server;
+        public Form1(Cloud server)
         {
             _server = server;
             InitializeComponent();

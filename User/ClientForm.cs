@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace User
+namespace Client
 {
-    public partial class UserForm : Form
+    public partial class ClientForm : Form
     {
-        User _user;
-        public UserForm(User user)
+        Client _user;
+        public ClientForm(Client user)
         {
             _user = user;
             InitializeComponent();
@@ -71,6 +71,11 @@ namespace User
             {
                 MessageBox.Show(ex.ToString());
             } 
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

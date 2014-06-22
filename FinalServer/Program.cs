@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FinalServer
+namespace Cloud
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Server server = new Server("127.0.0.1", 8000);
+            Cloud server = new Cloud("127.0.0.1", 8000);
             int[] lambdasOut_c1 = { 1, 2, 3, 4, 5 };
 
             int[] lambdasIn_c2 = { 1, 2, 3, 4, 5 };

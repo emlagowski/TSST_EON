@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalServer", "FinalServer\FinalServer.csproj", "{D571EE69-A0FC-44E8-B482-7B507BAFF90B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud", "FinalServer\Cloud.csproj", "{D571EE69-A0FC-44E8-B482-7B507BAFF90B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalClient", "FinalClient\FinalClient.csproj", "{21190D90-C3AC-4455-805C-99C56A81EDAA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Router", "FinalClient\Router.csproj", "{21190D90-C3AC-4455-805C-99C56A81EDAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User", "User\User.csproj", "{7FC40ECE-B344-475A-A06E-52407110AE03}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "User\Client.csproj", "{7FC40ECE-B344-475A-A06E-52407110AE03}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtSrc", "ExtSrc\ExtSrc.csproj", "{BCF244C3-ACA3-492D-9A52-71EDFAB8CC61}"
 EndProject
