@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BCF244C3-ACA3-492D-9A52-71EDFAB8CC61}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{21190D90-C3AC-4455-805C-99C56A81EDAA}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExtSrc</RootNamespace>
-    <AssemblyName>ExtSrc</AssemblyName>
+    <RootNamespace>FinalClient</RootNamespace>
+    <AssemblyName>FinalClient</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,6 +35,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,14 +44,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgentData.cs" />
-    <Compile Include="Connection.cs" />
-    <Compile Include="Data.cs" />
-    <Compile Include="PhysicalWires.cs" />
+    <Compile Include="AgentCommunication.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="ClientForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ClientForm.Designer.cs">
+      <DependentUpon>ClientForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FIB.cs" />
-    <Compile Include="Wire.cs" />
-    <Compile Include="WireBand.cs" />
+    <Compile Include="Signaling.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ClientForm.resx">
+      <DependentUpon>ClientForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="127.0.0.10.FIB.xml" />
+    <Content Include="127.0.0.20.FIB.xml" />
+    <Content Include="127.0.0.30.FIB.xml" />
+    <Content Include="127.0.0.40.FIB.xml" />
+    <Content Include="127.0.0.50.FIB.xml" />
+    <Content Include="wires.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExtSrc\ExtSrc.csproj">
+      <Project>{bcf244c3-aca3-492d-9a52-71edfab8cc61}</Project>
+      <Name>ExtSrc</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
