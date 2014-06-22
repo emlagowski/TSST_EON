@@ -25,7 +25,7 @@ namespace Router
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-            
+            _router.closing();
             Console.WriteLine("papa");
         }
 
