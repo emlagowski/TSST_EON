@@ -70,8 +70,9 @@ namespace ExtSrc
         public bool Equals(Connection other)
         {
             if (other == null) return false;
-            return (this.InWireID.Equals(other.InWireID) && this.OutWireID.Equals(other.OutWireID) && this.InLambdaIDs.Equals(other.InLambdaIDs)
-                && this.OutLambdaIDs.Equals(other.OutLambdaIDs) && this.Bandwidth.Equals(other.Bandwidth) && this.connectionID.Equals(other.connectionID));
+           // return (this.InWireID.Equals(other.InWireID) && this.OutWireID.Equals(other.OutWireID) && this.InLambdaIDs.Equals(other.InLambdaIDs)
+            //    && this.OutLambdaIDs.Equals(other.OutLambdaIDs) && this.Bandwidth.Equals(other.Bandwidth) && this.connectionID.Equals(other.connectionID));
+            return (this.connectionID.Equals(other.connectionID));
         }
 
     }

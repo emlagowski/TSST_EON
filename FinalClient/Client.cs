@@ -329,7 +329,8 @@ namespace FinalClient
             if (client != null && !s.Equals(client))
             {
                  int id = findWireID(data.EndAddress);
-                 if (signaling.checkIfConnEstablished(data.connectionID, data.bandwidthNeeded, id))
+                
+                 if (agentCom.sgnl.checkIfConnEstablished(data.connectionID, data.bandwidthNeeded, id))
                  {
                      MemoryStream fs = new MemoryStream();
                      BinaryFormatter formatter = new BinaryFormatter();

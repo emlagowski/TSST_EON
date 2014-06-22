@@ -303,7 +303,12 @@ namespace FinalClient
                 for (int i = 0; i < c.OutLambdaIDs.Length; i++)
                     findWireOut(c.OutWireID).lambdas[c.OutLambdaIDs[i]] = true;
             }
-            Connections.Remove(c); // nie sprawdza czy id sie roznia
+            Connections.Remove(c);
+            /*foreach(ExtSrc.Connection con in Connections){
+                if (con.CID == c.CID)
+                    Connections.RemoveAt(Connections.IndexOf(con));
+            }*/
+           
         }
         
 

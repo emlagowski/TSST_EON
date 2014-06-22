@@ -15,7 +15,7 @@ namespace FinalClient
     {
         IPEndPoint localEP, agentEP;
         public static Socket socket;
-        private Signaling sgnl;
+        public Signaling sgnl {get; set; }
         private Client clnt;
         String address;
       //  private ManualResetEvent allReceive = new ManualResetEvent(false);
@@ -120,9 +120,11 @@ namespace FinalClient
                 MemoryStream ms = new MemoryStream(state.buffer);
 
                 state.ad = (ExtSrc.AgentData)formattor.Deserialize(ms);
-
+                Console.WriteLine("KLIENT LICZBA KONEKSZYNOW PRZED" + clnt.signaling.Conn.Count.ToString());
+                Console.WriteLine("AD LICZBA KONEKSZYNOW PRZED" + sgnl.Conn.Count.ToString());
                 ProcessAgentData(state.ad);
-                             
+                Console.WriteLine("AD LICZBA KONEKSZYNOW PRZED" + sgnl.Conn.Count.ToString());
+                Console.WriteLine("KLIENT LICZBA KONEKSZYNOW PO" + clnt.signaling.Conn.Count.ToString());     
                 receiveDone.Set();
             }
             catch (Exception e)

@@ -21,7 +21,12 @@ namespace ExtSrc
         }
         public void remove(String one, String two)
     {
-        addressList.Remove(new AddressPair(one, two));
+        //addressList.Remove(new AddressPair(one, two));
+        foreach (AddressPair ap in addressList)
+        {
+            if (ap.TerminationPoint.Equals(one) && ap.NextHop.Equals(two))
+                addressList.RemoveAt(addressList.IndexOf(ap));
+        }
     }
 
 
