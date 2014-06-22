@@ -80,6 +80,8 @@ namespace Router
             agentCom.Send(AgentCommunication.socket, new ExtSrc.AgentData(address, localPhysicalWires, fib, signaling.AvBaIN, signaling.AvBaOUT, signaling.Conn));
         }
 
+
+
         private void readLocalPhysicalWires()
         {
             foreach (ExtSrc.Wire w in globalPhysicalWires.Wires) 
