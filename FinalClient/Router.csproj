@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D571EE69-A0FC-44E8-B482-7B507BAFF90B}</ProjectGuid>
+    <ProjectGuid>{21190D90-C3AC-4455-805C-99C56A81EDAA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cloud</RootNamespace>
-    <AssemblyName>Cloud</AssemblyName>
+    <RootNamespace>Router</RootNamespace>
+    <AssemblyName>Router</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -44,32 +44,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="AgentCommunication.cs" />
+    <Compile Include="Router.cs" />
+    <Compile Include="RouterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="RouterForm.Designer.cs">
+      <DependentUpon>RouterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Cloud.cs" />
     <Compile Include="Signaling.cs" />
-    <Compile Include="WireBand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Properties\DataSources\FIB.datasource" />
-    <None Include="Properties\DataSources\Form1.datasource" />
-    <None Include="Properties\DataSources\Server.datasource" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="RouterForm.resx">
+      <DependentUpon>RouterForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <Content Include="127.0.0.10.FIB.xml" />
+    <Content Include="127.0.0.20.FIB.xml" />
+    <Content Include="127.0.0.30.FIB.xml" />
+    <Content Include="127.0.0.40.FIB.xml" />
+    <Content Include="127.0.0.50.FIB.xml" />
+    <Content Include="wires.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExtSrc\ExtSrc.csproj">

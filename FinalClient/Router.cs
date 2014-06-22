@@ -28,6 +28,7 @@ namespace Router
         IPEndPoint cloudEP, clientEP;
         Socket clientSocket, client; // clientSocket is just for listening
         ArrayList sockets;
+        Boolean IsListening = true;
         private String response = String.Empty;
         public ExtSrc.FIB fib { get; set; }
 
@@ -196,7 +197,7 @@ namespace Router
         {
             try
             {
-                while (true)
+                while (IsListening)
                 {
                     allReceive.Reset();
                     for (int i = 0; i < sockets.Count; i++)
@@ -220,7 +221,7 @@ namespace Router
             {
                 clientSocket.Listen(100);
 
-                while (true)
+                while (IsListening)
                 {
                     // Set the event to nonsignaled state.
                     allDone.Reset();
@@ -246,7 +247,7 @@ namespace Router
         {
             // Signal the main thread to continue.
             allDone.Set();
-
+            if (!IsListening) return;
             // Get the socket that handles the client request.
             Socket listener = (Socket)ar.AsyncState;
             Socket handler = listener.EndAccept(ar);
@@ -267,6 +268,7 @@ namespace Router
         {
             try
             {
+                if (!IsListening) return;
                 // Retrieve the state object and the client socket 
                 // from the asynchronous state object.
                 StateObject state = (StateObject)ar.AsyncState;
@@ -300,6 +302,7 @@ namespace Router
         {
             try
             {
+                if (!IsListening) return;
                 // Retrieve the socket from the state object.
                 Socket client = (Socket)ar.AsyncState;
 
@@ -430,6 +433,7 @@ namespace Router
         {
             try
             {
+                if (!IsListening) return;
                 // Retrieve the socket from the state object.
                 Socket client = (Socket)ar.AsyncState;
 
@@ -469,6 +473,7 @@ namespace Router
         {
             try
             {
+                if (!IsListening) return;
                 Boolean flag = false;
                 // Retrieve the state object and the client socket 
                 // from the asynchronous state object.
@@ -529,9 +534,20 @@ namespace Router
 
         internal void closing()
         {
-            this.
+            IsListening = false;
 
-            throw new NotImplementedException();
+            //clientSocket.Shutdown(SocketShutdown.Send);            
+            this.clientSocket.Close();
+
+            if (client != null)
+            {
+                //client.Shutdown(SocketShutdown.Send);
+                this.client.Close();
+            }
+
+            Console.WriteLine("Closing.");
+            System.Windows.Forms.Application.Exit();
+
         }
     }
 
