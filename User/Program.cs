@@ -12,7 +12,18 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            Client user = new Client("127.0.0.5");
+            String arg = args[0];
+
+            Client user = new Client(arg);
+            Thread t = new Thread(delegate()
+            {
+                ClientForm uf = new ClientForm(user);
+                uf.Show();
+                Application.Run();
+            });
+            t.Start();
+
+            /*Client user = new Client("127.0.0.5");
             Thread t = new Thread(delegate()
             {
                 ClientForm uf = new ClientForm(user);
@@ -28,7 +39,7 @@ namespace Client
                 uf.Show();
                 Application.Run();
             });
-            t2.Start();
+            t2.Start();*/
         }
     }
 }
