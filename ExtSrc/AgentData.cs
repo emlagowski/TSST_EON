@@ -9,141 +9,130 @@ namespace ExtSrc
     [Serializable()]
     public class AgentData
     {
-        public String routerAddress;
-        public PhysicalWires physWires;
-        public FIB unFib;
-        public List<ExtSrc.WireBand> AvalaibleBandIN;
-        public List<ExtSrc.WireBand> AvalaibleBandOUT;
-        public List<ExtSrc.Connection> Connections { get; set; }
-        public String message;
 
+        public AgentComProtocol message;
+        
+        //-----------------ROUTING--
+        public String originatingAddress{get; set;}
+        public String targetAddress { get; set; }
+        //addfreqslot
+        public int startingFreq { get; set; }
+        public int FSUCount { get; set; }
+        public Modulation mod { get; set; }
+        //wires
+        public int firstWireID { get; set; }
+        public int secondWireID { get; set; }
+        //--------------------------
+        //--------------ClientTables
+        public int wireID { get; set; }
+        public int FSid { get; set; }
+        public int socketID { get; set; }
+        //--------------------------
+        //--------------ROUTING RETURN MSG
+        public int FSreturnID { get; set; }
+        public String uniqueKey { get; set; }
+        //--------------REGISTER WIRE_IDs
+        public List<DijkstraData> wireIDsList { get; set; }
 
-        public String address
+        public AgentData(AgentComProtocol msg):this()
         {
-            get { return routerAddress; }
-            set { routerAddress = value;  }
-        }
-
-        public PhysicalWires fibTable
-        {
-            get { return physWires; }
-            set { physWires = value; }
-        }
-
-        public List<ExtSrc.WireBand> AbIN
-        {
-            get { return AvalaibleBandIN; }
-        }
-
-        public List<ExtSrc.WireBand> AbOUT
-        {
-            get { return AvalaibleBandOUT; }
-        }
-
-        public List<ExtSrc.Connection> Conn
-        {
-            get { return Connections; }
-        }
-
-        public FIB unFibTable
-        {
-            get { return unFib; }
-            set { unFib = value; }
-        }
-
-        public AgentData(Connection conn)
-        {
-            this.routerAddress = null;
-            this.physWires = null;
-            this.unFib = null;
-            this.AvalaibleBandIN = null;
-            this.AvalaibleBandOUT = null;
-            this.Connections = new List<ExtSrc.Connection>(){conn};
-            message = null;
-        }
-        public AgentData(Connection conn, String msg)
-        {
-            this.routerAddress = null;
-            this.physWires = null;
-            this.unFib = null;
-            this.AvalaibleBandIN = null;
-            this.AvalaibleBandOUT = null;
-            this.Connections = new List<ExtSrc.Connection>() { conn };
-            message = msg;
-        }
-        public AgentData(ExtSrc.FIB fib, String msg)
-        {
-            this.routerAddress = null;
-            this.physWires = null;
-            this.unFib = fib;
-            this.AvalaibleBandIN = null;
-            this.AvalaibleBandOUT = null;
-            this.Connections = null;
             message = msg;
         }
 
-        public AgentData(String address, PhysicalWires fib, FIB ufib, List<ExtSrc.WireBand> AvalaibleBandIN, List<ExtSrc.WireBand> AvalaibleBandOUT, List<ExtSrc.Connection> Connections)
+        public AgentData(AgentComProtocol msg, List<DijkstraData> wiresList)
+            : this()
         {
-            this.routerAddress = address;
-            this.physWires = fib;
-            this.unFib = ufib;
-            this.AvalaibleBandIN = AvalaibleBandIN;
-            this.AvalaibleBandOUT = AvalaibleBandOUT;
-            this.Connections = Connections;
-            message = null;
-
+            message = msg;
+            wireIDsList = wiresList;
         }
 
-        public ExtSrc.WireBand findWireIN(int wireID)
+        public AgentData(AgentComProtocol msg, int startfreq)
+            : this()
         {
-            ExtSrc.WireBand result = null;
-            AvalaibleBandIN.ForEach(delegate(ExtSrc.WireBand wb)
-            {
-                if (wb.wireID == wireID) result = wb;
-            });
-            return result;
-
+            message = msg;
+            startingFreq = startfreq;
         }
-        public ExtSrc.WireBand findWireOut(int wireID)
-        {
-            ExtSrc.WireBand result = null;
-            AvalaibleBandOUT.ForEach(delegate(ExtSrc.WireBand wb)
-            {
-                if (wb.wireID == wireID) result = wb;
-            });
-            return result;//CZYto zwraca mi referencje???????????
 
-        }
-        public void addConnection(ExtSrc.Connection c)
+        public AgentData(AgentComProtocol msg, String origAddr, String targetAddr, int startFq, int FSUcnt, Modulation md, int frstWid, int secWid,
+            int wID, int FSid, int sockID)
+            : this()
         {
-            //NIE SPRAWDZA CZY JUZ SA ZAJETE LAMBDY 
-            if (c.InLambdaIDs != null)
-            {
-                for (int i = 0; i < c.InLambdaIDs.Length; i++)
-                    findWireIN(c.InWireID).lambdas[c.InLambdaIDs[i]] = false; // bedzie blad jak findwire zwroci null
-            }
-            if (c.OutLambdaIDs != null)
-            {
-                for (int i = 0; i < c.OutLambdaIDs.Length; i++)
-                    findWireOut(c.OutWireID).lambdas[c.OutLambdaIDs[i]] = false;
-            }
-            Connections.Add(c); // nie sprawdza czy id sie roznia
+            message = msg;
+            originatingAddress = origAddr;
+            targetAddress = targetAddr;
+            startingFreq = startFq;
+            FSUCount = FSUcnt;
+            mod = md;
+            firstWireID = frstWid;
+            secondWireID = secWid;
+            wireID = wID;
+            this.FSid = FSid;
+            socketID = sockID;
+            
+        }
 
-        }
-        public void removeConnection(ExtSrc.Connection c)
+        public AgentData(AgentComProtocol msg, String origAddr, String targetAddr, int startFq, int FSUcnt, Modulation md, int frstWid, int secWid)
+            : this()
         {
-            if (c.InLambdaIDs != null)
-            {
-                for (int i = 0; i < c.InLambdaIDs.Length; i++)
-                    findWireIN(c.InWireID).lambdas[c.InLambdaIDs[i]] = true; // bedzie blad jak findwire zwroci null
-            }
-            if (c.OutLambdaIDs != null)
-            {
-                for (int i = 0; i < c.OutLambdaIDs.Length; i++)
-                    findWireOut(c.OutWireID).lambdas[c.OutLambdaIDs[i]] = true;
-            }
-            Connections.Remove(c); // nie sprawdza czy id sie roznia
+            message = msg;
+            originatingAddress = origAddr;
+            targetAddress = targetAddr;
+            startingFreq = startFq;
+            FSUCount = FSUcnt;
+            mod = md;
+            firstWireID = frstWid;
+            secondWireID = secWid;
+          
+        }
+        public AgentData(AgentComProtocol msg, int wID, int FSid, int sockID):this()
+        {
+            message = msg;
+            wireID = wID;
+            this.FSid = FSid;
+            socketID = sockID;                              
+        }
+        public AgentData()
+        {
+            message = AgentComProtocol.NULL;
+            originatingAddress = null;
+            targetAddress = null;
+            startingFreq = -1;
+            FSUCount = -1;
+            mod = Modulation.NULL;
+            firstWireID = -1;
+            secondWireID = -1;
+            wireID = -1;
+            this.FSid = -1;
+            socketID = -1;
+            uniqueKey = null;
+            wireIDsList = new List<DijkstraData>();
+        }
+
+        public AgentData(AgentComProtocol msg, String ip, String unqKey)
+            : this()
+        {
+            message = msg;
+            targetAddress = ip;
+            uniqueKey = unqKey;
         }
 
     }
+    public enum AgentComProtocol { NULL, REGISTER, SET_ROUTE_FOR_ME, ROUTE_FOR_U_EDGE, ROUTE_FOR_U, U_CAN_SEND , DISROUTE, DISROUTE_EDGE, CONNECTION_IS_ON, CONNECTION_UNAVAILABLE, MSG_DELIVERED }
+    ///    ###########     MSG TYPES    ##########
+    ///    NULL                 -
+    ///    REGISTER             - router rejestruje sie u NMS'a
+    ///    SET_ROUTE_FOR_ME     - router prosi NMS'a o zestawienie drogi do danego adresu( tylko router edge moze wysalc)
+    ///    ROUTE_FOR_U_EDGE     - NMS odpowiada routerowi ze ma zestawic konkretne placzenie u siebie (klieckie u router edge )
+    ///    ROUTE_FOR_U          - NMS odpowiada routerowi ze ma zestawic konkretne placzenie u siebie ( wew. u router interior)
+    ///    U_CAN_SEND           - NMS wysyla do edge , sygnal ze wsyztsko juz gotowe i mozna wysylac wiadomosc
+    ///    DISROUTE             - rozłącz połączenie typu route interior
+    ///    DISROUTE_EDGE        - rozłącz połączenie klienta z routerem brzegowym
+    ///    CONNECTION_IS_ON     - wysyła router do nmsa informując o tym ze zestawil zadane polaczenie
+    ///    MSG_DELIVERED        - router edge wysyla do nmsa ze dostał wiadomosc
+
+
+
 }
+
+
+

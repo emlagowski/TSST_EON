@@ -38,13 +38,14 @@ namespace Client
 
         private void connectButton_Click(object sender, EventArgs e)
         {
-            _user.connect("127.0.0." + this.routerAddress.Text);
+            _user.connect("127.0.1." + this.routerAddress.Text);
         }
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            _user.Send("127.0.0." + this.targetAddress.Text, Convert.ToInt32(this.band.Text), this.message.Text, Convert.ToInt32(this.connectionBox.Text));
-        } // Guid.NewGuid().GetHashCode() // unique ID
+            //_user.Send(Convert.ToInt32(this.band.Text), this.message.Text);
+            //_user.Send("127.0.0." + this.targetAddress.Text, this.message.Text);
+        } 
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {

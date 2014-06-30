@@ -1,0 +1,80 @@
+<wires>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.20" Port="10200" WireId="1" >One</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.20" Port="10201" WireId="1" >One</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.20" Port="10202" WireId="1" >One</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.20" Port="10203" WireId="1" >One</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.20" Port="10204" WireId="1" >One</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.20" Port="10205" WireId="1" >One</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.20" Port="10206" WireId="1" >One</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.20" Port="10207" WireId="1" >One</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.20" Port="10208" WireId="1" >One</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.20" Port="10209" WireId="1" >One</wire>
+  
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.30" Port="10300" WireId="2" >Two</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.30" Port="10301" WireId="2" >Two</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.30" Port="10302" WireId="2" >Two</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.30" Port="10303" WireId="2" >Two</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.30" Port="10304" WireId="2" >Two</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.30" Port="10305" WireId="2" >Two</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.30" Port="10306" WireId="2" >Two</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.30" Port="10307" WireId="2" >Two</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.30" Port="10308" WireId="2" >Two</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.30" Port="10309" WireId="2" >Two</wire>
+  
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.50" Port="10500" WireId="3" >Three</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.50" Port="10501" WireId="3" >Three</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.50" Port="10502" WireId="3" >Three</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.50" Port="10503" WireId="3" >Three</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.50" Port="10504" WireId="3" >Three</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.50" Port="10505" WireId="3" >Three</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.50" Port="10506" WireId="3" >Three</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.50" Port="10507" WireId="3" >Three</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.50" Port="10508" WireId="3" >Three</wire>
+  <wire AddressA="127.0.0.10" AddressB="127.0.0.50" Port="10509" WireId="3" >Three</wire>
+  
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.50" Port="30500" WireId="4" >Four</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.50" Port="30501" WireId="4" >Four</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.50" Port="30502" WireId="4" >Four</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.50" Port="30503" WireId="4" >Four</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.50" Port="30504" WireId="4" >Four</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.50" Port="30505" WireId="4" >Four</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.50" Port="30506" WireId="4" >Four</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.50" Port="30507" WireId="4" >Four</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.50" Port="30508" WireId="4" >Four</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.50" Port="30509" WireId="4" >Four</wire>
+  
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.40" Port="30400" WireId="5" >Five</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.40" Port="30401" WireId="5" >Five</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.40" Port="30402" WireId="5" >Five</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.40" Port="30403" WireId="5" >Five</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.40" Port="30404" WireId="5" >Five</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.40" Port="30405" WireId="5" >Five</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.40" Port="30406" WireId="5" >Five</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.40" Port="30407" WireId="5" >Five</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.40" Port="30408" WireId="5" >Five</wire>
+  <wire AddressA="127.0.0.30" AddressB="127.0.0.40" Port="30409" WireId="5" >Five</wire>
+  
+  <wire AddressA="127.0.0.40" AddressB="127.0.0.50" Port="40500" WireId="6" >Six</wire>
+  <wire AddressA="127.0.0.40" AddressB="127.0.0.50" Port="40501" WireId="6" >Six</wire>
+  <wire AddressA="127.0.0.40" AddressB="127.0.0.50" Port="40502" WireId="6" >Six</wire>
+  <wire AddressA="127.0.0.40" AddressB="127.0.0.50" Port="40503" WireId="6" >Six</wire>
+  <wire AddressA="127.0.0.40" AddressB="127.0.0.50" Port="40504" WireId="6" >Six</wire>
+  <wire AddressA="127.0.0.40" AddressB="127.0.0.50" Port="40505" WireId="6" >Six</wire>
+  <wire AddressA="127.0.0.40" AddressB="127.0.0.50" Port="40506" WireId="6" >Six</wire>
+  <wire AddressA="127.0.0.40" AddressB="127.0.0.50" Port="40507" WireId="6" >Six</wire>
+  <wire AddressA="127.0.0.40" AddressB="127.0.0.50" Port="40508" WireId="6" >Six</wire>
+  <wire AddressA="127.0.0.40" AddressB="127.0.0.50" Port="40509" WireId="6" >Six</wire>
+  
+  <wire AddressA="127.0.0.20" AddressB="127.0.0.50" Port="20500" WireId="7" >Seven</wire>
+  <wire AddressA="127.0.0.20" AddressB="127.0.0.50" Port="20501" WireId="7" >Seven</wire>
+  <wire AddressA="127.0.0.20" AddressB="127.0.0.50" Port="20502" WireId="7" >Seven</wire>
+  <wire AddressA="127.0.0.20" AddressB="127.0.0.50" Port="20503" WireId="7" >Seven</wire>
+  <wire AddressA="127.0.0.20" AddressB="127.0.0.50" Port="20504" WireId="7" >Seven</wire>
+  <wire AddressA="127.0.0.20" AddressB="127.0.0.50" Port="20505" WireId="7" >Seven</wire>
+  <wire AddressA="127.0.0.20" AddressB="127.0.0.50" Port="20506" WireId="7" >Seven</wire>
+  <wire AddressA="127.0.0.20" AddressB="127.0.0.50" Port="20507" WireId="7" >Seven</wire>
+  <wire AddressA="127.0.0.20" AddressB="127.0.0.50" Port="20508" WireId="7" >Seven</wire>
+  <wire AddressA="127.0.0.20" AddressB="127.0.0.50" Port="20509" WireId="7" >Seven</wire>
+  
+
+</wires>

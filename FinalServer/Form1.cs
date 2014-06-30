@@ -53,5 +53,18 @@ namespace Cloud
                 MessageBox.Show(ex.ToString());
             } 
         }
+
+       
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            System.Drawing.Graphics graphicsObj;
+
+            graphicsObj = this.CreateGraphics();
+
+            Pen myPen = new Pen(System.Drawing.Color.Red, 5);
+
+            graphicsObj.DrawLine(myPen, 20, 20, 200, 210);
+        }
     }
 }

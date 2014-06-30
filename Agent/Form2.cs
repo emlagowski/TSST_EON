@@ -15,6 +15,7 @@ namespace Agent
         public Form2()
         {
             InitializeComponent();
+            Communication cm = new Communication();
         }
     }
 }

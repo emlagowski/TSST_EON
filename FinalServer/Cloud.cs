@@ -15,26 +15,27 @@ namespace Cloud
 {
     public class Cloud
     {
-        public Signaling signaling;
+        //public Signaling signaling;
         IPEndPoint endPoint;
         Socket localSocket;
         ArrayList sockets;
-        FIB fib;
+        CloudWires cloudWires;
         public ManualResetEvent allDone = new ManualResetEvent(false);
-        String xmlFileName = "log.xml", xmlConnectionName = "connections.xml";
-        XmlDocument xmlDoc, xmlDocConnection;
-        XmlNode rootNode, rootNodeConnection;
+        //String xmlFileName = "log.xml", xmlConnectionName = "connections.xml";
+     //   XmlDocument xmlDoc, xmlDocConnection;
+     //   XmlNode rootNode, rootNodeConnection;
 
         public Cloud(string ip, int port)
         {
-            signaling = new Signaling();
-            fib = new FIB();
-            xmlDoc = new XmlDocument();
-            rootNode = xmlDoc.CreateElement("cloud-log");
-            xmlDocConnection = new XmlDocument();
-            rootNodeConnection = xmlDocConnection.CreateElement("connections");
-            xmlDoc.AppendChild(rootNode);
-            xmlDocConnection.AppendChild(rootNodeConnection);
+            //signaling = new Signaling();
+            //fib = new FIB();
+           // xmlDoc = new XmlDocument();
+            //rootNode = xmlDoc.CreateElement("cloud-log");
+            //xmlDocConnection = new XmlDocument();
+            //rootNodeConnection = xmlDocConnection.CreateElement("connections");
+            //xmlDoc.AppendChild(rootNode);
+            //xmlDocConnection.AppendChild(rootNodeConnection);
+            cloudWires = new CloudWires();
             sockets = new ArrayList();
             endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
             localSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -43,67 +44,67 @@ namespace Cloud
             t.Start();
         }
         
-        void addLog(String t, String f_ip, String t_ip, String d)
-        {
-            XmlNode userNode = xmlDoc.CreateElement("event");
-            XmlAttribute type = xmlDoc.CreateAttribute("type");
-            XmlAttribute from = xmlDoc.CreateAttribute("from");
-            XmlAttribute to = xmlDoc.CreateAttribute("to");
-            type.Value = t;
-            from.Value = f_ip;
-            to.Value = t_ip;
-            userNode.Attributes.Append(type);
-            userNode.Attributes.Append(from);
-            userNode.Attributes.Append(to);
-            userNode.InnerText = d;
-            rootNode.AppendChild(userNode);
-            lock(this)
-            xmlDoc.Save(xmlFileName);
-        }
+        //void addLog(String t, String f_ip, String t_ip, String d)
+        //{
+        //    XmlNode userNode = xmlDoc.CreateElement("event");
+        //    XmlAttribute type = xmlDoc.CreateAttribute("type");
+        //    XmlAttribute from = xmlDoc.CreateAttribute("from");
+        //    XmlAttribute to = xmlDoc.CreateAttribute("to");
+        //    type.Value = t;
+        //    from.Value = f_ip;
+        //    to.Value = t_ip;
+        //    userNode.Attributes.Append(type);
+        //    userNode.Attributes.Append(from);
+        //    userNode.Attributes.Append(to);
+        //    userNode.InnerText = d;
+        //    rootNode.AppendChild(userNode);
+        //    lock(this)
+        //    xmlDoc.Save(xmlFileName);
+        //}
 
-        void addConnection(String _ip)
-        {
-            XmlNode userNode = xmlDocConnection.CreateElement("router");
-            XmlAttribute ip = xmlDocConnection.CreateAttribute("ip");
-            ip.Value = _ip;
-            userNode.Attributes.Append(ip);
-            //userNode.InnerText = _ip;
-            rootNodeConnection.AppendChild(userNode);
-            lock (xmlDocConnection)
-            {
-                xmlDocConnection.Save(xmlConnectionName);
-            }
-        }
+        //void addConnection(String _ip)
+        //{
+        //    XmlNode userNode = xmlDocConnection.CreateElement("router");
+        //    XmlAttribute ip = xmlDocConnection.CreateAttribute("ip");
+        //    ip.Value = _ip;
+        //    userNode.Attributes.Append(ip);
+        //    //userNode.InnerText = _ip;
+        //    rootNodeConnection.AppendChild(userNode);
+        //    lock (xmlDocConnection)
+        //    {
+        //        xmlDocConnection.Save(xmlConnectionName);
+        //    }
+        //}
 
-        public XmlDocument Doc
-        {
-            get { return xmlDoc; }
-        }
+        //public XmlDocument Doc
+        //{
+        //    get { return xmlDoc; }
+        //}
 
-        public ArrayList Sockets
-        {
-            get { return sockets; }
-        }
+        //public ArrayList Sockets
+        //{
+        //    get { return sockets; }
+        //}
 
-        public String[] EPoints
-        {
-            get 
-            { 
-                String[] tmp = new String[sockets.Count];
-                for (int i = 0; i < sockets.Count; i++)
-                {
-                    Socket s = sockets[i] as Socket;
-                    tmp[i] = s.RemoteEndPoint.ToString();
-                }
-                return tmp;
-            }
-        }
+        //public String[] EPoints
+        //{
+        //    get 
+        //    { 
+        //        String[] tmp = new String[sockets.Count];
+        //        for (int i = 0; i < sockets.Count; i++)
+        //        {
+        //            Socket s = sockets[i] as Socket;
+        //            tmp[i] = s.RemoteEndPoint.ToString();
+        //        }
+        //        return tmp;
+        //    }
+        //}
 
         void Run()
         {
             try
             {
-                localSocket.Listen(100);
+                localSocket.Listen(500);
 
                 while (true)
                 {
@@ -136,7 +137,7 @@ namespace Cloud
             Socket listener = (Socket)ar.AsyncState;
             Socket handler = listener.EndAccept(ar);
             sockets.Add(handler);
-            addConnection(handler.RemoteEndPoint.ToString());
+            //addConnection(handler.RemoteEndPoint.ToString());
             Console.WriteLine("Socket [{0}] {1} - {2} was added to sockets list", sockets.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
 
             // Create the state object.
@@ -148,6 +149,8 @@ namespace Cloud
 
         public void ReadCallback(IAsyncResult ar)
         {
+            try
+            {
             String content = String.Empty;
 
             // Retrieve the state object and the handler socket
@@ -156,7 +159,9 @@ namespace Cloud
             Socket handler = state.workSocket;
 
             // Read data from the client socket. 
-            int bytesRead = handler.EndReceive(ar);
+            
+                int bytesRead = handler.EndReceive(ar);
+            
             BinaryFormatter formattor = new BinaryFormatter();
 
             MemoryStream ms = new MemoryStream(state.buffer);
@@ -165,7 +170,7 @@ namespace Cloud
 
             Console.WriteLine("Read '{0}'[{1} bytes] from socket {2}.",
                       state.dt.ToString(), bytesRead, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
-            addLog("Receive", handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString(), state.dt.ToString());
+           // addLog("Receive", handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString(), state.dt.ToString());
 
             Socket s = findTarget((IPEndPoint)handler.RemoteEndPoint);
             StateObject newState = new StateObject();
@@ -175,6 +180,15 @@ namespace Cloud
 
             handler.BeginReceive(newState.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), newState);
+            }
+            catch (SocketException)
+            {
+
+
+                localSocket.BeginAccept(new AsyncCallback(AcceptCallback), localSocket);
+
+
+            }
            /* if (bytesRead > 0)
             {
                 // There  might be more data, so store the data received so far.
@@ -212,27 +226,27 @@ namespace Cloud
 
         private Socket findTarget(IPEndPoint iPEndPoint)
         {
-            for (int i = 0; i < fib.Wires.Count; i++)
+            for (int i = 0; i < cloudWires.ConnectedEndPointsList.Count; i++)
             {
-                Wire w = fib.Wires[i] as Wire;
-                if (iPEndPoint.Equals(w.One))
+                ConnectedEndPoints cep = cloudWires.ConnectedEndPointsList[i] as ConnectedEndPoints;
+                if (iPEndPoint.Equals(cep.One))
                 {
                     for (int j = 0; j < sockets.Count; j++)
                     {
                         Socket so = sockets[j] as Socket;
-                        if (so.RemoteEndPoint.Equals(w.Two)) return so;
+                        if (so.RemoteEndPoint.Equals(cep.Two)) return so;
                     }
                 }
-                if (iPEndPoint.Equals(w.Two))
+                if (iPEndPoint.Equals(cep.Two))
                 {
                     for (int j = 0; j < sockets.Count; j++)
                     {
                         Socket so = sockets[j] as Socket;
-                        if (so.RemoteEndPoint.Equals(w.One)) return so;
+                        if (so.RemoteEndPoint.Equals(cep.One)) return so;
                     }
                 }
             }
-            Console.WriteLine("Target was not found in the FIB.");
+            Console.WriteLine("Target was not found in the CloudWires.");
             return null;
         }
 
@@ -277,7 +291,7 @@ namespace Cloud
                 // Complete sending the data to the remote device.
                 int bytesSent = handler.EndSend(ar);
                 Console.WriteLine("Sent {0} bytes to client {1}.", bytesSent, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
-                addLog("Send", handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString(), "none");
+               // addLog("Send", handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString(), "none");
                 //handler.Shutdown(SocketShutdown.Both);
                 //handler.Close();
 
@@ -289,16 +303,16 @@ namespace Cloud
         }
     }
 
-    public class FIB
+    public class CloudWires
     {
         ArrayList _wires;
 
-        public ArrayList Wires
+        public ArrayList ConnectedEndPointsList
         {
             get { return _wires; }
         }
 
-        public FIB()
+        public CloudWires()
         {
              _wires = new ArrayList();
            /* _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.10"), 8020), new IPEndPoint(IPAddress.Parse("127.0.0.20"), 8010)));
@@ -308,31 +322,49 @@ namespace Cloud
             _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.30"), 8040), new IPEndPoint(IPAddress.Parse("127.0.0.40"), 8030)));
             _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse("127.0.0.40"), 8050), new IPEndPoint(IPAddress.Parse("127.0.0.50"), 8040)));
            */ 
-            String xmlString = File.ReadAllText("wires.xml");
+            String xmlString = File.ReadAllText("cloudwires.xml");
             using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
             {
                 while (reader.ReadToFollowing("wire"))
                 {
                     reader.MoveToFirstAttribute();
-                    string f_ip = reader.Value;
+                    string ipA = reader.Value;
                     reader.MoveToNextAttribute();
-                    string f_port = reader.Value;
+                    string ipB = reader.Value;
                     reader.MoveToNextAttribute();
-                    string s_ip = reader.Value;
+                    string wireID = reader.Value;
                     reader.MoveToNextAttribute();
-                    string s_port = reader.Value;
+                    string distance = reader.Value;
                     reader.MoveToNextAttribute();
-                    string id = reader.Value;
+                    string maxFreqSlots = reader.Value;
+                    reader.MoveToNextAttribute();
+                    string portPrefix = reader.Value;
+                    reader.MoveToNextAttribute();
+                    string spectralWidth = reader.Value;
 
-                    _wires.Add(new Wire(new IPEndPoint(IPAddress.Parse(f_ip), Convert.ToInt32(f_port)),
-                                        new IPEndPoint(IPAddress.Parse(s_ip), Convert.ToInt32(s_port)),
-                                        Convert.ToInt32(id)));
+                    for (int i = 0; i < Int32.Parse(maxFreqSlots); i++)
+                    {
+                        //reader.ReadToFollowing("lambda");
+                        //reader.MoveToFirstAttribute();
+                        //string lambdaPort = reader.Value;
+                        //reader.MoveToNextAttribute();
+                        //string lambdaID = reader.Value;
+                        //reader.MoveToNextAttribute();
+                        //string lambdaWireID = reader.Value;
+                        string port = String.Concat(new String[] { portPrefix, i.ToString() });
+                       //ExtSrc.Lambda lambda = new ExtSrc.Lambda(Int32.Parse(port), i);
+                        //nw.lambdas.Add(lambda);
+
+                        _wires.Add(new ConnectedEndPoints(new IPEndPoint(IPAddress.Parse(ipA), Convert.ToInt32(port)),
+                                               new IPEndPoint(IPAddress.Parse(ipB), Convert.ToInt32(port)),
+                                            Convert.ToInt32(wireID)));
+                    }
                 }
             }
         }
     }
 
-    public class Wire
+    public class ConnectedEndPoints
     {
         IPEndPoint _one, _two;
         int ID;
@@ -347,7 +379,7 @@ namespace Cloud
             get { return _two; }
         }
 
-        public Wire(IPEndPoint first, IPEndPoint second, int id)
+        public ConnectedEndPoints(IPEndPoint first, IPEndPoint second, int id)
         {
             _one = first;
             _two = second;

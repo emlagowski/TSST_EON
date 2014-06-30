@@ -12,10 +12,51 @@ namespace Router
     {
         public static void Main(string[] args)
         {
-            String arg = args[0];
-           // List<String> routers = new List<string>();
-            Router.readPhysicalWires();
-          Router clientZero = new Router(arg);
+            
+            String ip = args[0];
+            Boolean edge_b = false;
+            try
+            {
+                String edge = args[1];
+                if(edge.Equals("true"))
+                    edge_b = true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("NOT EDGE ROUTER");
+            }
+
+            Router clientZero;
+
+            if (edge_b == false)
+            {
+                Console.WriteLine("THIS IS ROUTER :" + ip);
+
+                clientZero = new Router(ip, false);
+
+            }
+            else
+            {
+                Console.WriteLine("THIS IS EDGE ROUTER :" + ip);
+
+                clientZero = new Router(ip, true);
+
+            }
+            //Thread t0 = new Thread(delegate()
+            //{
+            //    RouterForm cf = new RouterForm(clientZero);
+            //    cf.Show();
+            //    Application.Run();
+            //});
+            //t0.Start();
+
+            //Thread.Sleep(8000);
+            //if (ip.Equals("127.0.1.1"))
+            //{
+            //    Console.WriteLine("WYSYLAMY");
+            //    clientZero.Send(new ExtSrc.Data(5, "elo"), new int[] { 1, 1 });
+            //}
+
             //Router clientOne = new Router("127.0.0.10");
           //  routers.Add("127.0.0.10");
             
@@ -81,13 +122,7 @@ namespace Router
 
 
 
-             Thread t0 = new Thread(delegate()
-            {
-                RouterForm cf = new RouterForm(clientZero);
-                cf.Show();
-                Application.Run();
-            });
-            t0.Start();
+            
          /* Thread t = new Thread(delegate()
                 {
                     RouterForm cf = new RouterForm(clientOne);

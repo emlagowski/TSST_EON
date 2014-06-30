@@ -44,7 +44,6 @@ namespace Cloud
                Thread t0 = new Thread(RunSignaling);
                t0.Start();*/
         }
-
         private void RunSignaling()
         {
             try
@@ -133,7 +132,6 @@ namespace Cloud
                 Console.WriteLine(e.ToString());
             }
         }
-
         private void ConnectCallback(IAsyncResult ar)
         {
             try
@@ -171,7 +169,6 @@ namespace Cloud
                 new AsyncCallback(SendCallback), client);
             sendDone.WaitOne();
         }
-
         private void SendCallback(IAsyncResult ar)
         {
             try
@@ -191,8 +188,6 @@ namespace Cloud
                 Console.WriteLine(e.ToString());
             }
         }
-
-
         private void initWireBand()
         {
 
@@ -220,7 +215,6 @@ namespace Cloud
             }
 
         }
-
         public Boolean checkIfConnEstablished(int id, int wireID)
         {
             Boolean b = false;
@@ -250,9 +244,7 @@ namespace Cloud
             return result;//CZYto zwraca mi referencje???????????
 
         }
-
         public Boolean allocateConnection() { return false; }
-
         public void addConnection(Connection c, int wireID)
         {
             //NIE SPRAWDZA CZY JUZ SA ZAJETE LAMBDY 

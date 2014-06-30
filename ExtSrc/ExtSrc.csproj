@@ -41,14 +41,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentData.cs" />
+    <Compile Include="DijkstraData.cs" />
+    <Compile Include="ClientConnectionsTable.cs" />
+    <Compile Include="ClientData.cs" />
+    <Compile Include="ClientSocket.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Data.cs" />
+    <Compile Include="DataAndID.cs" />
+    <Compile Include="FrequencySlot.cs" />
+    <Compile Include="FrequencySlotUnit.cs" />
+    <Compile Include="FrequencySlotSwitchingTable.cs" />
+    <Compile Include="NewWire.cs" />
+    <Compile Include="Observers\Observer.cs" />
+    <Compile Include="Observers\Subject.cs" />
     <Compile Include="PhysicalWires.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FIB.cs" />
     <Compile Include="Wire.cs" />
     <Compile Include="WireBand.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -29,7 +29,6 @@ namespace Client
         XmlDocument xmlLog;
         XmlNode rootNodeLog;
 
-
         public Client(String ip)
         {
             logName= ip + ".xml";
@@ -59,8 +58,12 @@ namespace Client
             xmlLog.Save(logName);
         }
 
+        /**
+         * Metoda wołana w celu nawiazania połaczenia z routerem brzegowym.
+         **/
         public void connect(String router_ip)
         {
+            Console.WriteLine("Zaczynam nawiazywac polaczenie");
             remoteAddress = router_ip;
             remoteEndPoint = new IPEndPoint(IPAddress.Parse(remoteAddress), 7000);
             Thread t = new Thread(Run);
@@ -69,10 +72,14 @@ namespace Client
             connectDone.WaitOne();
         }
 
+        /**
+         * Ta metoda jest automatycznie wolana pod podlaczeniu sie do routera. Konczy ustanawianie polaczenia.
+         **/
         private void ConnectCallback(IAsyncResult ar)
         {
             try
             {
+                Console.WriteLine("Nawiazalem polaczenie");
                 // Retrieve the socket from the state object.
                 Socket client = (Socket)ar.AsyncState;
 
@@ -90,6 +97,9 @@ namespace Client
             }
         }
 
+        /**
+         * Metoda zapewnia ciągłe odbieranie w kliencie.
+         **/
         void Run()
         {
             try
@@ -118,7 +128,7 @@ namespace Client
                 //response = String.Empty;
                 // Begin receiving the data from the remote device.
                 socket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                    new AsyncCallback(ReceiveCallback), state);
+                                    new AsyncCallback(ReceiveCallback), state);
             }
             catch (Exception e)
             {
@@ -141,7 +151,7 @@ namespace Client
 
                 MemoryStream ms = new MemoryStream(state.buffer);
 
-                state.dt = (ExtSrc.Data)formattor.Deserialize(ms);
+                state.dt = (ExtSrc.ClientData)formattor.Deserialize(ms);
                 /*  //if (bytesRead > 0)
                   //{
                   // There might be more data, so store the data received so far.
@@ -168,7 +178,7 @@ namespace Client
                 allReceive.Set();
                 Console.WriteLine("User {0} Received '{1}'[{2} bytes] from router {3}.", client.LocalEndPoint.ToString(),
                           state.dt.ToString(), bytesRead, client.RemoteEndPoint.ToString());
-                addLog("Receive", client.RemoteEndPoint.ToString(), client.LocalEndPoint.ToString(), state.dt.ToString());
+                //addLog("Receive", client.RemoteEndPoint.ToString(), client.LocalEndPoint.ToString(), state.dt.ToString());
 
             }
             catch (Exception e)
@@ -177,7 +187,7 @@ namespace Client
             }
         }
 
-        public void Send(String targetIP, int bandwidth, String data, int id)
+        public void Send(int bandwidth, String data, String endAddress)
         {
             // Convert the string data to byte data using ASCII encoding.
           /*  byte[] byteData = Encoding.ASCII.GetBytes(targetIP+"|"+data);
@@ -191,7 +201,7 @@ namespace Client
 
             BinaryFormatter formatter = new BinaryFormatter();
 
-            formatter.Serialize(fs, new ExtSrc.Data(targetIP, bandwidth, data, id));
+            formatter.Serialize(fs, new ExtSrc.ClientData(bandwidth, data, endAddress));
 
             byte[] buffer = fs.ToArray();
 
@@ -200,7 +210,7 @@ namespace Client
             // Begin sending the data to the remote device.
             socket.BeginSend(buffer, 0, buffer.Length, 0,
                 new AsyncCallback(SendCallback), socket);
-            addLog("Send", localAddress, targetIP, data);
+            //addLog("Send", localAddress, targetIP, data);
             sendDone.WaitOne();
         }
 
@@ -234,6 +244,6 @@ namespace Client
         // Receive buffer.
         public byte[] buffer = new byte[BufferSize];
         // Received data string.
-        public ExtSrc.Data dt;
+        public ExtSrc.ClientData dt;
     }
 }

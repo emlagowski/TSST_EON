@@ -58,25 +58,25 @@ namespace Router
 
         private void button1_Click(object sender, EventArgs e)
         {
-            try
-            {
-                XmlReader xmlFile;
-                xmlFile = XmlReader.Create(_router.logName, new XmlReaderSettings());
-                DataSet ds = new DataSet();
-                ds.ReadXml(xmlFile);
-                dataGridView1.DataSource = ds.Tables[0];
-                xmlFile.Close();
-                XmlReader xmlFile2;
-                xmlFile2 = XmlReader.Create(_router.wiresName, new XmlReaderSettings());
-                DataSet ds2 = new DataSet();
-                ds2.ReadXml(xmlFile2);
-                dataGridView2.DataSource = ds2.Tables[0];
-                xmlFile2.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            } 
+            //try
+            //{
+            //    XmlReader xmlFile;
+            //    xmlFile = XmlReader.Create(_router.logName, new XmlReaderSettings());
+            //    DataSet ds = new DataSet();
+            //    ds.ReadXml(xmlFile);
+            //    dataGridView1.DataSource = ds.Tables[0];
+            //    xmlFile.Close();
+            //    XmlReader xmlFile2;
+            //    xmlFile2 = XmlReader.Create(_router.wiresName, new XmlReaderSettings());
+            //    DataSet ds2 = new DataSet();
+            //    ds2.ReadXml(xmlFile2);
+            //    dataGridView2.DataSource = ds2.Tables[0];
+            //    xmlFile2.Close();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.ToString());
+            //} 
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
