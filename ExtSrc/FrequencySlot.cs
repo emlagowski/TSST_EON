@@ -21,5 +21,5 @@ namespace ExtSrc
 
     }
 
-    public enum Modulation { NULL, SixteenQAM, QPSK };
+    public enum Modulation { NULL = 0, QPSK = 1, SixteenQAM = 2 };
 }

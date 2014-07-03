@@ -15,18 +15,24 @@ namespace ExtSrc
         //-----------------ROUTING--
         public String originatingAddress{get; set;}
         public String targetAddress { get; set; }
+        public String routerIPAddress{ get; set; }
+        public String clientIPAddress { get; set; }
         //addfreqslot
         public int startingFreq { get; set; }
         public int FSUCount { get; set; }
+        public int lastFSUCount { get; set; }
         public Modulation mod { get; set; }
+        public Modulation lastMod { get; set; }
         //wires
         public int firstWireID { get; set; }
         public int secondWireID { get; set; }
+        public int bitrate { get; set; }
+
         //--------------------------
         //--------------ClientTables
         public int wireID { get; set; }
         public int FSid { get; set; }
-        public int socketID { get; set; }
+        public int clientSocketID { get; set; }
         //--------------------------
         //--------------ROUTING RETURN MSG
         public int FSreturnID { get; set; }
@@ -67,7 +73,7 @@ namespace ExtSrc
             secondWireID = secWid;
             wireID = wID;
             this.FSid = FSid;
-            socketID = sockID;
+            clientSocketID = sockID;
             
         }
 
@@ -89,7 +95,7 @@ namespace ExtSrc
             message = msg;
             wireID = wID;
             this.FSid = FSid;
-            socketID = sockID;                              
+            clientSocketID = sockID;                              
         }
         public AgentData()
         {
@@ -103,7 +109,7 @@ namespace ExtSrc
             secondWireID = -1;
             wireID = -1;
             this.FSid = -1;
-            socketID = -1;
+            clientSocketID = -1;
             uniqueKey = null;
             wireIDsList = new List<DijkstraData>();
         }
@@ -111,13 +117,67 @@ namespace ExtSrc
         public AgentData(AgentComProtocol msg, String ip, String unqKey)
             : this()
         {
+            if (msg == AgentComProtocol.REGISTER_CLIENT)
+            {
+                //rejestracja klienta w w agencie, 
+                this.message = msg;
+                this.clientIPAddress = unqKey;
+                this.routerIPAddress = ip;
+            }
+            else
+            {
+                message = msg;
+                targetAddress = ip;
+                uniqueKey = unqKey;
+            }
+        }
+
+        public AgentData(AgentComProtocol msg, String originating, String clientIP, String ip, String unqKey, int bitrate)
+            : this()
+        {
             message = msg;
             targetAddress = ip;
             uniqueKey = unqKey;
+            clientIPAddress = clientIP;
+            routerIPAddress = originating;
+            this.bitrate = bitrate;
         }
 
+        public AgentData(AgentComProtocol msg, String unKey)
+            : this()
+        {
+            message = msg;
+            uniqueKey = unKey;
+        }
+
+        //fsucount, mod, firstwireid,secondwireid, startingfreq dla odbierajacego kabla bo juz obliczone w poprzednim roouterze
+        public AgentData(AgentComProtocol msg, int lastfsucount, Modulation lastmod, int fsucount, Modulation md, int firstWireID, int secondWireID, int startingfreq)
+            : this()
+        {
+            message = msg;
+            lastFSUCount = lastfsucount;
+            lastMod = lastmod;
+            FSUCount = fsucount;
+            mod = md;
+            this.firstWireID = firstWireID;
+            this.secondWireID = secondWireID;
+            this.startingFreq = startingfreq;
+        }
+
+        public AgentData(AgentComProtocol agentComProtocol, int fsuCount, Modulation modulation, int wireID, int clientID)
+            : this()
+        {
+            this.message = agentComProtocol;
+            this.FSUCount = fsuCount;
+            this.mod = modulation;
+            this.wireID = wireID;
+            this.clientSocketID = clientID;
+        }
+
+
+
     }
-    public enum AgentComProtocol { NULL, REGISTER, SET_ROUTE_FOR_ME, ROUTE_FOR_U_EDGE, ROUTE_FOR_U, U_CAN_SEND , DISROUTE, DISROUTE_EDGE, CONNECTION_IS_ON, CONNECTION_UNAVAILABLE, MSG_DELIVERED }
+    public enum AgentComProtocol { NULL, REGISTER, REGISTER_CLIENT, SET_ROUTE_FOR_ME, ROUTE_FOR_U_EDGE, ROUTE_FOR_U, U_CAN_SEND , DISROUTE, DISROUTE_EDGE, CONNECTION_IS_ON, CONNECTION_UNAVAILABLE, MSG_DELIVERED }
     ///    ###########     MSG TYPES    ##########
     ///    NULL                 -
     ///    REGISTER             - router rejestruje sie u NMS'a

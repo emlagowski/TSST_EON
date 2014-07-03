@@ -92,7 +92,7 @@
             // routerAddress
             // 
             this.routerAddress.Location = new System.Drawing.Point(426, 42);
-            this.routerAddress.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.routerAddress.Margin = new System.Windows.Forms.Padding(6);
             this.routerAddress.Name = "routerAddress";
             this.routerAddress.Size = new System.Drawing.Size(62, 31);
             this.routerAddress.TabIndex = 3;
@@ -100,7 +100,7 @@
             // connectButton
             // 
             this.connectButton.Location = new System.Drawing.Point(520, 37);
-            this.connectButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.connectButton.Margin = new System.Windows.Forms.Padding(6);
             this.connectButton.Name = "connectButton";
             this.connectButton.Size = new System.Drawing.Size(386, 44);
             this.connectButton.TabIndex = 4;
@@ -122,7 +122,7 @@
             // targetAddress
             // 
             this.targetAddress.Location = new System.Drawing.Point(152, 94);
-            this.targetAddress.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.targetAddress.Margin = new System.Windows.Forms.Padding(6);
             this.targetAddress.Name = "targetAddress";
             this.targetAddress.Size = new System.Drawing.Size(68, 31);
             this.targetAddress.TabIndex = 7;
@@ -152,7 +152,7 @@
             // message
             // 
             this.message.Location = new System.Drawing.Point(254, 94);
-            this.message.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.message.Margin = new System.Windows.Forms.Padding(6);
             this.message.Name = "message";
             this.message.Size = new System.Drawing.Size(276, 31);
             this.message.TabIndex = 10;
@@ -160,7 +160,7 @@
             // sendButton
             // 
             this.sendButton.Location = new System.Drawing.Point(700, 48);
-            this.sendButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.sendButton.Margin = new System.Windows.Forms.Padding(6);
             this.sendButton.Name = "sendButton";
             this.sendButton.Size = new System.Drawing.Size(194, 81);
             this.sendButton.TabIndex = 11;
@@ -174,9 +174,9 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.routerAddress);
             this.groupBox1.Location = new System.Drawing.Point(32, 100);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(6);
             this.groupBox1.Size = new System.Drawing.Size(918, 98);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
@@ -195,9 +195,9 @@
             this.groupBox2.Controls.Add(this.targetAddress);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Location = new System.Drawing.Point(32, 210);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(6);
             this.groupBox2.Size = new System.Drawing.Size(918, 156);
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
@@ -207,7 +207,7 @@
             // 
             this.connectionBox.Enabled = false;
             this.connectionBox.Location = new System.Drawing.Point(548, 92);
-            this.connectionBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.connectionBox.Margin = new System.Windows.Forms.Padding(6);
             this.connectionBox.Name = "connectionBox";
             this.connectionBox.Size = new System.Drawing.Size(48, 31);
             this.connectionBox.TabIndex = 15;
@@ -224,9 +224,8 @@
             // 
             // band
             // 
-            this.band.Enabled = false;
             this.band.Location = new System.Drawing.Point(620, 94);
-            this.band.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.band.Margin = new System.Windows.Forms.Padding(6);
             this.band.Name = "band";
             this.band.Size = new System.Drawing.Size(54, 31);
             this.band.TabIndex = 13;
@@ -245,9 +244,9 @@
             // 
             this.groupBox3.Controls.Add(this.dataGridView1);
             this.groupBox3.Location = new System.Drawing.Point(32, 377);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(6);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(6);
             this.groupBox3.Size = new System.Drawing.Size(918, 358);
             this.groupBox3.TabIndex = 14;
             this.groupBox3.TabStop = false;
@@ -257,7 +256,7 @@
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(16, 38);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(6);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(890, 308);
             this.dataGridView1.TabIndex = 0;
@@ -266,7 +265,7 @@
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(26, 25);
-            this.button1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.button1.Margin = new System.Windows.Forms.Padding(6);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(230, 63);
             this.button1.TabIndex = 15;
@@ -285,7 +284,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "ClientForm";
             this.Text = "Client";
             this.Load += new System.EventHandler(this.Form1_Load);

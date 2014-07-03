@@ -44,7 +44,7 @@ namespace Client
         private void sendButton_Click(object sender, EventArgs e)
         {
             //_user.Send(Convert.ToInt32(this.band.Text), this.message.Text);
-            //_user.Send("127.0.0." + this.targetAddress.Text, this.message.Text);
+            _user.Send(Convert.ToInt32(this.band.Text), this.message.Text, "127.0.0." + this.targetAddress.Text);
         } 
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)

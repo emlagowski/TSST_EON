@@ -125,56 +125,56 @@ namespace Router
             //    Send(new Data(1, "elo"), new int[] { 1, id });
             //}
 
-            if (ip.Equals("127.0.1.1"))
-            {
-                int fiveTOsevenOUT = localPhysicalWires.Wires[0].addFreqSlot(0, 5, Modulation.QPSK);
-                int fourTOeightOUT = localPhysicalWires.Wires[2].addFreqSlot(6, 10, Modulation.QPSK);
-                //int id1 = localPhysicalWires.Wires[2].addFreqSlot(0, 5, Modulation.QPSK);
-                //freqSlotSwitchingTable.add(3, id1, 1, id);
-                FROMclientConnectionsTable.add(1, fiveTOsevenOUT, 5);
-                TOclientConnectionsTable.add(1, fiveTOsevenOUT, 5);
-                FROMclientConnectionsTable.add(3, fourTOeightOUT, 4);
-                TOclientConnectionsTable.add(3, fourTOeightOUT, 4);
+            //if (ip.Equals("127.0.1.1"))
+            //{
+            //    int fiveTOsevenOUT = localPhysicalWires.Wires[0].addFreqSlot(0, 5, Modulation.QPSK);
+            //    int fourTOeightOUT = localPhysicalWires.Wires[2].addFreqSlot(6, 10, Modulation.QPSK);
+            //    //int id1 = localPhysicalWires.Wires[2].addFreqSlot(0, 5, Modulation.QPSK);
+            //    //freqSlotSwitchingTable.add(3, id1, 1, id);
+            //    FROMclientConnectionsTable.add(1, fiveTOsevenOUT, 5);
+            //    TOclientConnectionsTable.add(1, fiveTOsevenOUT, 5);
+            //    FROMclientConnectionsTable.add(3, fourTOeightOUT, 4);
+            //    TOclientConnectionsTable.add(3, fourTOeightOUT, 4);
 
-               // Thread.Sleep(10000);
-               // Send(new Data(1, "elo"), new int[] { 1, id });
-            }
-            if (ip.Equals("127.0.1.2"))
-            {
-                int fiveTOsevenIN = localPhysicalWires.Wires[0].addFreqSlot(0, 5, Modulation.QPSK);
-                int fiveTOsevenOUT = localPhysicalWires.Wires[1].addFreqSlot(0, 5, Modulation.QPSK);
-                freqSlotSwitchingTable.add(1, fiveTOsevenIN, 7, fiveTOsevenOUT);
-            }
-            if (ip.Equals("127.0.1.3"))
-            {
-                int fiveTOsevenIN = localPhysicalWires.Wires[1].addFreqSlot(0, 5, Modulation.QPSK);
-                int fiveTOsevenOUT = localPhysicalWires.Wires[2].addFreqSlot(0, 5, Modulation.QPSK);
-                freqSlotSwitchingTable.add(4, fiveTOsevenIN, 5, fiveTOsevenOUT);
+            //   // Thread.Sleep(10000);
+            //   // Send(new Data(1, "elo"), new int[] { 1, id });
+            //}
+            //if (ip.Equals("127.0.1.2"))
+            //{
+            //    int fiveTOsevenIN = localPhysicalWires.Wires[0].addFreqSlot(0, 5, Modulation.QPSK);
+            //    int fiveTOsevenOUT = localPhysicalWires.Wires[1].addFreqSlot(0, 5, Modulation.QPSK);
+            //    freqSlotSwitchingTable.add(1, fiveTOsevenIN, 7, fiveTOsevenOUT);
+            //}
+            //if (ip.Equals("127.0.1.3"))
+            //{
+            //    int fiveTOsevenIN = localPhysicalWires.Wires[1].addFreqSlot(0, 5, Modulation.QPSK);
+            //    int fiveTOsevenOUT = localPhysicalWires.Wires[2].addFreqSlot(0, 5, Modulation.QPSK);
+            //    freqSlotSwitchingTable.add(4, fiveTOsevenIN, 5, fiveTOsevenOUT);
 
-                int fourTOeightIN = localPhysicalWires.Wires[1].addFreqSlot(6, 10, Modulation.QPSK);
-                TOclientConnectionsTable.add(4, fourTOeightIN, 8);
-                FROMclientConnectionsTable.add(4, fourTOeightIN, 8);
-            }
-            if (ip.Equals("127.0.1.4"))
-            {
-                int fiveTOsevenIN = localPhysicalWires.Wires[0].addFreqSlot(0, 5, Modulation.QPSK);
-                //int id1 = localPhysicalWires.Wires[1].addFreqSlot(0, 2, Modulation.QPSK);
-                //freqSlotSwitchingTable.add(1, id, 7, id1);
-                TOclientConnectionsTable.add(5, fiveTOsevenIN, 7);
-                FROMclientConnectionsTable.add(5, fiveTOsevenIN, 7);
+            //    int fourTOeightIN = localPhysicalWires.Wires[1].addFreqSlot(6, 10, Modulation.QPSK);
+            //    TOclientConnectionsTable.add(4, fourTOeightIN, 8);
+            //    FROMclientConnectionsTable.add(4, fourTOeightIN, 8);
+            //}
+            //if (ip.Equals("127.0.1.4"))
+            //{
+            //    int fiveTOsevenIN = localPhysicalWires.Wires[0].addFreqSlot(0, 5, Modulation.QPSK);
+            //    //int id1 = localPhysicalWires.Wires[1].addFreqSlot(0, 2, Modulation.QPSK);
+            //    //freqSlotSwitchingTable.add(1, id, 7, id1);
+            //    TOclientConnectionsTable.add(5, fiveTOsevenIN, 7);
+            //    FROMclientConnectionsTable.add(5, fiveTOsevenIN, 7);
 
-            }
-            if (ip.Equals("127.0.1.5"))
-            {
-                int fiveTOsevenOUT = localPhysicalWires.Wires[1].addFreqSlot(0, 5, Modulation.QPSK);
-                int fiveTOsevenIN = localPhysicalWires.Wires[3].addFreqSlot(0, 5, Modulation.QPSK);
-                int fourTOeightOUT = localPhysicalWires.Wires[1].addFreqSlot(6, 10, Modulation.QPSK);
-                int fourTOeightIN = localPhysicalWires.Wires[0].addFreqSlot(6, 10, Modulation.QPSK);
-                freqSlotSwitchingTable.add(7, fiveTOsevenIN, 4, fiveTOsevenOUT);
-                freqSlotSwitchingTable.add(4, fourTOeightOUT, 3, fourTOeightIN);
-                //clientConnectionsTable.add(7, id1, 7);
-                //Console.WriteLine("");
-            }
+            //}
+            //if (ip.Equals("127.0.1.5"))
+            //{
+            //    int fiveTOsevenOUT = localPhysicalWires.Wires[1].addFreqSlot(0, 5, Modulation.QPSK);
+            //    int fiveTOsevenIN = localPhysicalWires.Wires[3].addFreqSlot(0, 5, Modulation.QPSK);
+            //    int fourTOeightOUT = localPhysicalWires.Wires[1].addFreqSlot(6, 10, Modulation.QPSK);
+            //    int fourTOeightIN = localPhysicalWires.Wires[0].addFreqSlot(6, 10, Modulation.QPSK);
+            //    freqSlotSwitchingTable.add(7, fiveTOsevenIN, 4, fiveTOsevenOUT);
+            //    freqSlotSwitchingTable.add(4, fourTOeightOUT, 3, fourTOeightIN);
+            //    //clientConnectionsTable.add(7, id1, 7);
+            //    //Console.WriteLine("");
+            //}
 
             agentLocalEP = new IPEndPoint(IPAddress.Parse(ip), 6666);
             agentEP = new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666);
@@ -372,7 +372,9 @@ namespace Router
            // client = handler;
             //addWires(handler.RemoteEndPoint.ToString());
             Console.WriteLine("User [{0}] {1} - {2} was added to sockets list", clientSocketDictionary.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
-
+            AgentSend(new AgentData(    AgentComProtocol.REGISTER_CLIENT, 
+                                        address, 
+                                        ((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
             // Create the state object.
             ClientStateObject state = new ClientStateObject();
             state.workSocket = handler;
@@ -414,19 +416,16 @@ namespace Router
                 /// 
                 
                 String key = generateUniqueKey();
-                AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.SET_ROUTE_FOR_ME, target, key));
+                AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.SET_ROUTE_FOR_ME, address, ((IPEndPoint)client.RemoteEndPoint).Address.ToString(),target, key, state.cdt.bandwidthNeeded));
 
                 int id = Int32.Parse(((IPEndPoint)client.RemoteEndPoint).Address.ToString().
                         Substring(((IPEndPoint)client.RemoteEndPoint).Address.ToString().Length - 1, 1));
                 // dodac na liste oczekujacych wyslan
-                waitingMessages.Add(key, new ExtSrc.DataAndID(data,id));
-                
+                waitingMessages.Add(key, new ExtSrc.DataAndID(data,id));               
 
 
                 //  Console.WriteLine("User {0} Received '{1}'[{2} bytes] from router {3}.", client.LocalEndPoint.ToString(),
-                //           state.dt.ToString(), bytesRead, client.RemoteEndPoint.ToString());
-               
-
+                //           state.dt.ToString(), bytesRead, client.RemoteEndPoint.ToString());            
             }
             catch (Exception e)
             {
@@ -470,7 +469,7 @@ namespace Router
                 BinaryFormatter formatter = new BinaryFormatter();
 
                 //znajduje adres poczatkowy polaczenia zeby odbiorca wiedzial skad to jest
-               String originatingAddr = String.Format("127.0.0." + FROMclientConnectionsTable.findClient(route[0], route[1]));
+                String originatingAddr = String.Format("127.0.0." + FROMclientConnectionsTable.findClient(route[0], route[1]));
                 ClientData clientdata = new ClientData(data.bandwidthNeeded, data.info, originatingAddr); 
 
                 formatter.Serialize(fs, clientdata);
@@ -782,19 +781,24 @@ namespace Router
             {
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U_EDGE:
                     ///
-                    
-                    id1 = localPhysicalWires.getWireByID(agentData.wireID).addFreqSlot(agentData.startingFreq, agentData.FSUCount, agentData.mod);
-                    TOclientConnectionsTable.add(agentData.wireID, id1, agentData.socketID);
-                    FROMclientConnectionsTable.add(agentData.wireID, id1, agentData.socketID);
+                    Console.WriteLine("ROUTE_FOR_U_EDGE");
+                    int startfreqEdge=0;
+                    if (agentData.startingFreq == -1)
+                        startfreqEdge = localPhysicalWires.getWireByID(agentData.wireID).findSpaceForFS(agentData.FSUCount);
+                    else
+                        startfreqEdge = agentData.startingFreq;
+                    id1 = localPhysicalWires.getWireByID(agentData.wireID).addFreqSlot(startfreqEdge, agentData.FSUCount, agentData.mod);
+                    TOclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
+                    FROMclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
                     Console.WriteLine("ROUTE SET, EDGE");
-
+                    AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreqEdge));
                     break;
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U:
                     ///od agenta: fsucount, mod, firstwireid,secondwireid, startingfreq dla odbierajacego kabla bo juz obliczone w poprzednim roouterze
-                    
+                    Console.WriteLine("ROUTE_FOR_U");
                     int startfreq = localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
                     if(startfreq >= 0) {
-                        id1 = localPhysicalWires.getWireByID(agentData.firstWireID).addFreqSlot(agentData.startingFreq, agentData.FSUCount, agentData.mod);
+                        id1 = localPhysicalWires.getWireByID(agentData.firstWireID).addFreqSlot(agentData.startingFreq, agentData.lastFSUCount, agentData.lastMod);
                         id2 = localPhysicalWires.getWireByID(agentData.secondWireID).addFreqSlot(startfreq, agentData.FSUCount, agentData.mod);
                         freqSlotSwitchingTable.add(agentData.firstWireID, id1, agentData.secondWireID, id2);
                         Console.WriteLine("ROUTE SET, NOT EDGE");
@@ -808,6 +812,7 @@ namespace Router
                     break;
                 case ExtSrc.AgentComProtocol.U_CAN_SEND:
                     //Otrzymano pozwolenie na wyslanie wiadomosci z kolejki
+                    Console.WriteLine("U_CAN_SEND");
                     ExtSrc.DataAndID dataID;
                     if (waitingMessages.TryGetValue(agentData.uniqueKey, out dataID))
                     {
