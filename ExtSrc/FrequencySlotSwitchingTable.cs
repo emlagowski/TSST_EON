@@ -8,6 +8,7 @@ namespace ExtSrc
 {
     public class FrequencySlotSwitchingTable
     {
+        // int[] { wireID, FSid}
         public Dictionary<int[], int[]> freqSlotSwitchingTable { get; set; }
 
         public FrequencySlotSwitchingTable()
@@ -21,8 +22,16 @@ namespace ExtSrc
             freqSlotSwitchingTable.Add(new int[] { wireB, FSidB }, new int[] { wireA, FSidA });
         }
 
+        public void remove(int wireA, int FSidA, int wireB, int FSidB)
+        {
+            //todo dobrze usuwa bo jest uzyty MyEqualityComparer ktory sprawdza wartosci?
+            freqSlotSwitchingTable.Remove(new int[] { wireA, FSidA });
+            freqSlotSwitchingTable.Remove(new int[] { wireB, FSidB });
+        }
+
         public int[] findRoute(int wire, int FSid)
         {
+            //return freqSlotSwitchingTable[new int[] {wire, FSid}];
             int[] result;
             if (freqSlotSwitchingTable.TryGetValue(new int[] { wire, FSid }, out result))
                 return result;

@@ -10,12 +10,13 @@ namespace Agent
     {
 
         private static int MAXNODES = 5;
-        private static int INFINITY = 9999;//Int32.MaxValue;
+        public static int INFINITY = 9999;//Int32.MaxValue;
         int n = 5;
         int[,] weight = new int[MAXNODES, MAXNODES];
         int[] distance = new int[MAXNODES];
         int[] precede = new int[MAXNODES];
 
+        //todo zwracanie wagi drogi i jesli wieksza od infinity wtedy znaczy ze graf rozlaczny i chuj nie da sie
         public int[] evaluate(int[,] weights,int source, int destination)
         {
             //int[,] w ={         {99,1,2,99,3},
@@ -23,6 +24,8 @@ namespace Agent
             //                    {2,99,99,5,4},
             //                    {99,99,5,99,6},
             //                    {3,7,4,6,99}};
+
+
 
             weight = buildAdjacencyMatrix(weights);
 
@@ -35,6 +38,11 @@ namespace Agent
             buildSpanningTree(s, d);
             //displayResult(getShortestPath(s, d));
             int[] res = getShortestPath(s, d);
+
+            if (pathCost(res) > INFINITY)
+                return null;
+
+
             for (int i = 0; i < res.Length; i++)
             {
                 res[i] += 1;
@@ -115,20 +123,20 @@ namespace Agent
         /**
          * Print the result.
          */
-        void displayResult(int[] path)
-        {
-            int displayResult = 0;
-            Console.WriteLine("\nThe shortest path followed is : \n");
-            for (int i = path.Length - 1; i > 0; i--)
-            {
-                Console.WriteLine("\t\t( " + path[i] + " ->" + path[i - 1] +
-                        " ) with cost = " + weight[path[i], path[i - 1]]);
-                displayResult += weight[path[i], path[i - 1]];
-            }
-            Console.WriteLine("For the Total Cost = " +
-                //        distance[path[path.Length-1]]);
-                    displayResult);
-        }
+        //void displayResult(int[] path)
+        //{
+        //    int displayResult = 0;
+        //    Console.WriteLine("\nThe shortest path followed is : \n");
+        //    for (int i = path.Length - 1; i > 0; i--)
+        //    {
+        //        Console.WriteLine("\t\t( " + path[i] + " ->" + path[i - 1] +
+        //                " ) with cost = " + weight[path[i], path[i - 1]]);
+        //        displayResult += weight[path[i], path[i - 1]];
+        //    }
+        //    Console.WriteLine("For the Total Cost = " +
+        //        //        distance[path[path.Length-1]]);
+        //            displayResult);
+        //}
     //----------------------------------
     public int[,] buildAdjacencyMatrix(int[,] arr)
     {
@@ -173,6 +181,21 @@ namespace Agent
 
 
     //----------------------------------
+   private int pathCost(int[] path)
+    {
+        int displayResult = 0;
+      //  Console.WriteLine("\nThe shortest path followed is : \n");
+        for (int i = path.Length - 1; i > 0; i--)
+        {
+            //Console.WriteLine("\t\t( " + path[i] + " ->" + path[i - 1] +
+            //        " ) with cost = " + weight[path[i], path[i - 1]]);
+            displayResult += weight[path[i], path[i - 1]];
+        }
+        //Console.WriteLine("For the Total Cost = " +
+            //        distance[path[path.Length-1]]);
+              // displayResult);
+        return displayResult;
+    }
     }
 
 }

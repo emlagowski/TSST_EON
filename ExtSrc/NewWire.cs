@@ -37,7 +37,7 @@ namespace ExtSrc
         {
 
             int id = FrequencySlotDictionary.Values.Count();
-            FrequencySlot slot = new FrequencySlot(id, Modulation.QPSK);
+            FrequencySlot slot = new FrequencySlot(id, Modulation.QPSK, startingFreq);
 
             FrequencySlotDictionary.Add(id, slot);
 
@@ -55,6 +55,21 @@ namespace ExtSrc
             }
             takeSpectralWidth(startingFreq, FSUcount * FREQ_SLOT_UNIT + GUARD_BAND, id);
             return id;
+        }
+
+        public Boolean removeFreqSlot(int id)
+        {
+            FrequencySlot freqSlot;
+            if (FrequencySlotDictionary.TryGetValue(id, out freqSlot)) {
+                foreach (FrequencySlotUnit fsu in freqSlot.FSUList)
+                {
+                    fsu.isUsed = false;
+                }
+                removeSpectralWidth(freqSlot.startingFreq, freqSlot.FSUList.Count * FREQ_SLOT_UNIT + GUARD_BAND);
+                FrequencySlotDictionary.Remove(id);
+                return true;
+            }
+            return false;
         }
 
         public int findSpaceForFS(int fsucount)
@@ -79,7 +94,8 @@ namespace ExtSrc
 
         public void takeSpectralWidth(int start, int count, int id)
         {
-            for (int i = start; i < start + count; i++)
+            Console.WriteLine("takeSpectralWidth : " + start + " - " + count + " - " + id);
+            for (int i = start; i < start + count && i < spectralWidth.Length; i++)
             {
                 spectralWidth[i] = id;
             }

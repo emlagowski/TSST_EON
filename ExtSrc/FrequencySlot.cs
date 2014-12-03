@@ -10,13 +10,16 @@ namespace ExtSrc
     {
         public int ID;
         public List<FrequencySlotUnit> FSUList { get; set; }
+        public int startingFreq { get; set; }
+
         Modulation modulation;
 
-        public FrequencySlot(int id, Modulation mod)
+        public FrequencySlot(int id, Modulation mod, int startFre)
         {
             ID = id;
             modulation = mod;
             FSUList = new List<FrequencySlotUnit>();
+            startingFreq = startFre;
         }
 
     }

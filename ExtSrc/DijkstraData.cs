@@ -27,19 +27,13 @@ namespace ExtSrc
     {
         public bool Equals(DijkstraData x, DijkstraData y)
         {
-            
-            if (x.wireDistance != y.wireDistance || x.wireID != y.wireID)
-            {
-                return false;
-            }
-            
-            return true;
+            return x.wireDistance == y.wireDistance && x.wireID == y.wireID;
         }
 
         public int GetHashCode(DijkstraData obj)
         {
-            int result = 19;
-            for (int i = 0; i < 10; i++)
+            var result = 19;
+            for (var i = 0; i < 10; i++)
             {
                 unchecked
                 {

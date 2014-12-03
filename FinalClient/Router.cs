@@ -506,7 +506,7 @@ namespace Router
 
             // ############################################ NEW START
             int id = TOclientConnectionsTable.findClient(route[0], route[1]);
-            
+            //todo co ten if?
             ClientSocket client;
             if (id != fromID && clientSocketDictionary.TryGetValue(id, out client))
             {
@@ -566,6 +566,7 @@ namespace Router
             }
             catch (Exception e)
             {
+                //todo co to?
                 try
                 {
                     Socket client = (Socket)ar.AsyncState;
@@ -780,7 +781,6 @@ namespace Router
             switch (agentData.message)
             {
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U_EDGE:
-                    ///
                     Console.WriteLine("ROUTE_FOR_U_EDGE");
                     int startfreqEdge=0;
                     if (agentData.startingFreq == -1)
@@ -791,24 +791,55 @@ namespace Router
                     TOclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
                     FROMclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
                     Console.WriteLine("ROUTE SET, EDGE");
-                    AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreqEdge));
+                    AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreqEdge, id1));
                     break;
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U:
                     ///od agenta: fsucount, mod, firstwireid,secondwireid, startingfreq dla odbierajacego kabla bo juz obliczone w poprzednim roouterze
                     Console.WriteLine("ROUTE_FOR_U");
                     int startfreq = localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
-                    if(startfreq >= 0) {
+                    if (startfreq >= 0)
+                    {
                         id1 = localPhysicalWires.getWireByID(agentData.firstWireID).addFreqSlot(agentData.startingFreq, agentData.lastFSUCount, agentData.lastMod);
                         id2 = localPhysicalWires.getWireByID(agentData.secondWireID).addFreqSlot(startfreq, agentData.FSUCount, agentData.mod);
                         freqSlotSwitchingTable.add(agentData.firstWireID, id1, agentData.secondWireID, id2);
                         Console.WriteLine("ROUTE SET, NOT EDGE");
-                        AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreq));
-                    } else
+                        AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreq, id2));
+                    }
+                    else
+                    {
                         AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_UNAVAILABLE));
+                        Console.WriteLine("CONNECTION UNAVAILABLE, NOT EDGE");
+                    }
                     break;
                 case ExtSrc.AgentComProtocol.DISROUTE:
+                    Console.WriteLine("DISROUTE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.firstWireID + " FSid : " + agentData.FSid);
+                    int[] inttab = new int[2];
+                    inttab = freqSlotSwitchingTable.findRoute(agentData.firstWireID, agentData.FSid);
+                    if (localPhysicalWires.getWireByID(agentData.firstWireID).removeFreqSlot(agentData.FSid) && 
+                        localPhysicalWires.getWireByID(inttab[0]).removeFreqSlot(inttab[1]))
+                    {
+                        freqSlotSwitchingTable.remove(agentData.firstWireID, agentData.FSid, inttab[0], inttab[1]);
+                        AgentSend(new AgentData(ExtSrc.AgentComProtocol.DISROUTE_IS_DONE));
+                        Console.WriteLine("DISROUTE DONE");
+                    }else{
+                        AgentSend(new AgentData(ExtSrc.AgentComProtocol.DISROUTE_ERROR));
+                        Console.WriteLine("DISROUTE ERROR!!!!");
+                    }
                     break;
                 case ExtSrc.AgentComProtocol.DISROUTE_EDGE:
+                    Console.WriteLine("DISROUTE_EDGE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.firstWireID + " FSid : " + agentData.FSid);
+                    if (localPhysicalWires.getWireByID(agentData.firstWireID).removeFreqSlot(agentData.FSid))
+                    {
+                        TOclientConnectionsTable.remove(agentData.wireID, agentData.FSid);
+                        FROMclientConnectionsTable.remove(agentData.wireID, agentData.FSid);
+                        AgentSend(new AgentData(ExtSrc.AgentComProtocol.DISROUTE_EDGE_IS_DONE));
+                        Console.WriteLine("DISROUTE EDGE DONE");
+                    }
+                    else
+                    {
+                        AgentSend(new AgentData(ExtSrc.AgentComProtocol.DISROUTE_ERROR_EDGE));
+                        Console.WriteLine("DISROUTE EDGE ERROR!!!!");
+                    }
                     break;
                 case ExtSrc.AgentComProtocol.U_CAN_SEND:
                     //Otrzymano pozwolenie na wyslanie wiadomosci z kolejki

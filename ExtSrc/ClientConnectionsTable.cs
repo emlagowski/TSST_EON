@@ -27,6 +27,11 @@ namespace ExtSrc
             clientConnectionTable.Add(new int[] { wire, FSid }, socketID);
         }
 
+        public void remove(int wire, int FSid)
+        {
+            clientConnectionTable.Remove(new int[] { wire, FSid });
+        }
+
         //public int[] findRoute(Socket socket)
         //{
         //    int[] result;

@@ -160,7 +160,7 @@ namespace Cloud
 
             // Read data from the client socket. 
             
-                int bytesRead = handler.EndReceive(ar);
+            int bytesRead = handler.EndReceive(ar);
             
             BinaryFormatter formattor = new BinaryFormatter();
 

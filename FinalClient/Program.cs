@@ -160,8 +160,6 @@ namespace Router
                 Application.Run();
             });
             t5.Start();*/
-   
-            
 
             Console.ReadLine();
         }
