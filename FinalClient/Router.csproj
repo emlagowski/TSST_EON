@@ -81,11 +81,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="1270010.xml" />
-    <Content Include="1270020.xml" />
-    <Content Include="1270030.xml" />
-    <Content Include="1270040.xml" />
-    <Content Include="1270050.xml" />
     <Content Include="wires.xml" />
   </ItemGroup>
   <ItemGroup>

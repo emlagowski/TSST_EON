@@ -40,5 +40,10 @@ namespace Agent
             }
             cm.disroute(route, key);
         }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
