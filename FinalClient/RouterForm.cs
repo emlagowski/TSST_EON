@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using ExtSrc;
 
 namespace Router
 {
@@ -16,10 +17,10 @@ namespace Router
         Router _router;
         public RouterForm(Router router)
         {
-
             _router = router;
             InitializeComponent();
             LabelText = _router.address;
+            Console.SetOut(new TextBoxWriter(consoleOutput));
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -48,7 +49,12 @@ namespace Router
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
+        }
 
+        public void WriteLine(string value)
+        {
+            Console.WriteLine(value);
         }
 
         private void labelName_Click(object sender, EventArgs e)
@@ -80,6 +86,31 @@ namespace Router
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
         {
 
         }

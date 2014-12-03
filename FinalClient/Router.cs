@@ -20,6 +20,7 @@ namespace Router
 
     public class Router : ExtSrc.Observers.Subject
     {
+        public RouterForm RouterForm { get; set; }
         //public Signaling signaling;
         //public AgentCommunication agentCom;
         //public static XmlDocument wires;
@@ -66,18 +67,19 @@ namespace Router
         public Router(string ip, Boolean isEdge)
         {
             if (isEdge) this.isEdge = true;
-
             address = ip;
+        }
+
+        public void initialize()
+        {
             observers = new List<Observer>();
             freqSlotSwitchingTable = new ExtSrc.FrequencySlotSwitchingTable();
-            waitingMessages = new Dictionary<String,ExtSrc.DataAndID>();
+            waitingMessages = new Dictionary<String, ExtSrc.DataAndID>();
             //fib = new ExtSrc.FIB();
             localPhysicalWires = new ExtSrc.PhysicalWires();
             readLocalPhysicalWires();
             cloudEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
-
-
-            //--------client
+//--------client
             TOclientConnectionsTable = new ClientConnectionsTable();
             FROMclientConnectionsTable = new ClientConnectionsTable();
             clientSocketDictionary = new Dictionary<int, ClientSocket>();
@@ -176,29 +178,28 @@ namespace Router
             //    //Console.WriteLine("");
             //}
 
-            agentLocalEP = new IPEndPoint(IPAddress.Parse(ip), 6666);
+            agentLocalEP = new IPEndPoint(IPAddress.Parse(address), 6666);
             agentEP = new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666);
             agentSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             agentSocket.Bind(agentLocalEP);
-            agentSocket.ReceiveBufferSize = 1024 * 100;
+            agentSocket.ReceiveBufferSize = 1024*100;
 
             agentSocket.BeginConnect(agentEP,
-                    new AsyncCallback(AgentConnectCallback), agentSocket);
+                new AsyncCallback(AgentConnectCallback), agentSocket);
             agentConnectDone.WaitOne();
 
             Thread agentThread = new Thread(agentRun);
             agentThread.Start();
 
 
-            ID = Int32.Parse(ip.Substring(ip.Length - 1, 1));
+            ID = Int32.Parse(address.Substring(address.Length - 1, 1));
             List<DijkstraData> wiresIds = new List<DijkstraData>();
-            foreach(NewWire nw in localPhysicalWires.Wires)
+            foreach (NewWire nw in localPhysicalWires.Wires)
             {
                 wiresIds.Add(new DijkstraData(ID, nw.ID, nw.distance));
             }
             AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.REGISTER, wiresIds));
         }
-
 
 
         private void readLocalPhysicalWires()
@@ -318,13 +319,13 @@ namespace Router
                             ReceiveFromCloud(unit.socket);
                         }
                     }
-                    Console.WriteLine("WszySTkie LaMbDY NaSlUccHuJA FalA SuPEr!");
+                    RouterForm.WriteLine("WszySTkie LaMbDY NaSlUccHuJA FalA SuPEr!");
                     allReceive.WaitOne();
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                RouterForm.WriteLine(e.ToString());
             }
         }
 
@@ -344,7 +345,7 @@ namespace Router
 
                     // Start an asynchronous socket to listen for connections.
                     clientSocket.BeginAccept(new AsyncCallback(AcceptClientCallback), clientSocket);
-                    Console.WriteLine("CZEKAM NA KLIENTa");
+                    RouterForm.WriteLine("CZEKAM NA KLIENTa");
                     // Wait until a connection is made before continuing.
                     allDone.WaitOne();
                 }
@@ -352,9 +353,9 @@ namespace Router
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                RouterForm.WriteLine(e.ToString());
             }
-            Console.WriteLine("\nPress ENTER to continue...");
+            RouterForm.WriteLine("\nPress ENTER to continue...");
             Console.Read();
         }
         //
@@ -371,7 +372,8 @@ namespace Router
             int id = Int32.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString().Substring(((IPEndPoint)handler.RemoteEndPoint).Address.ToString().Length - 1, 1));
            // client = handler;
             //addWires(handler.RemoteEndPoint.ToString());
-            Console.WriteLine("User [{0}] {1} - {2} was added to sockets list", clientSocketDictionary.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
+            //Console.WriteLine("User [{0}] {1} - {2} was added to sockets list", clientSocketDictionary.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
+            RouterForm.WriteLine(String.Format("User [{0}] {1} - {2} was added to sockets list", clientSocketDictionary.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString()));
             AgentSend(new AgentData(    AgentComProtocol.REGISTER_CLIENT, 
                                         address, 
                                         ((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
@@ -429,7 +431,7 @@ namespace Router
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                RouterForm.WriteLine(e.ToString());
             }
 
 
@@ -558,7 +560,7 @@ namespace Router
                 Socket client = unit.socket;
                 // Complete sending the data to the remote device.
                 int bytesSent = client.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes from {1} to server {2}.", bytesSent, client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
+                RouterForm.WriteLine(String.Format("Sent {0} bytes from {1} to server {2}.", bytesSent, client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString()));
                 //lock (this)
                // addLog("Send", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString(), "none");
                 // Signal that all bytes have been sent.
@@ -571,13 +573,13 @@ namespace Router
                 {
                     Socket client = (Socket)ar.AsyncState;
                     int bytesSent = client.EndSend(ar);
-                    Console.WriteLine("Sent {0} bytes from {1} to server {2}.", bytesSent, client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
+                    RouterForm.WriteLine(String.Format("Sent {0} bytes from {1} to server {2}.", bytesSent, client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString()));
                     sendDone.Set();
 
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    RouterForm.WriteLine(ex.ToString());
                 }
             }
         }
@@ -597,7 +599,7 @@ namespace Router
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                RouterForm.WriteLine(e.ToString());
             }
         }   
 
@@ -622,7 +624,7 @@ namespace Router
 
                 state.dt = (ExtSrc.Data)formattor.Deserialize(ms);
 
-                Console.WriteLine("MSG :" + state.dt.info);
+                RouterForm.WriteLine("MSG :" + state.dt.info);
                // String address = (client.LocalEndPoint as IPEndPoint).Address.ToString();
                 String port = (client.LocalEndPoint as IPEndPoint).Port.ToString();
                 int[] wireAndFreqSlotID = localPhysicalWires.getIDsbyPort(Int32.Parse(port));
@@ -652,8 +654,8 @@ namespace Router
                 }
                 receiveDone.Set();
                 allReceive.Set();
-                Console.WriteLine("Socket {0} Read '{1}'[{2} bytes] from socket {3}.", client.LocalEndPoint.ToString(),
-                        state.dt.ToString(), bytesRead, client.RemoteEndPoint.ToString());
+                RouterForm.WriteLine(String.Format("Socket {0} Read '{1}'[{2} bytes] from socket {3}.", client.LocalEndPoint.ToString(),
+                        state.dt.ToString(), bytesRead, client.RemoteEndPoint.ToString()));
 
                 if (canSend)
                 {
@@ -663,7 +665,7 @@ namespace Router
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                RouterForm.WriteLine(e.ToString());
             }
         }
 
@@ -680,7 +682,7 @@ namespace Router
                 this.client.Close();
             }
 
-            Console.WriteLine("Closing.");
+            RouterForm.WriteLine("Closing.");
             System.Windows.Forms.Application.Exit();
 
         }
@@ -697,14 +699,14 @@ namespace Router
                 {
                     client.EndConnect(ar);
                 }
-                Console.WriteLine("SIGNALING: {0} Socket connected to {1}", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
+                RouterForm.WriteLine(String.Format("SIGNALING: {0} Socket connected to {1}", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString()));
 
                 // Signal that the connection has been made.
                 agentConnectDone.Set();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                RouterForm.WriteLine(e.ToString());
             }
         }
 
@@ -715,7 +717,7 @@ namespace Router
                 while (true)
                 {
                     agentReceiveDone.Reset();
-                    Console.WriteLine("Waiting for data from AGENT...");
+                    RouterForm.WriteLine("Waiting for data from AGENT...");
                     AgentReceive();
                     agentReceiveDone.WaitOne();
                 }
@@ -723,7 +725,7 @@ namespace Router
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                RouterForm.WriteLine(e.ToString());
             }
         }
 
@@ -741,7 +743,7 @@ namespace Router
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                RouterForm.WriteLine(e.ToString());
             }
         }
 
@@ -771,7 +773,7 @@ namespace Router
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                RouterForm.WriteLine(e.ToString());
             }
         }
 
@@ -781,7 +783,7 @@ namespace Router
             switch (agentData.message)
             {
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U_EDGE:
-                    Console.WriteLine("ROUTE_FOR_U_EDGE");
+                    RouterForm.WriteLine("ROUTE_FOR_U_EDGE");
                     int startfreqEdge=0;
                     if (agentData.startingFreq == -1)
                         startfreqEdge = localPhysicalWires.getWireByID(agentData.wireID).findSpaceForFS(agentData.FSUCount);
@@ -790,29 +792,29 @@ namespace Router
                     id1 = localPhysicalWires.getWireByID(agentData.wireID).addFreqSlot(startfreqEdge, agentData.FSUCount, agentData.mod);
                     TOclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
                     FROMclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
-                    Console.WriteLine("ROUTE SET, EDGE");
+                    RouterForm.WriteLine("ROUTE SET, EDGE");
                     AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreqEdge, id1));
                     break;
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U:
                     ///od agenta: fsucount, mod, firstwireid,secondwireid, startingfreq dla odbierajacego kabla bo juz obliczone w poprzednim roouterze
-                    Console.WriteLine("ROUTE_FOR_U");
+                    RouterForm.WriteLine("ROUTE_FOR_U");
                     int startfreq = localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
                     if (startfreq >= 0)
                     {
                         id1 = localPhysicalWires.getWireByID(agentData.firstWireID).addFreqSlot(agentData.startingFreq, agentData.lastFSUCount, agentData.lastMod);
                         id2 = localPhysicalWires.getWireByID(agentData.secondWireID).addFreqSlot(startfreq, agentData.FSUCount, agentData.mod);
                         freqSlotSwitchingTable.add(agentData.firstWireID, id1, agentData.secondWireID, id2);
-                        Console.WriteLine("ROUTE SET, NOT EDGE");
+                        RouterForm.WriteLine("ROUTE SET, NOT EDGE");
                         AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreq, id2));
                     }
                     else
                     {
                         AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_UNAVAILABLE));
-                        Console.WriteLine("CONNECTION UNAVAILABLE, NOT EDGE");
+                        RouterForm.WriteLine("CONNECTION UNAVAILABLE, NOT EDGE");
                     }
                     break;
                 case ExtSrc.AgentComProtocol.DISROUTE:
-                    Console.WriteLine("DISROUTE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.firstWireID + " FSid : " + agentData.FSid);
+                    RouterForm.WriteLine("DISROUTE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.firstWireID + " FSid : " + agentData.FSid);
                     int[] inttab = new int[2];
                     inttab = freqSlotSwitchingTable.findRoute(agentData.firstWireID, agentData.FSid);
                     if (localPhysicalWires.getWireByID(agentData.firstWireID).removeFreqSlot(agentData.FSid) && 
@@ -820,30 +822,30 @@ namespace Router
                     {
                         freqSlotSwitchingTable.remove(agentData.firstWireID, agentData.FSid, inttab[0], inttab[1]);
                         AgentSend(new AgentData(ExtSrc.AgentComProtocol.DISROUTE_IS_DONE));
-                        Console.WriteLine("DISROUTE DONE");
+                        RouterForm.WriteLine("DISROUTE DONE");
                     }else{
                         AgentSend(new AgentData(ExtSrc.AgentComProtocol.DISROUTE_ERROR));
-                        Console.WriteLine("DISROUTE ERROR!!!!");
+                        RouterForm.WriteLine("DISROUTE ERROR!!!!");
                     }
                     break;
                 case ExtSrc.AgentComProtocol.DISROUTE_EDGE:
-                    Console.WriteLine("DISROUTE_EDGE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.firstWireID + " FSid : " + agentData.FSid);
+                    RouterForm.WriteLine("DISROUTE_EDGE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.firstWireID + " FSid : " + agentData.FSid);
                     if (localPhysicalWires.getWireByID(agentData.firstWireID).removeFreqSlot(agentData.FSid))
                     {
                         TOclientConnectionsTable.remove(agentData.wireID, agentData.FSid);
                         FROMclientConnectionsTable.remove(agentData.wireID, agentData.FSid);
                         AgentSend(new AgentData(ExtSrc.AgentComProtocol.DISROUTE_EDGE_IS_DONE));
-                        Console.WriteLine("DISROUTE EDGE DONE");
+                        RouterForm.WriteLine("DISROUTE EDGE DONE");
                     }
                     else
                     {
                         AgentSend(new AgentData(ExtSrc.AgentComProtocol.DISROUTE_ERROR_EDGE));
-                        Console.WriteLine("DISROUTE EDGE ERROR!!!!");
+                        RouterForm.WriteLine("DISROUTE EDGE ERROR!!!!");
                     }
                     break;
                 case ExtSrc.AgentComProtocol.U_CAN_SEND:
                     //Otrzymano pozwolenie na wyslanie wiadomosci z kolejki
-                    Console.WriteLine("U_CAN_SEND");
+                    RouterForm.WriteLine("U_CAN_SEND");
                     ExtSrc.DataAndID dataID;
                     if (waitingMessages.TryGetValue(agentData.uniqueKey, out dataID))
                     {
@@ -854,16 +856,16 @@ namespace Router
                             Send(dataID.data, route, dataID.ID);
                         else
                             // pomimo powolenie od agenta na wysylanie(co ma byc tylko gdy polaczenie zestawione) placzenie nie znalezione
-                            Console.WriteLine("Couldn't find route but got permission to send from NMS");
+                            RouterForm.WriteLine("Couldn't find route but got permission to send from NMS");
                         // niezaleznie od powodzenia usun wiadomosc z listy( na podstawie kodu od agenta
                         waitingMessages.Remove(agentData.uniqueKey);
                     } else
                         // nie znaleziono wiadomosci na podstawie klucza
-                        Console.WriteLine("No waiting message for KEY from NMS");
+                        RouterForm.WriteLine("No waiting message for KEY from NMS");
                     break;
 
                 default:
-                    Console.WriteLine("Zły msg przybył");
+                    RouterForm.WriteLine("Zły msg przybył");
                     break;
             }
         }
@@ -895,14 +897,14 @@ namespace Router
 
                 // Complete sending the data to the remote device.
                 int bytesSent = client.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes to AGENT.", bytesSent);
+                RouterForm.WriteLine(String.Format("Sent {0} bytes to AGENT.", bytesSent));
 
                 // Signal that all bytes have been sent.
                 agentSendDone.Set();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                RouterForm.WriteLine(e.ToString());
             }
         }
 
