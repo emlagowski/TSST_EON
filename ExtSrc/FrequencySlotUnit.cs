@@ -46,7 +46,7 @@ namespace ExtSrc
                 // Complete the connection.
                 client.EndConnect(ar);
 
-                Console.WriteLine("{0} Socket connected to {1}", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
+                //Console.WriteLine("{0} Socket connected to {1}", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
 
                 // Signal that the connection has been made.
                 connectDone.Set();

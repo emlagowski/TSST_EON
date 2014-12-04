@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentData.cs" />
+    <Compile Include="BindingDictionary.cs" />
+    <Compile Include="Dictionary.cs" />
     <Compile Include="DijkstraData.cs" />
     <Compile Include="ClientConnectionsTable.cs" />
     <Compile Include="ClientData.cs" />

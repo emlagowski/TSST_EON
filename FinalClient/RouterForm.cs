@@ -15,21 +15,7 @@ namespace Router
     public partial class RouterForm : Form
     {
         Router _router;
-        public RouterForm(Router router)
-        {
-            _router = router;
-            InitializeComponent();
-            LabelText = _router.address;
-            Console.SetOut(new TextBoxWriter(consoleOutput));
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            _router.closing();
-            Console.WriteLine("papa");
-        }
-
+        
         public string LabelText
         {
             get
@@ -42,77 +28,78 @@ namespace Router
             }
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        public RouterForm(Router router)
         {
-
+            _router = router;
+            InitializeComponent();
+            LabelText = _router.address;
+            Console.SetOut(new TextBoxWriter(consoleOutput));
+            var t = new Timer { Enabled = true, Interval = 1 * 1000 };
+            t.Tick += delegate { Bind(); };
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        public void Bind()
         {
-            
+            //            connectedWiresTable;
+            connectedWiresTable.DataSource = null;
+            connectedWiresTable.DataSource = (_router.localPhysicalWires.Wires.Select(w => new
+            {
+                Wire_ID = w.ID,
+                Distance = w.distance,
+                Width = w.spectralWidth,
+                FSUCount = w.FrequencySlotUnitList.Count,
+                FSUDictCount = w.FrequencySlotDictionary.Count
+            }));
+            //            clientTable;
+            clientTable.DataSource = null;
+            clientTable.DataSource = (_router.clientSocketDictionary.Select(d => new
+            {
+                IDX = d.Key,
+                Client_ID = d.Value.ID,
+                LOCAL = d.Value.socket.LocalEndPoint,
+                REMOTE = d.Value.socket.RemoteEndPoint
+            })).ToList();
+            //            messagesTable;
+            messagesTable.DataSource = null;
+            messagesTable.DataSource = (_router.waitingMessages.Select(d => new
+            {
+                UNIQUE = d.Key,
+                CLIENT_ID = d.Value.ID,
+                BANDWITDHT = d.Value.data.bandwidthNeeded,
+                DATA = d.Value.data.info
+            })).ToList();
+            //            toClientTable;
+            toClientTable.DataSource = null;
+            toClientTable.DataSource = (_router.TOclientConnectionsTable.clientConnectionTable.Select(d => new
+            {
+                WireID = d.Key[0],
+                FS_ID = d.Key[1],
+                Client_ID = d.Value
+            })).ToList();
+            //            fromClientTable;
+            fromClientTable.DataSource = null;
+            fromClientTable.DataSource = (_router.FROMclientConnectionsTable.clientConnectionTable.Select(d => new
+            {
+                WireID = d.Key[0],
+                FS_ID = d.Key[1],
+                Client_ID = d.Value
+            })).ToList();
+            //            frequencySlotsTable;
+            frequencySlotsTable.DataSource = null;
+            frequencySlotsTable.DataSource = (_router.freqSlotSwitchingTable.freqSlotSwitchingTable.Select(d => new
+            {
+                WireID_A = d.Key[0],
+                FS_ID_A = d.Key[1],
+                WireID_B = d.Value[0],
+                FS_ID_B = d.Value[1]
+            })).ToList();
         }
 
-        public void WriteLine(string value)
+        protected override void OnClosing(CancelEventArgs e)
         {
-            Console.WriteLine(value);
-        }
-
-        private void labelName_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //try
-            //{
-            //    XmlReader xmlFile;
-            //    xmlFile = XmlReader.Create(_router.logName, new XmlReaderSettings());
-            //    DataSet ds = new DataSet();
-            //    ds.ReadXml(xmlFile);
-            //    dataGridView1.DataSource = ds.Tables[0];
-            //    xmlFile.Close();
-            //    XmlReader xmlFile2;
-            //    xmlFile2 = XmlReader.Create(_router.wiresName, new XmlReaderSettings());
-            //    DataSet ds2 = new DataSet();
-            //    ds2.ReadXml(xmlFile2);
-            //    dataGridView2.DataSource = ds2.Tables[0];
-            //    xmlFile2.Close();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.ToString());
-            //} 
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
+            base.OnClosing(e);
+            _router.closing();
+            Console.WriteLine("papa");
         }
     }
 }

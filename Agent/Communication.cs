@@ -104,7 +104,7 @@ namespace Agent
                     allDone.Reset();
 
                     // Start an asynchronous socket to listen for connections.
-                    Console.WriteLine("Waiting for a connection...");
+                    //Console.WriteLine("Waiting for a connection...");
                     socket.BeginAccept(new AsyncCallback(AcceptCallback), socket);
 
                     // Wait until a connection is made before continuing.
@@ -130,7 +130,7 @@ namespace Agent
             Socket handler = listener.EndAccept(ar);
             sockets.Add(Convert.ToString((handler.RemoteEndPoint as IPEndPoint).Address), handler);
             //addConnection(handler.RemoteEndPoint.ToString());
-            Console.WriteLine("Socket [{0}] {1} - {2} was added to sockets list", sockets.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
+            //Console.WriteLine("Socket [{0}] {1} - {2} was added to sockets list", sockets.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
 
             // Create the state object.
             var state = new StateObject {workSocket = handler};
