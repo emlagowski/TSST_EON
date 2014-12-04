@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +43,8 @@ namespace Router
         public ExtSrc.ClientConnectionsTable FROMclientConnectionsTable { get; set; }
         public Dictionary<int, ClientSocket> clientSocketDictionary { get; set; }
         public Dictionary<String, ExtSrc.DataAndID> waitingMessages { get; set; }
-
+        public List<String> messagesToSend { get; set; }
+    
         //lista observerow
         protected List<Observer> observers;
 
@@ -74,12 +76,13 @@ namespace Router
         {
             observers = new List<Observer>();
             freqSlotSwitchingTable = new ExtSrc.FrequencySlotSwitchingTable();
+            messagesToSend = new List<string>();
             waitingMessages = new Dictionary<String, ExtSrc.DataAndID>();
             //fib = new ExtSrc.FIB();
             localPhysicalWires = new ExtSrc.PhysicalWires();
             readLocalPhysicalWires();
             cloudEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
-//--------client
+            //--------client
             TOclientConnectionsTable = new ClientConnectionsTable();
             FROMclientConnectionsTable = new ClientConnectionsTable();
             clientSocketDictionary = new Dictionary<int, ClientSocket>();
@@ -100,84 +103,6 @@ namespace Router
             Thread t = new Thread(Run);
             t.Start();
 
-            //if (ip.Equals("127.0.1.2"))
-            //{
-            //    int id = localPhysicalWires.Wires[0].addFreqSlot(0, 2, Modulation.QPSK);
-            //    int id1 = localPhysicalWires.Wires[1].addFreqSlot(0, 2, Modulation.QPSK);
-
-            //    freqSlotSwitchingTable.add(1, id, 7, id1);
-            //}
-            //if (ip.Equals("127.0.1.5"))
-            //{
-            //    //int id = localPhysicalWires.Wires[0].addFreqSlot(0, 2, Modulation.QPSK);
-            //    int id1 = localPhysicalWires.Wires[3].addFreqSlot(0, 2, Modulation.QPSK);
-
-            //    clientConnectionsTable.add(7,id1,7);
-            //    Console.WriteLine("");
-            //   // freqSlotSwitchingTable.add(7, id1, 3, id);
-            //}
-            //if (ip.Equals("127.0.1.1"))
-            //{
-            //    int id = localPhysicalWires.Wires[0].addFreqSlot(0, 2, Modulation.QPSK);
-            //    int id1 = localPhysicalWires.Wires[2].addFreqSlot(0, 2, Modulation.QPSK);
-
-            //    freqSlotSwitchingTable.add(3, id1, 1, id);
-
-            //    Thread.Sleep(20000);
-            //    Send(new Data(1, "elo"), new int[] { 1, id });
-            //}
-
-            //if (ip.Equals("127.0.1.1"))
-            //{
-            //    int fiveTOsevenOUT = localPhysicalWires.Wires[0].addFreqSlot(0, 5, Modulation.QPSK);
-            //    int fourTOeightOUT = localPhysicalWires.Wires[2].addFreqSlot(6, 10, Modulation.QPSK);
-            //    //int id1 = localPhysicalWires.Wires[2].addFreqSlot(0, 5, Modulation.QPSK);
-            //    //freqSlotSwitchingTable.add(3, id1, 1, id);
-            //    FROMclientConnectionsTable.add(1, fiveTOsevenOUT, 5);
-            //    TOclientConnectionsTable.add(1, fiveTOsevenOUT, 5);
-            //    FROMclientConnectionsTable.add(3, fourTOeightOUT, 4);
-            //    TOclientConnectionsTable.add(3, fourTOeightOUT, 4);
-
-            //   // Thread.Sleep(10000);
-            //   // Send(new Data(1, "elo"), new int[] { 1, id });
-            //}
-            //if (ip.Equals("127.0.1.2"))
-            //{
-            //    int fiveTOsevenIN = localPhysicalWires.Wires[0].addFreqSlot(0, 5, Modulation.QPSK);
-            //    int fiveTOsevenOUT = localPhysicalWires.Wires[1].addFreqSlot(0, 5, Modulation.QPSK);
-            //    freqSlotSwitchingTable.add(1, fiveTOsevenIN, 7, fiveTOsevenOUT);
-            //}
-            //if (ip.Equals("127.0.1.3"))
-            //{
-            //    int fiveTOsevenIN = localPhysicalWires.Wires[1].addFreqSlot(0, 5, Modulation.QPSK);
-            //    int fiveTOsevenOUT = localPhysicalWires.Wires[2].addFreqSlot(0, 5, Modulation.QPSK);
-            //    freqSlotSwitchingTable.add(4, fiveTOsevenIN, 5, fiveTOsevenOUT);
-
-            //    int fourTOeightIN = localPhysicalWires.Wires[1].addFreqSlot(6, 10, Modulation.QPSK);
-            //    TOclientConnectionsTable.add(4, fourTOeightIN, 8);
-            //    FROMclientConnectionsTable.add(4, fourTOeightIN, 8);
-            //}
-            //if (ip.Equals("127.0.1.4"))
-            //{
-            //    int fiveTOsevenIN = localPhysicalWires.Wires[0].addFreqSlot(0, 5, Modulation.QPSK);
-            //    //int id1 = localPhysicalWires.Wires[1].addFreqSlot(0, 2, Modulation.QPSK);
-            //    //freqSlotSwitchingTable.add(1, id, 7, id1);
-            //    TOclientConnectionsTable.add(5, fiveTOsevenIN, 7);
-            //    FROMclientConnectionsTable.add(5, fiveTOsevenIN, 7);
-
-            //}
-            //if (ip.Equals("127.0.1.5"))
-            //{
-            //    int fiveTOsevenOUT = localPhysicalWires.Wires[1].addFreqSlot(0, 5, Modulation.QPSK);
-            //    int fiveTOsevenIN = localPhysicalWires.Wires[3].addFreqSlot(0, 5, Modulation.QPSK);
-            //    int fourTOeightOUT = localPhysicalWires.Wires[1].addFreqSlot(6, 10, Modulation.QPSK);
-            //    int fourTOeightIN = localPhysicalWires.Wires[0].addFreqSlot(6, 10, Modulation.QPSK);
-            //    freqSlotSwitchingTable.add(7, fiveTOsevenIN, 4, fiveTOsevenOUT);
-            //    freqSlotSwitchingTable.add(4, fourTOeightOUT, 3, fourTOeightIN);
-            //    //clientConnectionsTable.add(7, id1, 7);
-            //    //Console.WriteLine("");
-            //}
-
             agentLocalEP = new IPEndPoint(IPAddress.Parse(address), 6666);
             agentEP = new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666);
             agentSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -191,6 +116,32 @@ namespace Router
             Thread agentThread = new Thread(agentRun);
             agentThread.Start();
 
+            new Thread(delegate()
+            {
+                while (true)
+                {
+                    if (messagesToSend.Count != 0)
+                    {
+                        messagesToSend.Where(s => waitingMessages.ContainsKey(s)).ToList().ForEach(s =>
+                        {
+                            // znaleziono wiadomosc oczekujaca na liscie
+                            var d = waitingMessages[s];
+                            var route = FROMclientConnectionsTable.findRoute(d.ID);
+                            if (route != null)
+                                // wysylamy wiadomosc z kolejki
+                                Send(d.data, route, d.ID);
+                            else
+                                // pomimo powolenie od agenta na wysylanie(co ma byc tylko gdy polaczenie zestawione) placzenie nie znalezione
+                                Console.WriteLine("Couldn't find route but got permission to send from NMS");
+
+                            // niezaleznie od powodzenia usun wiadomosc z listy( na podstawie kodu od agenta
+                            waitingMessages.Remove(s);
+                            messagesToSend.Remove(s);
+                        });
+                    }
+                    Thread.Sleep(500);
+                }
+            }).Start();
 
             ID = Int32.Parse(address.Substring(address.Length - 1, 1));
             List<DijkstraData> wiresIds = new List<DijkstraData>();
@@ -201,7 +152,6 @@ namespace Router
             AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.REGISTER, wiresIds));
             RouterForm.Bind();
         }
-
 
         private void readLocalPhysicalWires()
         {
@@ -319,16 +269,18 @@ namespace Router
 
         public void ReceiveFromClientCallback(IAsyncResult ar)
         {
+            var state = (ClientStateObject)ar.AsyncState;
+            var clientSocket = state.workSocket;
             try
             {
                 if (!IsListening) return;
                 // Retrieve the state object and the client socket 
                 // from the asynchronous state object.
-                ClientStateObject state = (ClientStateObject)ar.AsyncState;
-                Socket client = state.workSocket;
+                //ClientStateObject state = (ClientStateObject)ar.AsyncState;
+                //Socket client = state.workSocket;
 
                 // Read data from the remote device.
-                int bytesRead = client.EndReceive(ar);
+                int bytesRead = clientSocket.EndReceive(ar);
                 BinaryFormatter formattor = new BinaryFormatter();
 
                 MemoryStream ms = new MemoryStream(state.buffer);
@@ -349,23 +301,19 @@ namespace Router
                 /// 
                 
                 String key = generateUniqueKey();
-                AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.SET_ROUTE_FOR_ME, address, ((IPEndPoint)client.RemoteEndPoint).Address.ToString(),target, key, state.cdt.bandwidthNeeded));
+                AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.SET_ROUTE_FOR_ME, address, ((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString(), target, key, state.cdt.bandwidthNeeded));
 
-                int id = Int32.Parse(((IPEndPoint)client.RemoteEndPoint).Address.ToString().
-                        Substring(((IPEndPoint)client.RemoteEndPoint).Address.ToString().Length - 1, 1));
+                int id = Int32.Parse(((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString().
+                        Substring(((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString().Length - 1, 1));
                 // dodac na liste oczekujacych wyslan
-                waitingMessages.Add(key, new ExtSrc.DataAndID(data,id));               
-
-
-                //  Console.WriteLine("User {0} Received '{1}'[{2} bytes] from router {3}.", client.LocalEndPoint.ToString(),
-                //           state.dt.ToString(), bytesRead, client.RemoteEndPoint.ToString());            
+                waitingMessages.Add(key, new ExtSrc.DataAndID(data,id));                        
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
-
-
+            clientSocket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+              new AsyncCallback(ReceiveFromClientCallback), state);
         }
 
         //private void ConnectCallback(IAsyncResult ar)
@@ -777,22 +725,23 @@ namespace Router
                 case ExtSrc.AgentComProtocol.U_CAN_SEND:
                     //Otrzymano pozwolenie na wyslanie wiadomosci z kolejki
                     Console.WriteLine("U_CAN_SEND");
-                    ExtSrc.DataAndID dataID;
-                    if (waitingMessages.TryGetValue(agentData.uniqueKey, out dataID))
-                    {
-                        // znaleziono wiadomosc oczekujaca na liscie
-                        int[] route = FROMclientConnectionsTable.findRoute(dataID.ID);
-                        if(route != null)
-                            // wysylamy wiadomosc z kolejki
-                            Send(dataID.data, route, dataID.ID);
-                        else
-                            // pomimo powolenie od agenta na wysylanie(co ma byc tylko gdy polaczenie zestawione) placzenie nie znalezione
-                            Console.WriteLine("Couldn't find route but got permission to send from NMS");
-                        // niezaleznie od powodzenia usun wiadomosc z listy( na podstawie kodu od agenta
-                        waitingMessages.Remove(agentData.uniqueKey);
-                    } else
-                        // nie znaleziono wiadomosci na podstawie klucza
-                        Console.WriteLine("No waiting message for KEY from NMS");
+//                    ExtSrc.DataAndID dataID;
+//                    if (waitingMessages.TryGetValue(agentData.uniqueKey, out dataID))
+//                    {
+//                        // znaleziono wiadomosc oczekujaca na liscie
+//                        int[] route = FROMclientConnectionsTable.findRoute(dataID.ID);
+//                        if(route != null)
+//                            // wysylamy wiadomosc z kolejki
+//                            Send(dataID.data, route, dataID.ID);
+//                        else
+//                            // pomimo powolenie od agenta na wysylanie(co ma byc tylko gdy polaczenie zestawione) placzenie nie znalezione
+//                            Console.WriteLine("Couldn't find route but got permission to send from NMS");
+//                        // niezaleznie od powodzenia usun wiadomosc z listy( na podstawie kodu od agenta
+//                        waitingMessages.Remove(agentData.uniqueKey);
+//                    } else
+//                        // nie znaleziono wiadomosci na podstawie klucza
+//                        Console.WriteLine("No waiting message for KEY from NMS");
+                    messagesToSend.Add(agentData.uniqueKey);
                     break;
 
                 default:

@@ -32,13 +32,14 @@ namespace Agent
         private void button1_Click(object sender, EventArgs e)
         {
             // send disroute by cm
-            var key = comboBox1.SelectedItem as String;
-            List<int[]> route = null;
-            foreach (var i in cm.routeHistoryList.Keys.Where(i => i[2] == key))
-            {
-                route = cm.routeHistoryList[i];
-            }
-            cm.disroute(route, key);
+            Console.WriteLine("x");
+//            var key = comboBox1.SelectedItem as String;
+//            List<int[]> route = null;
+//            foreach (var i in cm.routeHistoryList.Keys.Where(i => i[2] == key))
+//            {
+//                route = cm.routeHistoryList[i];
+//            }
+//            cm.disroute(route, key);
         }
 
         private void Form2_Load(object sender, EventArgs e)
