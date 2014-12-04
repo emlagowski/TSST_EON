@@ -18,6 +18,8 @@ namespace Client
         IPEndPoint localEndPoint, remoteEndPoint;
         Socket socket;
 
+        public List<KeyValuePair<MsgType, String>> messages { get; set; }
+
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         public ManualResetEvent allReceive = new ManualResetEvent(false);
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
@@ -25,37 +27,18 @@ namespace Client
 
         private String response = String.Empty;
 
-        public String logName;
-        XmlDocument xmlLog;
-        XmlNode rootNodeLog;
 
         public Client(String ip)
         {
-            logName= ip + ".xml";
-            xmlLog = new XmlDocument();
-            rootNodeLog = xmlLog.CreateElement("user-log");
-            xmlLog.AppendChild(rootNodeLog);
             localAddress = ip;
+            messages = new List<KeyValuePair<MsgType, string>>();
+        }
+
+        public void initialization()
+        {
             localEndPoint = new IPEndPoint(IPAddress.Parse(localAddress), 7000);
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(localEndPoint);
-        }
-
-        void addLog(String t, String f_ip, String t_ip, String d)
-        {
-            XmlNode userNode = xmlLog.CreateElement("event");
-            XmlAttribute type = xmlLog.CreateAttribute("type");
-            XmlAttribute from = xmlLog.CreateAttribute("from");
-            XmlAttribute to = xmlLog.CreateAttribute("to");
-            type.Value = t;
-            from.Value = f_ip;
-            to.Value = t_ip;
-            userNode.Attributes.Append(type);
-            userNode.Attributes.Append(from);
-            userNode.Attributes.Append(to);
-            userNode.InnerText = d;
-            rootNodeLog.AppendChild(userNode);
-            xmlLog.Save(logName);
         }
 
         /**
@@ -152,32 +135,11 @@ namespace Client
                 MemoryStream ms = new MemoryStream(state.buffer);
 
                 state.dt = (ExtSrc.ClientData)formattor.Deserialize(ms);
-                /*  //if (bytesRead > 0)
-                  //{
-                  // There might be more data, so store the data received so far.
-                  state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
-
-                  // Get the rest of the data.
-                  client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                      new AsyncCallback(ReceiveCallback), state);
-                  //}
-                  //else
-                  // {
-                  // All the data has arrived; put it in response.
-                  if (state.sb.Length > 1)
-                  {
-                      response = state.sb.ToString();
-                  }
-                  // Signal that all bytes have been received.
-                  receiveDone.Set();
-                  allReceive.Set();
-                  //}
-                  Console.WriteLine("User {0} Received '{1}'[{2} bytes] from router {3}.", client.LocalEndPoint.ToString(),
-                          response, response.Length, client.RemoteEndPoint.ToString());*/
                 receiveDone.Set();
                 allReceive.Set();
                 Console.WriteLine("User {0} Received '{1}'[{2} bytes] from router {3}.", client.LocalEndPoint.ToString(),
                           state.dt.ToString(), bytesRead, client.RemoteEndPoint.ToString());
+                messages.Add(new KeyValuePair<MsgType, string>(MsgType.RECEIVED, state.dt.ToString()));
                 //addLog("Receive", client.RemoteEndPoint.ToString(), client.LocalEndPoint.ToString(), state.dt.ToString());
 
             }
@@ -189,27 +151,18 @@ namespace Client
 
         public void Send(int bandwidth, String data, String endAddress)
         {
-            // Convert the string data to byte data using ASCII encoding.
-          /*  byte[] byteData = Encoding.ASCII.GetBytes(targetIP+"|"+data);
-
-            // Begin sending the data to the remote device.
-            socket.BeginSend(byteData, 0, byteData.Length, 0,
-                new AsyncCallback(SendCallback), socket);
-            sendDone.WaitOne();*/
-
             MemoryStream fs = new MemoryStream();
 
             BinaryFormatter formatter = new BinaryFormatter();
 
             formatter.Serialize(fs, new ExtSrc.ClientData(bandwidth, data, endAddress));
-
+            
             byte[] buffer = fs.ToArray();
-
-
 
             // Begin sending the data to the remote device.
             socket.BeginSend(buffer, 0, buffer.Length, 0,
                 new AsyncCallback(SendCallback), socket);
+            messages.Add(new KeyValuePair<MsgType, string>(MsgType.SEND, data));
             //addLog("Send", localAddress, targetIP, data);
             sendDone.WaitOne();
         }
@@ -233,6 +186,11 @@ namespace Client
             }
         }
     
+    }
+
+    public enum MsgType
+    {
+        SEND, RECEIVED
     }
 
     public class StateObject

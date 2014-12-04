@@ -23,32 +23,34 @@ namespace Router
             }
             catch (Exception e)
             {
-                Console.WriteLine("NOT EDGE ROUTER");
+                //Console.WriteLine("NOT EDGE ROUTER");
             }
 
             Router clientZero;
 
             if (edge_b == false)
             {
-                Console.WriteLine("THIS IS ROUTER :" + ip);
+                //Console.WriteLine("THIS IS ROUTER :" + ip);
 
                 clientZero = new Router(ip, false);
 
             }
             else
             {
-                Console.WriteLine("THIS IS EDGE ROUTER :" + ip);
+                //Console.WriteLine("THIS IS EDGE ROUTER :" + ip);
 
                 clientZero = new Router(ip, true);
 
             }
-            //Thread t0 = new Thread(delegate()
-            //{
-            //    RouterForm cf = new RouterForm(clientZero);
-            //    cf.Show();
-            //    Application.Run();
-            //});
-            //t0.Start();
+            Thread t0 = new Thread(delegate()
+            {
+                RouterForm cf = new RouterForm(clientZero);
+                clientZero.RouterForm = cf;
+                cf.Show();
+                clientZero.initialize();
+                Application.Run();
+            });
+            t0.Start();
 
             //Thread.Sleep(8000);
             //if (ip.Equals("127.0.1.1"))
@@ -161,7 +163,7 @@ namespace Router
             });
             t5.Start();*/
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }

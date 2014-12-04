@@ -20,12 +20,13 @@ namespace Router
 
     public class Router : ExtSrc.Observers.Subject
     {
+        public RouterForm RouterForm { get; set; }
         //public Signaling signaling;
         //public AgentCommunication agentCom;
         //public static XmlDocument wires;
      //   public static ExtSrc.PhysicalWires globalPhysicalWires;
         public int ID { get; set; }
-        public ExtSrc.PhysicalWires localPhysicalWires;
+        public ExtSrc.PhysicalWires localPhysicalWires { get; set; }
        // XmlDocument xmlLog, xmlWires;
         //XmlNode rootNodeLog, rootNodeWires;
        // public String logName, wiresName;
@@ -66,18 +67,19 @@ namespace Router
         public Router(string ip, Boolean isEdge)
         {
             if (isEdge) this.isEdge = true;
-
             address = ip;
+        }
+
+        public void initialize()
+        {
             observers = new List<Observer>();
             freqSlotSwitchingTable = new ExtSrc.FrequencySlotSwitchingTable();
-            waitingMessages = new Dictionary<String,ExtSrc.DataAndID>();
+            waitingMessages = new Dictionary<String, ExtSrc.DataAndID>();
             //fib = new ExtSrc.FIB();
             localPhysicalWires = new ExtSrc.PhysicalWires();
             readLocalPhysicalWires();
             cloudEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
-
-
-            //--------client
+//--------client
             TOclientConnectionsTable = new ClientConnectionsTable();
             FROMclientConnectionsTable = new ClientConnectionsTable();
             clientSocketDictionary = new Dictionary<int, ClientSocket>();
@@ -94,7 +96,7 @@ namespace Router
                 //Dodatkowo po zarejestrowaniu wszystkich lambd robie inicjalizacje socketow w lambdach
                 wire.initWire(address, cloudEP);
             }
-            Thread.Sleep(10000);
+            
             Thread t = new Thread(Run);
             t.Start();
 
@@ -176,29 +178,29 @@ namespace Router
             //    //Console.WriteLine("");
             //}
 
-            agentLocalEP = new IPEndPoint(IPAddress.Parse(ip), 6666);
+            agentLocalEP = new IPEndPoint(IPAddress.Parse(address), 6666);
             agentEP = new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666);
             agentSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             agentSocket.Bind(agentLocalEP);
-            agentSocket.ReceiveBufferSize = 1024 * 100;
+            agentSocket.ReceiveBufferSize = 1024*100;
 
             agentSocket.BeginConnect(agentEP,
-                    new AsyncCallback(AgentConnectCallback), agentSocket);
+                new AsyncCallback(AgentConnectCallback), agentSocket);
             agentConnectDone.WaitOne();
 
             Thread agentThread = new Thread(agentRun);
             agentThread.Start();
 
 
-            ID = Int32.Parse(ip.Substring(ip.Length - 1, 1));
+            ID = Int32.Parse(address.Substring(address.Length - 1, 1));
             List<DijkstraData> wiresIds = new List<DijkstraData>();
-            foreach(NewWire nw in localPhysicalWires.Wires)
+            foreach (NewWire nw in localPhysicalWires.Wires)
             {
                 wiresIds.Add(new DijkstraData(ID, nw.ID, nw.distance));
             }
             AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.REGISTER, wiresIds));
+            RouterForm.Bind();
         }
-
 
 
         private void readLocalPhysicalWires()
@@ -233,87 +235,17 @@ namespace Router
             }
         }
 
-        //public void readFIB() // now FIB
-        //{
-        //    String xmlString = File.ReadAllText(address+".FIB.xml");
-        //    using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
-        //    {
-        //        while (reader.ReadToFollowing("wire"))
-        //        {
-        //            reader.MoveToFirstAttribute();
-        //            string first = reader.Value;
-        //            reader.MoveToNextAttribute();
-        //            string second = reader.Value;
-        //            //czy on czyta tylko w calejklamrze address??
-        //            fib.addNext(first, second);
-        //        }
-        //    }
-        //}
-        //void addLog(String t, String f_ip, String t_ip, String d)
-        //{
-        //    lock (this)
-        //    {
-
-        //        XmlNode userNode = xmlLog.CreateElement("event");
-        //        XmlAttribute type = xmlLog.CreateAttribute("type");
-        //        XmlAttribute from = xmlLog.CreateAttribute("from");
-        //        XmlAttribute to = xmlLog.CreateAttribute("to");
-        //        type.Value = t;
-        //        from.Value = f_ip;
-        //        to.Value = t_ip;
-        //        userNode.Attributes.Append(type);
-        //        userNode.Attributes.Append(from);
-        //        userNode.Attributes.Append(to);
-        //        userNode.InnerText = d;
-        //        rootNodeLog.AppendChild(userNode);
-        //        xmlLog.Save(logName);
-
-        //    }
-        //}
-
-        //void addWires(String _ip)
-        //{
-        //    XmlNode userNode = xmlWires.CreateElement("wire");
-        //    XmlAttribute ip = xmlWires.CreateAttribute("ip");
-        //    ip.Value = _ip;
-        //    userNode.Attributes.Append(ip);
-        //    //userNode.InnerText = _ip;
-        //    rootNodeWires.AppendChild(userNode);
-        //    lock (xmlWires)
-        //    {
-        //        xmlWires.Save(wiresName);
-        //    }
-        //}
-
-        //private ArrayList findingPorts()
-        //{
-        //    ArrayList tmp = new ArrayList();
-        //    for (int i = 0; i < globalPhysicalWires.Wires.Count; i++)
-        //    {
-        //        ExtSrc.Wire w = globalPhysicalWires.Wires[i] as ExtSrc.Wire;
-        //        if (address.Equals(w.One.Address.ToString()))
-        //        {
-        //            tmp.Add(w.One.Port);
-        //        }
-        //        if (address.Equals(w.Two.Address.ToString()))
-        //        {
-        //            tmp.Add(w.Two.Port);
-        //        }
-        //    }
-        //    return tmp;
-        //}
-
-
         void Run()
         {
+            Thread.Sleep(10000);
             try
             {
                 while (IsListening)
                 {
                     allReceive.Reset();                 
-                    foreach (ExtSrc.NewWire wire in localPhysicalWires.Wires)
+                    foreach (var wire in localPhysicalWires.Wires)
                     {
-                        foreach (ExtSrc.FrequencySlotUnit unit in wire.FrequencySlotUnitList)
+                        foreach (var unit in wire.FrequencySlotUnitList)
                         {
                             ReceiveFromCloud(unit.socket);
                         }
@@ -371,6 +303,7 @@ namespace Router
             int id = Int32.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString().Substring(((IPEndPoint)handler.RemoteEndPoint).Address.ToString().Length - 1, 1));
            // client = handler;
             //addWires(handler.RemoteEndPoint.ToString());
+            //Console.WriteLine("User [{0}] {1} - {2} was added to sockets list", clientSocketDictionary.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
             Console.WriteLine("User [{0}] {1} - {2} was added to sockets list", clientSocketDictionary.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
             AgentSend(new AgentData(    AgentComProtocol.REGISTER_CLIENT, 
                                         address, 

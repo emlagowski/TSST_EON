@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using ExtSrc;
 
 namespace Cloud
 {
@@ -20,51 +21,18 @@ namespace Cloud
         {
             _server = server;
             InitializeComponent();
+            Console.SetOut(new TextBoxWriter(consoleOutput));
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                XmlReader xmlFile;
-                xmlFile = XmlReader.Create("log.xml", new XmlReaderSettings());
-                DataSet ds = new DataSet();
-                ds.ReadXml(xmlFile);
-                dataGridView1.DataSource = ds.Tables[0];
-                xmlFile.Close();
-                XmlReader xmlFile2;
-                xmlFile2 = XmlReader.Create("connections.xml", new XmlReaderSettings());
-                DataSet ds2 = new DataSet();
-                ds2.ReadXml(xmlFile2);
-                dataGridView2.DataSource = ds2.Tables[0];
-                xmlFile2.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            } 
-        }
-
-       
-
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-            System.Drawing.Graphics graphicsObj;
-
-            graphicsObj = this.CreateGraphics();
-
-            Pen myPen = new Pen(System.Drawing.Color.Red, 5);
-
-            graphicsObj.DrawLine(myPen, 20, 20, 200, 210);
-        }
+//        private void Form1_Paint(object sender, PaintEventArgs e)
+//        {
+//            System.Drawing.Graphics graphicsObj;
+//
+//            graphicsObj = this.CreateGraphics();
+//
+//            Pen myPen = new Pen(System.Drawing.Color.Red, 5);
+//
+//            graphicsObj.DrawLine(myPen, 20, 20, 200, 210);
+//        }
     }
 }
