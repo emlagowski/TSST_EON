@@ -28,20 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.RouterComboBox = new System.Windows.Forms.ComboBox();
+            this.ModComboBox = new System.Windows.Forms.ComboBox();
+            this.WireComboBox = new System.Windows.Forms.ComboBox();
+            this.BitrateComboBox = new System.Windows.Forms.ComboBox();
+            this.SetConnButton = new System.Windows.Forms.Button();
+            this.RemoveConnButton = new System.Windows.Forms.Button();
+            this.ConnDataGridView = new System.Windows.Forms.DataGridView();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.communicationBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.consoleOutput = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.ConnDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.communicationBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBox1
@@ -99,77 +105,110 @@
             this.label4.TabIndex = 5;
             this.label4.Text = "Bitrate";
             // 
-            // comboBox2
+            // RouterComboBox
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(89, 62);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 33);
-            this.comboBox2.TabIndex = 6;
+            this.RouterComboBox.Location = new System.Drawing.Point(89, 62);
+            this.RouterComboBox.Name = "RouterComboBox";
+            this.RouterComboBox.Size = new System.Drawing.Size(121, 33);
+            this.RouterComboBox.TabIndex = 6;
+            this.RouterComboBox.SelectedValueChanged += new System.EventHandler(this.RouterComboBox_SelectedValueChanged);
             // 
-            // comboBox3
+            // ModComboBox
             // 
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(50, 384);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(121, 33);
-            this.comboBox3.TabIndex = 7;
+            this.ModComboBox.FormattingEnabled = true;
+            this.ModComboBox.Items.AddRange(new object[] {
+            "QPSK",
+            "SixteenQAM"});
+            this.ModComboBox.Location = new System.Drawing.Point(50, 384);
+            this.ModComboBox.Name = "ModComboBox";
+            this.ModComboBox.Size = new System.Drawing.Size(121, 33);
+            this.ModComboBox.TabIndex = 7;
             // 
-            // comboBox4
+            // WireComboBox
             // 
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(50, 320);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(121, 33);
-            this.comboBox4.TabIndex = 8;
+            this.WireComboBox.FormattingEnabled = true;
+            this.WireComboBox.Location = new System.Drawing.Point(50, 320);
+            this.WireComboBox.Name = "WireComboBox";
+            this.WireComboBox.Size = new System.Drawing.Size(121, 33);
+            this.WireComboBox.TabIndex = 8;
             // 
-            // comboBox5
+            // BitrateComboBox
             // 
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(52, 448);
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(121, 33);
-            this.comboBox5.TabIndex = 9;
+            this.BitrateComboBox.FormattingEnabled = true;
+            this.BitrateComboBox.Location = new System.Drawing.Point(52, 448);
+            this.BitrateComboBox.Name = "BitrateComboBox";
+            this.BitrateComboBox.Size = new System.Drawing.Size(121, 33);
+            this.BitrateComboBox.TabIndex = 9;
             // 
-            // button2
+            // SetConnButton
             // 
-            this.button2.Location = new System.Drawing.Point(50, 510);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(221, 51);
-            this.button2.TabIndex = 10;
-            this.button2.Text = "Set Konekszyn";
-            this.button2.UseVisualStyleBackColor = true;
+            this.SetConnButton.Location = new System.Drawing.Point(50, 510);
+            this.SetConnButton.Name = "SetConnButton";
+            this.SetConnButton.Size = new System.Drawing.Size(221, 51);
+            this.SetConnButton.TabIndex = 10;
+            this.SetConnButton.Text = "Set Konekszyn";
+            this.SetConnButton.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // RemoveConnButton
             // 
-            this.button3.Location = new System.Drawing.Point(340, 278);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(221, 51);
-            this.button3.TabIndex = 11;
-            this.button3.Text = "Remove Konekszyn";
-            this.button3.UseVisualStyleBackColor = true;
+            this.RemoveConnButton.Location = new System.Drawing.Point(340, 278);
+            this.RemoveConnButton.Name = "RemoveConnButton";
+            this.RemoveConnButton.Size = new System.Drawing.Size(221, 51);
+            this.RemoveConnButton.TabIndex = 11;
+            this.RemoveConnButton.Text = "Remove Konekszyn";
+            this.RemoveConnButton.UseVisualStyleBackColor = true;
+            this.RemoveConnButton.Click += new System.EventHandler(this.RemoveConnButton_Click);
             // 
-            // dataGridView1
+            // ConnDataGridView
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(43, 116);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 33;
-            this.dataGridView1.Size = new System.Drawing.Size(518, 150);
-            this.dataGridView1.TabIndex = 12;
+            this.ConnDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ConnDataGridView.Location = new System.Drawing.Point(43, 116);
+            this.ConnDataGridView.Name = "ConnDataGridView";
+            this.ConnDataGridView.RowTemplate.Height = 33;
+            this.ConnDataGridView.Size = new System.Drawing.Size(518, 150);
+            this.ConnDataGridView.TabIndex = 12;
+            this.ConnDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ConnDataGridView_CellContentClick);
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(200, 384);
+            this.trackBar1.Maximum = 1000;
+            this.trackBar1.Minimum = 10;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(430, 90);
+            this.trackBar1.SmallChange = 10;
+            this.trackBar1.TabIndex = 13;
+            this.trackBar1.TickFrequency = 10;
+            this.trackBar1.Value = 10;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
+            // communicationBindingSource
+            // 
+            this.communicationBindingSource.DataSource = typeof(Agent.Communication);
+            // 
+            // consoleOutput
+            // 
+            this.consoleOutput.Location = new System.Drawing.Point(917, 210);
+            this.consoleOutput.Multiline = true;
+            this.consoleOutput.Name = "consoleOutput";
+            this.consoleOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.consoleOutput.Size = new System.Drawing.Size(914, 528);
+            this.consoleOutput.TabIndex = 14;
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1002, 595);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.comboBox5);
-            this.Controls.Add(this.comboBox4);
-            this.Controls.Add(this.comboBox3);
-            this.Controls.Add(this.comboBox2);
+            this.ClientSize = new System.Drawing.Size(1873, 838);
+            this.Controls.Add(this.consoleOutput);
+            this.Controls.Add(this.trackBar1);
+            this.Controls.Add(this.ConnDataGridView);
+            this.Controls.Add(this.RemoveConnButton);
+            this.Controls.Add(this.SetConnButton);
+            this.Controls.Add(this.BitrateComboBox);
+            this.Controls.Add(this.WireComboBox);
+            this.Controls.Add(this.ModComboBox);
+            this.Controls.Add(this.RouterComboBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -179,7 +218,9 @@
             this.Name = "Form2";
             this.Text = "Form2";
             this.Load += new System.EventHandler(this.Form2_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ConnDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.communicationBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -193,12 +234,15 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox3;
-        private System.Windows.Forms.ComboBox comboBox4;
-        private System.Windows.Forms.ComboBox comboBox5;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.ComboBox RouterComboBox;
+        private System.Windows.Forms.ComboBox ModComboBox;
+        private System.Windows.Forms.ComboBox WireComboBox;
+        private System.Windows.Forms.ComboBox BitrateComboBox;
+        private System.Windows.Forms.Button SetConnButton;
+        private System.Windows.Forms.Button RemoveConnButton;
+        private System.Windows.Forms.DataGridView ConnDataGridView;
+        private System.Windows.Forms.BindingSource communicationBindingSource;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.TextBox consoleOutput;
     }
 }

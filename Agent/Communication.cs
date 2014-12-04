@@ -1,4 +1,6 @@
-﻿using ExtSrc;
+﻿using System.ComponentModel;
+using System.Security.Cryptography;
+using ExtSrc;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +18,8 @@ namespace Agent
 {
     public class Communication
     {
+        Action<DijkstraData> dijkstraDataAdder;
+        private Form form;
         Socket socket;
         public ManualResetEvent allDone = new ManualResetEvent(false);
         public ManualResetEvent sendDone = new ManualResetEvent(false);
@@ -34,7 +38,7 @@ namespace Agent
         public Dictionary<String, int[]> edgeRouterIDs { get; set; }
         
         // ROUTING DIJKSTRA DATA
-        public List<ExtSrc.DijkstraData> dijkstraDataList { get; set; }
+        public BindingList<ExtSrc.DijkstraData> dijkstraDataList { get; set; }
 
         // routerIpaddres - clientIpaddress
         public Dictionary<String, String> clientMap;
@@ -53,11 +57,15 @@ namespace Agent
             }
         }
 
-        public Communication()
+        public Communication(Form form)
         {
+            this.form = form;
+            dijkstraDataAdder = dd => dijkstraDataList.Add(dd);
             routeHistoryList = new Dictionary<String[], List<int[]>>(new MyEqualityStringComparer());
             edgeRouterIDs = new Dictionary<String, int[]>();
-            dijkstraDataList = new List<ExtSrc.DijkstraData>();
+            dijkstraDataList = new BindingList<DijkstraData>();
+            
+
             sockets = new Dictionary<String, Socket>();
             clientMap = new Dictionary<String, String>();
             dijkstra = new Dijkstra();
@@ -192,6 +200,7 @@ namespace Agent
             }
         }
 
+       
         private void ProcessAgentData(ExtSrc.AgentData agentData)
         {
             int id1, id2;
@@ -202,7 +211,9 @@ namespace Agent
                     foreach (DijkstraData dd in agentData.wireIDsList)
                     {
                         Console.WriteLine("ADDED "+dd.routerID+" "+dd.wireID+" "+dd.wireDistance);
-                        dijkstraDataList.Add(dd);
+                        
+                        //dijkstraDataList.Add(dd);
+                        form.Invoke(this.dijkstraDataAdder, dd);
                     }
                     //rejestruje sie na liste 
                     break;
