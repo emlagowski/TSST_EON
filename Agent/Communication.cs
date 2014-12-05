@@ -60,11 +60,16 @@ namespace Agent
         public Communication(Form form)
         {
             this.form = form;
+            
+        }
+
+        public void Initialize()
+        {
             dijkstraDataAdder = dd => dijkstraDataList.Add(dd);
             routeHistoryList = new Dictionary<String[], List<int[]>>(new MyEqualityStringComparer());
             edgeRouterIDs = new Dictionary<String, int[]>();
             dijkstraDataList = new BindingList<DijkstraData>();
-            
+
 
             sockets = new Dictionary<String, Socket>();
             clientMap = new Dictionary<String, String>();
@@ -72,7 +77,7 @@ namespace Agent
             bufferAgentData = new List<ExtSrc.AgentData>();
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666));
-            socket.ReceiveBufferSize = 1024 * 100;
+            socket.ReceiveBufferSize = 1024*100;
 
             Thread t = new Thread(Run);
             t.Start();
@@ -94,8 +99,6 @@ namespace Agent
 
             //foreach (int x in res)
             //    Console.WriteLine(x);
-
-
         }
 
         /**
@@ -208,6 +211,7 @@ namespace Agent
             {
                 case ExtSrc.AgentComProtocol.REGISTER:
                     Console.WriteLine("REGISTER");
+                    dijkstra.RoutersNum++;
                     foreach (DijkstraData dd in agentData.wireIDsList)
                     {
                         Console.WriteLine("ADDED "+dd.routerID+" "+dd.wireID+" "+dd.wireDistance);
