@@ -282,7 +282,7 @@ namespace Agent
                     ArrayList ar = calculateFSUcount(FindWireId(route[j], route[j+1]), bitrate);
                     String ip = String.Format("127.0.1." + route[j]);
                     Send(ip, new ExtSrc.AgentData(ExtSrc.AgentComProtocol.ROUTE_FOR_U_EDGE, (int)ar[1], (Modulation)ar[0],
-                                                        FindWireId(route[j], route[j + 1]), ClientSenderID));
+                                                        FindWireId(route[j], route[j + 1]), ClientSenderID){uniqueKey =  hashKey});
                     int rSid = Int32.Parse(senderRouterIP.Substring(senderRouterIP.Length - 1, 1));
                     edgeRouterIDs.Add(hashKey, new int[2] { rSid, -1 });
 
@@ -308,7 +308,12 @@ namespace Agent
                     ArrayList ar0 = calculateFSUcount(FindWireId(route[j - 1], route[j]), bitrate);
                     String ip = String.Format("127.0.1." + route[j]);
                     Send(ip, new ExtSrc.AgentData(ExtSrc.AgentComProtocol.ROUTE_FOR_U_EDGE, (int)ar0[1], (Modulation)ar0[0],
-                                                        FindWireId(route[j - 1], route[j]), ClientRecipientID));
+                                                        FindWireId(route[j - 1], route[j]), ClientRecipientID)
+                    {
+                        originatingAddress = clientSourceIP,
+                        targetAddress = ClientDestinationIP,
+                        uniqueKey = hashKey
+                    });
                     Console.WriteLine("WYSYLALEM DO OSTATNIEGO EDGE ROUTERA DANE ROUTINGOWE (" + ip + ")");
                 }
                 //sprawdz czy dostepne bitrejty

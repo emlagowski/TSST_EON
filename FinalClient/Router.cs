@@ -42,9 +42,18 @@ namespace Router
         public ExtSrc.ClientConnectionsTable TOclientConnectionsTable { get; set; }
         public ExtSrc.ClientConnectionsTable FROMclientConnectionsTable { get; set; }
         public Dictionary<int, ClientSocket> clientSocketDictionary { get; set; }
-        public Dictionary<String, ExtSrc.DataAndID> waitingMessages { get; set; }
-        public List<String> messagesToSend { get; set; }
-    
+        public List<KeyValuePair<String, ExtSrc.DataAndID>> waitingMessages { get; set; }
+        public List<UniqueConnection> UniqueConnections { get; set; }
+
+        public class UniqueConnection
+        {
+            public String UniqueKey { get; set; }
+            public String AddressA { get; set; }
+            public String AddressB { get; set; }
+            public int[] WireAndFsu { get; set; }
+            public bool isOnline { get; set; }
+        }
+
         //lista observerow
         protected List<Observer> observers;
 
@@ -76,8 +85,8 @@ namespace Router
         {
             observers = new List<Observer>();
             freqSlotSwitchingTable = new ExtSrc.FrequencySlotSwitchingTable();
-            messagesToSend = new List<string>();
-            waitingMessages = new Dictionary<String, ExtSrc.DataAndID>();
+            waitingMessages = new List<KeyValuePair<string, DataAndID>>();
+            UniqueConnections = new List<UniqueConnection>();
             //fib = new ExtSrc.FIB();
             localPhysicalWires = new ExtSrc.PhysicalWires();
             readLocalPhysicalWires();
@@ -120,24 +129,30 @@ namespace Router
             {
                 while (true)
                 {
-                    if (messagesToSend.Count != 0)
+                    if (UniqueConnections.Count(x => x.isOnline)!=0 && waitingMessages.Count!=0)
                     {
-                        messagesToSend.Where(s => waitingMessages.ContainsKey(s)).ToList().ForEach(s =>
+                        var list = UniqueConnections.Where(x => x.isOnline).ToList();
+                        foreach (var uc in list)
                         {
-                            // znaleziono wiadomosc oczekujaca na liscie
-                            var d = waitingMessages[s];
-                            var route = FROMclientConnectionsTable.findRoute(d.ID);
-                            if (route != null)
-                                // wysylamy wiadomosc z kolejki
-                                Send(d.data, route, d.ID);
-                            else
-                                // pomimo powolenie od agenta na wysylanie(co ma byc tylko gdy polaczenie zestawione) placzenie nie znalezione
-                                Console.WriteLine("Couldn't find route but got permission to send from NMS");
+                            var tmpList = new List<KeyValuePair<string, DataAndID>>();
+                            foreach (var wm in waitingMessages)
+                            {
+                                if (!uc.UniqueKey.Equals(wm.Key)) continue;
+                                var d = wm.Value;
+                                //var route = FROMclientConnectionsTable.findRoute(d.ID);
+                                var route = UniqueConnections.First(x => x.UniqueKey.Equals(wm.Key)).WireAndFsu;
+                                if (route != null)
+                                    // wysylamy wiadomosc z kolejki
+                                    Send(d.data, route, d.ID);
+                                else
+                                    // pomimo powolenie od agenta na wysylanie(co ma byc tylko gdy polaczenie zestawione) placzenie nie znalezione
+                                    Console.WriteLine("Couldn't find route but got permission to send from NMS (Message Deleted)");
 
-                            // niezaleznie od powodzenia usun wiadomosc z listy( na podstawie kodu od agenta
-                            waitingMessages.Remove(s);
-                            messagesToSend.Remove(s);
-                        });
+                                // niezaleznie od powodzenia usun wiadomosc z listy( na podstawie kodu od agenta
+                                tmpList.Add(wm);
+                            }
+                            tmpList.ForEach(x=>waitingMessages.Remove(x));
+                        }
                     }
                     Thread.Sleep(500);
                 }
@@ -299,14 +314,29 @@ namespace Router
                 /// I WTEDY MOZEMY DOPIEROWYSYLAC
                 /// 
                 /// 
+                String key;
+                var uc = UniqueConnections.FirstOrDefault(w => w.AddressA.Equals(address) & w.AddressB.Equals(target));
+                if (uc!=null && uc.isOnline)
+                {
+                    key = uc.UniqueKey;
+                }
+                else
+                {
+                    key = generateUniqueKey();
+                    AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.SET_ROUTE_FOR_ME, address, ((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString(), target, key, state.cdt.bandwidthNeeded));
+                    UniqueConnections.Add(new UniqueConnection()
+                    {
+                        UniqueKey = key,
+                        AddressA = address,
+                        AddressB = target,
+                        isOnline = false
+                    });
+                }
                 
-                String key = generateUniqueKey();
-                AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.SET_ROUTE_FOR_ME, address, ((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString(), target, key, state.cdt.bandwidthNeeded));
-
                 int id = Int32.Parse(((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString().
                         Substring(((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString().Length - 1, 1));
                 // dodac na liste oczekujacych wyslan
-                waitingMessages.Add(key, new ExtSrc.DataAndID(data,id));                        
+                waitingMessages.Add(new KeyValuePair<string, DataAndID>(key, new ExtSrc.DataAndID(data,id)));
             }
             catch (Exception e)
             {
@@ -671,6 +701,19 @@ namespace Router
                     id1 = localPhysicalWires.getWireByID(agentData.wireID).addFreqSlot(startfreqEdge, agentData.FSUCount, agentData.mod);
                     TOclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
                     FROMclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
+                    var ucon = UniqueConnections.FirstOrDefault(x => x.UniqueKey.Equals(agentData.uniqueKey));
+                    if (ucon == null)
+                    {
+                        ucon = new UniqueConnection()
+                        {
+                            AddressA = agentData.originatingAddress,
+                            AddressB = agentData.targetAddress,
+                            UniqueKey = agentData.uniqueKey,
+                            isOnline = true
+                        };
+                        UniqueConnections.Add(ucon);
+                    }
+                    ucon.WireAndFsu = new int[] { agentData.wireID , id1};
                     Console.WriteLine("ROUTE SET, EDGE");
                     AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreqEdge, id1));
                     break;
@@ -725,23 +768,8 @@ namespace Router
                 case ExtSrc.AgentComProtocol.U_CAN_SEND:
                     //Otrzymano pozwolenie na wyslanie wiadomosci z kolejki
                     Console.WriteLine("U_CAN_SEND");
-//                    ExtSrc.DataAndID dataID;
-//                    if (waitingMessages.TryGetValue(agentData.uniqueKey, out dataID))
-//                    {
-//                        // znaleziono wiadomosc oczekujaca na liscie
-//                        int[] route = FROMclientConnectionsTable.findRoute(dataID.ID);
-//                        if(route != null)
-//                            // wysylamy wiadomosc z kolejki
-//                            Send(dataID.data, route, dataID.ID);
-//                        else
-//                            // pomimo powolenie od agenta na wysylanie(co ma byc tylko gdy polaczenie zestawione) placzenie nie znalezione
-//                            Console.WriteLine("Couldn't find route but got permission to send from NMS");
-//                        // niezaleznie od powodzenia usun wiadomosc z listy( na podstawie kodu od agenta
-//                        waitingMessages.Remove(agentData.uniqueKey);
-//                    } else
-//                        // nie znaleziono wiadomosci na podstawie klucza
-//                        Console.WriteLine("No waiting message for KEY from NMS");
-                    messagesToSend.Add(agentData.uniqueKey);
+                    var uc = UniqueConnections.First(w => w.UniqueKey.Equals(agentData.uniqueKey));
+                    if(uc!=null) uc.isOnline = true;
                     break;
 
                 default:
