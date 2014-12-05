@@ -32,27 +32,6 @@ namespace ExtSrc
             clientConnectionTable.Remove(new int[] { wire, FSid });
         }
 
-        //public int[] findRoute(Socket socket)
-        //{
-        //    int[] result;
-        //    foreach (Socket s in clientConnectionTable.Values)
-        //    {
-        //        if (socket.LocalEndPoint == s.LocalEndPoint && socket.RemoteEndPoint == s.RemoteEndPoint)
-        //        {
-        //            result = clientConnectionTable.FirstOrDefault(x => (x.Value.LocalEndPoint == socket.LocalEndPoint &&
-        //                                                                (x.Value.RemoteEndPoint == socket.RemoteEndPoint))).Key;
-        //        }
-        //    }
-        //    return null;
-        //}
-        //public int findOriginatingClientID(int wire, int FSid)
-        //{
-        //    int result;
-        //    if (clientConnectionTable.TryGetValue(new int[] { wire, FSid }, out result))
-        //        return result;
-        //    else
-        //        return result;
-        //}
         public int[] findRoute(int socketID)
         {
             int[] result;

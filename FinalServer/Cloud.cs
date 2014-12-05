@@ -112,7 +112,7 @@ namespace Cloud
                     allDone.Reset();
 
                     // Start an asynchronous socket to listen for connections.
-                    Console.WriteLine("Waiting for a connection...");
+                    //Console.WriteLine("Waiting for a connection...");
                     localSocket.BeginAccept(new AsyncCallback(AcceptCallback), localSocket);
 
                     // Wait until a connection is made before continuing.
@@ -138,7 +138,7 @@ namespace Cloud
             Socket handler = listener.EndAccept(ar);
             sockets.Add(handler);
             //addConnection(handler.RemoteEndPoint.ToString());
-            Console.WriteLine("Socket [{0}] {1} - {2} was added to sockets list", sockets.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
+            //Console.WriteLine("Socket [{0}] {1} - {2} was added to sockets list", sockets.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
 
             // Create the state object.
             StateObject state = new StateObject();
