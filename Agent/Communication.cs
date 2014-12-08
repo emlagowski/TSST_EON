@@ -279,6 +279,7 @@ namespace Agent
             {
                 case ExtSrc.AgentComProtocol.REGISTER:
                     Console.WriteLine("REGISTER");
+                    dijkstra.RoutersNum++;
                     foreach (DijkstraData dd in agentData.wireIDsList)
                     {
                         Console.WriteLine("ADDED "+dd.routerID+" "+dd.wireID+" "+dd.wireDistance);
