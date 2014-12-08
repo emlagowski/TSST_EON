@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,9 @@ namespace ExtSrc
 
         public override void Write(char value)
         {
-            if (_output != null)
+            try
             {
+                if (_output == null) return;
                 if (this._output.InvokeRequired)
                 {
                     this._output.BeginInvoke(new Action<char>(WriteLinePrivate), new object[] {value});
@@ -31,13 +33,29 @@ namespace ExtSrc
                     WriteLinePrivate(value);
                 }
             }
+            catch (InvalidOperationException)
+            {
+                //todo 
+            }
+            catch (Win32Exception)
+            {
+                //todo 
+            }
         }
 
         public void WriteLinePrivate(char value)
         {
-            base.Write(value);
-            if (_output != null)
-                _output.AppendText(value.ToString());
+            try
+            {
+                base.Write(value);
+                if (_output != null)
+                    _output.AppendText(value.ToString());
+            }
+            catch (ObjectDisposedException)
+            {
+                //todo router disconnected
+            }
+            
         }
 
         public override Encoding Encoding

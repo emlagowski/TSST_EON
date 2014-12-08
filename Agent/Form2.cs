@@ -54,8 +54,8 @@ namespace Agent
         }
 
         private void TimerEventProcessor(Object myObject, EventArgs myEventArgs)
-        {Console.WriteLine("dsd");
-        var list = new BindingList<int>();
+        {
+            var list = new BindingList<int>();
             for (var i = 0; i < cm.dijkstraDataList.Count; i++)
             {
                 if(cm.dijkstraDataList.ElementAt(i).routerID.Equals((RouterComboBox.SelectedItem as DijkstraData).routerID))

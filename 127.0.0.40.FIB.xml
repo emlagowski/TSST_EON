@@ -1,8 +1,0 @@
-	<w1270040>
-		<wire TargetIp="127.0.0.50" TmpIp="127.0.0.50"></wire>
-		<wire TargetIp="127.0.0.30" TmpIp="127.0.0.30"></wire>
-		<wire TargetIp="127.0.0.10" TmpIp="127.0.0.30"></wire>
-		<wire TargetIp="127.0.0.20" TmpIp="127.0.0.30"></wire>
-		<wire TargetIp="127.0.0.5" TmpIp="127.0.0.30"></wire>
-		<wire TargetIp="127.0.0.7" TmpIp="127.0.0.7"></wire>
-	</w1270040>
