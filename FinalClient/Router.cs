@@ -315,7 +315,7 @@ namespace Router
                 /// 
                 /// 
                 String key;
-                var uc = UniqueConnections.FirstOrDefault(w => w.AddressA.Equals(address) & w.AddressB.Equals(target));
+                var uc = UniqueConnections.FirstOrDefault(w => w.AddressA.Equals((clientSocket.RemoteEndPoint as IPEndPoint).Address.ToString()) & w.AddressB.Equals(target));
                 if (uc!=null && uc.isOnline)
                 {
                     key = uc.UniqueKey;
@@ -327,7 +327,7 @@ namespace Router
                     UniqueConnections.Add(new UniqueConnection()
                     {
                         UniqueKey = key,
-                        AddressA = address,
+                        AddressA = (clientSocket.RemoteEndPoint as IPEndPoint).Address.ToString(),
                         AddressB = target,
                         isOnline = false
                     });
