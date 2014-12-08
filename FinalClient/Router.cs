@@ -22,22 +22,14 @@ namespace Router
     public class Router : ExtSrc.Observers.Subject
     {
         public RouterForm RouterForm { get; set; }
-        //public Signaling signaling;
-        //public AgentCommunication agentCom;
-        //public static XmlDocument wires;
-     //   public static ExtSrc.PhysicalWires globalPhysicalWires;
         public int ID { get; set; }
         public ExtSrc.PhysicalWires localPhysicalWires { get; set; }
-       // XmlDocument xmlLog, xmlWires;
-        //XmlNode rootNodeLog, rootNodeWires;
-       // public String logName, wiresName;
         public String address;
         protected IPEndPoint cloudEP, clientEP;
         protected Socket clientSocket, client; // clientSocket is just for listening
-       // ArrayList sockets;
+        protected Socket AgentOnline;
         protected Boolean IsListening = true;
         protected String response = String.Empty;
-        //public ExtSrc.FIB fib { get; set; }
         public ExtSrc.FrequencySlotSwitchingTable freqSlotSwitchingTable { get; set; }
         public ExtSrc.ClientConnectionsTable TOclientConnectionsTable { get; set; }
         public ExtSrc.ClientConnectionsTable FROMclientConnectionsTable { get; set; }
@@ -87,10 +79,10 @@ namespace Router
             freqSlotSwitchingTable = new ExtSrc.FrequencySlotSwitchingTable();
             waitingMessages = new List<KeyValuePair<string, DataAndID>>();
             UniqueConnections = new List<UniqueConnection>();
-            //fib = new ExtSrc.FIB();
             localPhysicalWires = new ExtSrc.PhysicalWires();
             readLocalPhysicalWires();
             cloudEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
+            
             //--------client
             TOclientConnectionsTable = new ClientConnectionsTable();
             FROMclientConnectionsTable = new ClientConnectionsTable();
@@ -109,8 +101,7 @@ namespace Router
                 wire.initWire(address, cloudEP);
             }
             
-            Thread t = new Thread(Run);
-            t.Start();
+            new Thread(Run).Start();
 
             agentLocalEP = new IPEndPoint(IPAddress.Parse(address), 6666);
             agentEP = new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666);
@@ -118,12 +109,11 @@ namespace Router
             agentSocket.Bind(agentLocalEP);
             agentSocket.ReceiveBufferSize = 1024*100;
 
-            agentSocket.BeginConnect(agentEP,
-                new AsyncCallback(AgentConnectCallback), agentSocket);
+            agentSocket.BeginConnect(agentEP, AgentConnectCallback, agentSocket);
             agentConnectDone.WaitOne();
 
-            Thread agentThread = new Thread(agentRun);
-            agentThread.Start();
+
+            new Thread(agentRun).Start();
 
             new Thread(delegate()
             {
@@ -590,8 +580,12 @@ namespace Router
                 //client.Shutdown(SocketShutdown.Send);
                 this.client.Close();
             }
-
+            localPhysicalWires.Close();
+            clientSocket.Close();
+            agentSocket.Close();
+            AgentOnline.Close();
             Console.WriteLine("Closing.");
+            RouterForm.Finish();
             System.Windows.Forms.Application.Exit();
 
         }
@@ -612,10 +606,47 @@ namespace Router
 
                 // Signal that the connection has been made.
                 agentConnectDone.Set();
+
+                AgentOnline = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                AgentOnline.Bind(new IPEndPoint(IPAddress.Parse(address), 6667));
+                AgentOnline.BeginConnect(new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6667), new AsyncCallback(AgentOnlineRequests), AgentOnline);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+            }
+        }
+
+        private void AgentOnlineRequests(IAsyncResult ar)
+        {
+            //var socket = ((Socket) ar.AsyncState);
+            //socket.EndConnect(ar);
+            try
+            {
+                var state = new StateObject();
+                AgentOnline.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, result =>
+                {
+                    Console.WriteLine("ROUTER RECEIVER ONLINE REQUEST AND SENDING RESPONSE");
+                    var fs = new MemoryStream();
+                    new BinaryFormatter().Serialize(fs, "ONLINE");
+                    var buffer = fs.ToArray();
+                    try
+                    {
+                        AgentOnline.BeginSend(buffer, 0, buffer.Length, 0, AgentOnlineRequests, agentSocket);
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        //todo 
+                    }
+                    catch (SocketException)
+                    {
+                        //todo
+                    }
+                }, state);
+            }
+            catch (SocketException)
+            {
+                //todo
             }
         }
 

@@ -89,6 +89,10 @@ namespace ExtSrc
             return list;
 
         }
-            
-        }
+
+    public void Close()
+    {
+        Wires.ForEach(w => w.Close());
+    }
+    }
     }

@@ -126,5 +126,10 @@ namespace ExtSrc
                 l.close();
             }
         }
+
+        public void Close()
+        {
+            FrequencySlotUnitList.ForEach(f => f.close());
+        }
     }
 }

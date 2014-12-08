@@ -95,6 +95,11 @@ namespace Router
             })).ToList();
         }
 
+        public void Finish()
+        {
+            this.BeginInvoke(new MethodInvoker(Close));
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);

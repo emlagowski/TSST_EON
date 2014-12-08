@@ -26,7 +26,7 @@ namespace Agent
             Console.SetOut(new TextBoxWriter(consoleOutput));
             bandwidthTextBox.Text = "10";
             cm = new Communication(this);
-            cm.Initialize();
+            //cm.Initialize();
             myTimer = new System.Windows.Forms.Timer();
             myTimer.Tick += new EventHandler(TimerEventProcessor);
             myTimer.Interval = 1000;

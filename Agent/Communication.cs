@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Timer = System.Threading.Timer;
 
 namespace Agent
 {
@@ -23,6 +24,8 @@ namespace Agent
         Socket socket;
         public ManualResetEvent allDone = new ManualResetEvent(false);
         public ManualResetEvent sendDone = new ManualResetEvent(false);
+        public ManualResetEvent allDoneOnline = new ManualResetEvent(false);
+        public ManualResetEvent sendDoneOnline = new ManualResetEvent(false);
         private bool running = true;
         public Dijkstra dijkstra { get; set; }
 
@@ -30,6 +33,8 @@ namespace Agent
         Dictionary<String, Socket> sockets { get; set; }
 
         List<ExtSrc.AgentData> _bufferAgentData;
+        Socket OnlineAgentSocket;
+        List<RouterOnline> OnlineRoutersList { get; set; }
 
         ExtSrc.AgentData bufferRouterResponse;
         // routerAaddress, routerBaddress, hashKey - > routeHistory (list of routerID, wireId, FSid )
@@ -60,16 +65,12 @@ namespace Agent
         public Communication(Form form)
         {
             this.form = form;
-            
-        }
-
-        public void Initialize()
-        {
+            OnlineRoutersList = new List<RouterOnline>();
             dijkstraDataAdder = dd => dijkstraDataList.Add(dd);
             routeHistoryList = new Dictionary<String[], List<int[]>>(new MyEqualityStringComparer());
             edgeRouterIDs = new Dictionary<String, int[]>();
             dijkstraDataList = new BindingList<DijkstraData>();
-
+            
 
             sockets = new Dictionary<String, Socket>();
             clientMap = new Dictionary<String, String>();
@@ -77,14 +78,29 @@ namespace Agent
             bufferAgentData = new List<ExtSrc.AgentData>();
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666));
-            socket.ReceiveBufferSize = 1024*100;
+            socket.ReceiveBufferSize = 1024 * 100;
+            OnlineAgentSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            OnlineAgentSocket.Bind(new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6667));
 
-            Thread t = new Thread(Run);
-            t.Start();
+            new Thread(Run).Start();
+            new Thread(ProcessAgentDataRun).Start();
+            new Thread(OnlineRun).Start();
+            new Thread(delegate()
+            {
+                while (true)
+                {
+                    lock (((ICollection) OnlineRoutersList).SyncRoot)
+                    {
+                        if (OnlineRoutersList.Count != 0)
+                        {
+                            OnlineRoutersList.ForEach(s => SendOnlineRequest(s.Socket));
+                        }
+                    }
+                    Thread.Sleep(1000);
+                }
+            }).Start();
 
 
-            Thread dataProcessor = new Thread(ProcessAgentDataRun);
-            dataProcessor.Start();
 
             //Dijkstra dijkstra = new Dijkstra();
             //int[,] tab = new int[,] {           {1,2,1},
@@ -99,6 +115,8 @@ namespace Agent
 
             //foreach (int x in res)
             //    Console.WriteLine(x);
+
+
         }
 
         /**
@@ -131,14 +149,57 @@ namespace Agent
             Console.Read();
         }
 
+        void OnlineRun()
+        {
+            try
+            {
+                OnlineAgentSocket.Listen(100);
+                while (true)
+                {
+                    allDoneOnline.Reset();
+                    OnlineAgentSocket.BeginAccept(delegate(IAsyncResult ar)
+                    {
+                        allDoneOnline.Set();
+                        lock (((ICollection) OnlineRoutersList).SyncRoot)
+                        {
+                            var ro = new RouterOnline() {Socket = ((Socket) ar.AsyncState).EndAccept(ar)};
+                            var adrress = ro.Socket.RemoteEndPoint as IPEndPoint;
+                            OnlineRoutersList.Add(ro);
+                            new Thread(() =>
+                            {
+                                var ip = adrress;
+                                while (true)
+                                {
+                                    Thread.Sleep(1000);
+                                    var x = GetTimestamp(DateTime.Now) - ro.TimeStamp;
+                                    if (x > 30000000)
+                                    {
+                                        //Console.WriteLine("CLOSING");
+                                        CloseRouterSocket(ip);
+                                        return;
+                                    }
+                                    //Console.WriteLine("NOT CLOSING");
+                                }
+                            }).Start();
+                        }
+                    }, OnlineAgentSocket);
+                    allDoneOnline.WaitOne();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
         public void AcceptCallback(IAsyncResult ar)
         {
             // Signal the main thread to continue.
             allDone.Set();
 
             // Get the socket that handles the client request.
-            Socket listener = (Socket)ar.AsyncState;
-            Socket handler = listener.EndAccept(ar);
+            var listener = (Socket)ar.AsyncState;
+            var handler = listener.EndAccept(ar);
             sockets.Add(Convert.ToString((handler.RemoteEndPoint as IPEndPoint).Address), handler);
             //addConnection(handler.RemoteEndPoint.ToString());
             //Console.WriteLine("Socket [{0}] {1} - {2} was added to sockets list", sockets.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
@@ -150,44 +211,51 @@ namespace Agent
 
         public void ReadCallback(IAsyncResult ar)
         {
-            String content = String.Empty;
+            try
+            {
+                String content = String.Empty;
 
-            // Retrieve the state object and the handler socket
-            // from the asynchronous state object.
-            StateObject state = (StateObject)ar.AsyncState;
-            Socket handler = state.workSocket;
+                // Retrieve the state object and the handler socket
+                // from the asynchronous state object.
+                StateObject state = (StateObject) ar.AsyncState;
+                Socket handler = state.workSocket;
 
-            // Read data from the client socket. 
-            int bytesRead = handler.EndReceive(ar);
-            BinaryFormatter formattor = new BinaryFormatter();
+                // Read data from the client socket. 
+                int bytesRead = handler.EndReceive(ar);
+                BinaryFormatter formattor = new BinaryFormatter();
 
-            MemoryStream ms = new MemoryStream(state.buffer);
+                MemoryStream ms = new MemoryStream(state.buffer);
 
-            state.dt = (ExtSrc.AgentData)formattor.Deserialize(ms);
+                state.dt = (ExtSrc.AgentData) formattor.Deserialize(ms);
 
-            Console.WriteLine("Read '{0}'[{1} bytes] from socket {2}.",
-                      state.dt.ToString(), bytesRead, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
+                Console.WriteLine("Read '{0}'[{1} bytes] from socket {2}.",
+                    state.dt.ToString(), bytesRead,
+                    IPAddress.Parse(((IPEndPoint) handler.RemoteEndPoint).Address.ToString()));
 
-            //
-            // Odbieramy dane od routera dodajemy do bufora,
-            // aby odebrac dane od wszystkich i nic nie stracić
-            // 
-            if (state.dt.message.Equals(ExtSrc.AgentComProtocol.CONNECTION_IS_ON) || 
-                state.dt.message.Equals(ExtSrc.AgentComProtocol.CONNECTION_UNAVAILABLE) ||
-                state.dt.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_IS_DONE) ||
-                state.dt.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR) ||
-                state.dt.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR_EDGE) ||
-                state.dt.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_EDGE_IS_DONE)
-                )
-                bufferRouterResponse = state.dt;
-            else
-                bufferAgentData.Add(state.dt);
+                //
+                // Odbieramy dane od routera dodajemy do bufora,
+                // aby odebrac dane od wszystkich i nic nie stracić
+                // 
+                if (state.dt.message.Equals(ExtSrc.AgentComProtocol.CONNECTION_IS_ON) ||
+                    state.dt.message.Equals(ExtSrc.AgentComProtocol.CONNECTION_UNAVAILABLE) ||
+                    state.dt.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_IS_DONE) ||
+                    state.dt.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR) ||
+                    state.dt.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR_EDGE) ||
+                    state.dt.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_EDGE_IS_DONE)
+                    )
+                    bufferRouterResponse = state.dt;
+                else
+                    bufferAgentData.Add(state.dt);
 
 
-            var newState = new StateObject {workSocket = handler};
-            handler.BeginReceive(newState.buffer, 0, StateObject.BufferSize, 0,
-                new AsyncCallback(ReadCallback), newState);
-
+                var newState = new StateObject {workSocket = handler};
+                handler.BeginReceive(newState.buffer, 0, StateObject.BufferSize, 0,
+                    new AsyncCallback(ReadCallback), newState);
+            }
+            catch (SocketException)
+            {
+                //todo
+            }
         }
 
         public void ProcessAgentDataRun()
@@ -625,6 +693,75 @@ namespace Agent
                 Console.WriteLine(e.ToString());
             }
         }
+
+        public void SendOnlineRequest(Socket socketRouterOnline)
+        {
+            try
+            {
+                var fs = new MemoryStream();
+                new BinaryFormatter().Serialize(fs, "IS_ONLINE");
+                var buffer = fs.ToArray();
+                socketRouterOnline.BeginSend(buffer, 0, buffer.Length, 0, SendOnlineRequestCallback, socketRouterOnline);
+                sendDone.WaitOne(); //todo?
+            }
+            catch(SocketException)
+            {
+                //todo
+            }
+        }
+
+        private void SendOnlineRequestCallback(IAsyncResult ar)
+        {
+            try
+            {
+                var client = (Socket)ar.AsyncState;
+                var bytesSent = client.EndSend(ar);
+                sendDone.Set();//todo?
+                var state = new StateObject { workSocket = client };
+                var ro = OnlineRoutersList.FirstOrDefault(s => s.Socket == client);
+                
+                IAsyncResult asyncResult = client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, delegate(IAsyncResult ar1)
+                {
+                    var handler = ((StateObject)ar1.AsyncState).workSocket;
+                    var routerOnline = OnlineRoutersList.FirstOrDefault(s => s.Socket == handler);
+                    
+                    if (routerOnline == null) return;
+                    routerOnline.TimeStamp = GetTimestamp(DateTime.Now);
+                    //Console.WriteLine(GetTimestamp(DateTime.Now));
+                    routerOnline.IsOnline = true;
+                    Console.WriteLine("ROUTER ONLINE " + routerOnline.Socket.RemoteEndPoint);
+                }, state);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        private void CloseRouterSocket(IPEndPoint ipEndPoint)
+        {
+            Console.WriteLine("ROUTER CLOSED");
+            var router = OnlineRoutersList.FirstOrDefault(s => Equals(s.Socket.RemoteEndPoint, ipEndPoint));
+            if (router == null) return;
+            router.IsOnline = false;
+            //var ip = router.Socket.RemoteEndPoint as IPEndPoint;
+            var routerId = Int32.Parse(ipEndPoint.Address.ToString().Substring(ipEndPoint.Address.ToString().Length - 1, 1));
+            sockets.Remove(Convert.ToString((ipEndPoint).Address));
+            router.Socket.Close();
+            OnlineRoutersList.Remove(router);
+            var ddata = dijkstraDataList.FirstOrDefault(dd => dd.routerID == routerId);
+            if (ddata != null)
+            {
+                Console.WriteLine("DD REMOVED");
+                dijkstraDataList.Remove(ddata);
+            }
+        }
+
+        public static long GetTimestamp(DateTime value)
+        {
+            return value.Ticks;
+        }
+
     }
     public class StateObject
     {
@@ -670,5 +807,11 @@ namespace Agent
         }
     }
 
-
+    public class RouterOnline
+    {
+        public long TimeStamp { get; set; }
+        public Socket Socket { get; set; }
+        public Boolean IsOnline { get; set; }
+        public Timer ClosingTimer { get; set; }
+    }
 }
