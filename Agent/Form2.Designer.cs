@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -54,11 +57,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.WireComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.communicationBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.communicationBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ConnDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.banwidthTrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.communicationBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -164,6 +169,8 @@
             // 
             this.ConHashComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ConHashComboBox.FormattingEnabled = true;
+            this.ConHashComboBox.Items.AddRange(new object[] {
+            ""});
             this.ConHashComboBox.Location = new System.Drawing.Point(172, 560);
             this.ConHashComboBox.Name = "ConHashComboBox";
             this.ConHashComboBox.Size = new System.Drawing.Size(202, 33);
@@ -294,10 +301,6 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "WireID";
             // 
-            // communicationBindingSource
-            // 
-            this.communicationBindingSource.DataSource = typeof(Agent.Communication);
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -316,11 +319,37 @@
             this.label10.TabIndex = 31;
             this.label10.Text = "127.0.0.";
             // 
+            // chart1
+            // 
+            this.chart1.BackColor = System.Drawing.Color.Transparent;
+            this.chart1.BorderlineColor = System.Drawing.Color.Black;
+            chartArea1.AxisX.IsMarginVisible = false;
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
+            this.chart1.Location = new System.Drawing.Point(1222, 109);
+            this.chart1.Name = "chart1";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            series1.YValuesPerPoint = 2;
+            this.chart1.Series.Add(series1);
+            this.chart1.Size = new System.Drawing.Size(691, 379);
+            this.chart1.TabIndex = 32;
+            this.chart1.Text = "chart1";
+            // 
+            // communicationBindingSource
+            // 
+            this.communicationBindingSource.DataSource = typeof(Agent.Communication);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1993, 1280);
+            this.Controls.Add(this.chart1);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -353,6 +382,7 @@
             this.Load += new System.EventHandler(this.Form2_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ConnDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.banwidthTrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.communicationBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -389,5 +419,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
     }
 }

@@ -29,7 +29,9 @@ namespace ExtSrc
 
         public void remove(int wire, int FSid)
         {
-            clientConnectionTable.Remove(new int[] { wire, FSid });
+            int[] toRemove = clientConnectionTable.First(d => d.Key[0] == wire && d.Key[1] == FSid).Key;
+            clientConnectionTable.Remove(toRemove);
+
         }
 
         public int[] findRoute(int socketID)
