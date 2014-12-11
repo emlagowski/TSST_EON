@@ -176,8 +176,13 @@ namespace Agent
                 {
                     list1.Add(s[2]);
                 }
-                
+
+                var prevSelConHash = ConHashComboBox.SelectedItem;
                 ConHashComboBox.DataSource = list1;
+
+                if (prevSelConHash != null && ConHashComboBox.Items.Contains(prevSelConHash))
+                    ConHashComboBox.SelectedItem = prevSelConHash;
+
             }
            
             if(cm.dijkstraDataList.Count != 0)
