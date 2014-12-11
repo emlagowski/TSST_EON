@@ -175,7 +175,7 @@ namespace Agent
                                     if (x > 30000000)
                                     {
                                         //Console.WriteLine("CLOSING");
-                                        CloseRouterSocket(ip);
+                                       //todo CloseRouterSocket(ip);
                                         return;
                                     }
                                     //Console.WriteLine("NOT CLOSING");
@@ -516,7 +516,7 @@ namespace Agent
                     else
                     {
                         bufferRouterResponse = null;
-                        Send(String.Format("127.0.1." + routeHistory.ElementAt(i)[0]), new ExtSrc.AgentData(ExtSrc.AgentComProtocol.DISROUTE_EDGE, routeHistory.ElementAt(i)[1], routeHistory.ElementAt(i)[2]));
+                        Send(String.Format("127.0.1." + routeHistory.ElementAt(i)[0]), new ExtSrc.AgentData(ExtSrc.AgentComProtocol.DISROUTE_EDGE, routeHistory.ElementAt(i)[1], routeHistory.ElementAt(i)[2]) { uniqueKey = hashKey });
                         while (bufferRouterResponse == null)
                         {
                             //w8 na odp od routera
@@ -729,7 +729,7 @@ namespace Agent
                     routerOnline.TimeStamp = GetTimestamp(DateTime.Now);
                     //Console.WriteLine(GetTimestamp(DateTime.Now));
                     routerOnline.IsOnline = true;
-                    //Console.WriteLine("ROUTER ONLINE " + routerOnline.Socket.RemoteEndPoint);
+                    Console.WriteLine("ROUTER ONLINE " + routerOnline.Socket.RemoteEndPoint);
                 }, state);
             }
             catch (Exception e)

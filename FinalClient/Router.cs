@@ -71,6 +71,8 @@ namespace Router
         {
             if (isEdge) this.isEdge = true;
             address = ip;
+            localPhysicalWires = new ExtSrc.PhysicalWires();
+            readLocalPhysicalWires();
         }
 
         public void initialize()
@@ -79,8 +81,6 @@ namespace Router
             freqSlotSwitchingTable = new ExtSrc.FrequencySlotSwitchingTable();
             waitingMessages = new List<KeyValuePair<string, DataAndID>>();
             UniqueConnections = new List<UniqueConnection>();
-            localPhysicalWires = new ExtSrc.PhysicalWires();
-            readLocalPhysicalWires();
             cloudEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
             
             //--------client
@@ -777,8 +777,18 @@ namespace Router
                     Console.WriteLine("DISROUTE_EDGE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.firstWireID + " FSid : " + agentData.FSid);
                     if (localPhysicalWires.getWireByID(agentData.firstWireID).removeFreqSlot(agentData.FSid))
                     {
-                        TOclientConnectionsTable.remove(agentData.wireID, agentData.FSid);
-                        FROMclientConnectionsTable.remove(agentData.wireID, agentData.FSid);
+                        TOclientConnectionsTable.remove(agentData.firstWireID, agentData.FSid);
+                        FROMclientConnectionsTable.remove(agentData.firstWireID, agentData.FSid);
+                        UniqueConnection uconnn = null;
+                        foreach (var uniqueConnection in UniqueConnections)
+                        {
+                            if (uniqueConnection.UniqueKey.Equals(agentData.uniqueKey))
+                                uconnn = uniqueConnection;
+                                
+
+                        }
+                        if(uconnn != null)
+                            UniqueConnections.Remove(uconnn);
                         AgentSend(new AgentData(ExtSrc.AgentComProtocol.DISROUTE_EDGE_IS_DONE));
                         Console.WriteLine("DISROUTE EDGE DONE");
                     }
