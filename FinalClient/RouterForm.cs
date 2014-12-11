@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,8 +17,13 @@ namespace Router
 {
     public partial class RouterForm : Form
     {
-        Router _router;
+        // to samo jest w NewWire
+        static readonly int GUARD_BAND = 10;
+        //blabla
+        private Router _router;
         private Dictionary<int, Chart> chartsByWireIDs;
+        private Random random;
+        private List<System.Drawing.Color> colors;
         
         public string LabelText
         {
@@ -34,6 +40,8 @@ namespace Router
         public RouterForm(Router router)
         {
             _router = router;
+            random = new Random();
+            colors = new List<Color>();
             InitializeComponent();
             LabelText = _router.address;
             Console.SetOut(new TextBoxWriter(consoleOutput));
@@ -155,24 +163,47 @@ namespace Router
                 {
                     chart.Series.Clear();
                     chart.ChartAreas["Default"].Axes[1].Maximum = wire.spectralWidth.Length;
+                     var slotsCount = wire.FrequencySlotDictionary.Values.Count;
+                    if(colors.Count < slotsCount)
+                        for (int i = 0; i < slotsCount - colors.Count; i++)
+                        {
+                            colors.Add(Color.FromArgb(random.Next(0, 255), random.Next(0, 255), random.Next(0, 255)));
+                        }
+                    var counter = 0;
                     foreach (var freqSlot in wire.FrequencySlotDictionary.Values)
                     {
-                        var height = freqSlot.FSUList.Count * 20;
+                        var height = freqSlot.FSUList.Count * 10;
                         var start = freqSlot.startingFreq;
-                        var name = "Series" + Convert.ToString(start);
-                        var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                        var name = "Bandwidth " + Convert.ToString(start);
+                        var guardName = "Guard Band " + Convert.ToString(start);
+                        var seriesBand = new System.Windows.Forms.DataVisualization.Charting.Series
                         {
                             Name = name,
-                            Color = System.Drawing.Color.Green,
+                            Color = colors[counter],
                             IsVisibleInLegend = false,
                             IsXValueIndexed = false,
                             ChartType = SeriesChartType.Range
                         };
-                        chart.Series.Add(series1);
+                        var seriesGuardBand = new System.Windows.Forms.DataVisualization.Charting.Series
+                        {
+                            Name = guardName,
+                            Color = Color.Crimson,
+                            IsVisibleInLegend = true,
+                            IsXValueIndexed = false,
+                            ChartType = SeriesChartType.Range
+                        };
+                        chart.Series.Add(seriesBand);
+                        chart.Series.Add(seriesGuardBand);
+
                         double[] yValue1 = { start + height, start + height };
                         double[] yValue2 = { start, start};
-                        chart.Series[name].Points.DataBindY(yValue1, yValue2);
+                        double[] yValue1Guard = { start + height + GUARD_BAND, start + height + GUARD_BAND};
+                        double[] yValue2Guard = { start + height, start + height };
 
+                        chart.Series[name].Points.DataBindY(yValue1, yValue2);
+                        chart.Series[guardName].Points.DataBindY(yValue1Guard, yValue2Guard);
+
+                        counter++;
                     }
                     
                 }
