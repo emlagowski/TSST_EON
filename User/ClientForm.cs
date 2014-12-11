@@ -43,6 +43,13 @@ namespace Client
         private void sendButton_Click(object sender, EventArgs e)
         {
             _user.Send(Convert.ToInt32(this.band.Text), this.message.Text, "127.0.0." + this.targetAddress.Text);
-        } 
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            _user.closing();
+            Console.WriteLine("papa");
+        }
     }
 }

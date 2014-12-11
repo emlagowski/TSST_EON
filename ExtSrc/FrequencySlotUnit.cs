@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -60,9 +62,19 @@ namespace ExtSrc
         public void close()
         {
             Console.WriteLine("FSU closing");
-          //  socket.Disconnect(false);
-          //  socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
+            var fs = new MemoryStream();
+            var formatter = new BinaryFormatter();
+            var data = new Data(0, "CLOSING_UNIT");
+            formatter.Serialize(fs, data);
+            var buffer = fs.ToArray();
+            try
+            {
+                socket.BeginSend(buffer, 0, buffer.Length, 0, ar => socket.Close(), socket);
+            }
+            catch (ObjectDisposedException)
+            {
+                //todo
+            }
         }
     }
 }

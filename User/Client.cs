@@ -186,7 +186,12 @@ namespace Client
                 Console.WriteLine(e.ToString());
             }
         }
-    
+
+        public void closing()
+        {
+            Console.WriteLine("CLOSING");
+            socket.Close();
+        }
     }
 
     public enum MsgType

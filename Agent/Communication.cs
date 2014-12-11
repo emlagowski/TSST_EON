@@ -34,7 +34,7 @@ namespace Agent
 
         List<ExtSrc.AgentData> _bufferAgentData;
         Socket OnlineAgentSocket;
-        List<RouterOnline> OnlineRoutersList { get; set; }
+        public List<RouterOnline> OnlineRoutersList { get; set; }
 
         ExtSrc.AgentData bufferRouterResponse;
         // routerAaddress, routerBaddress, hashKey - > routeHistory (list of routerID, wireId, FSid )
@@ -74,7 +74,7 @@ namespace Agent
 
             sockets = new Dictionary<String, Socket>();
             clientMap = new Dictionary<String, String>();
-            dijkstra = new Dijkstra();
+            dijkstra = new Dijkstra(this);
             bufferAgentData = new List<ExtSrc.AgentData>();
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(new IPEndPoint(IPAddress.Parse("127.6.6.6"), 6666));
@@ -206,7 +206,7 @@ namespace Agent
 
             // Create the state object.
             var state = new StateObject {workSocket = handler};
-            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReadCallback), state);
+            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
         }
 
         public void ReadCallback(IAsyncResult ar)
@@ -279,7 +279,7 @@ namespace Agent
             {
                 case ExtSrc.AgentComProtocol.REGISTER:
                     Console.WriteLine("REGISTER");
-                    dijkstra.RoutersNum++;
+                    //dijkstra.RoutersNum++;
                     foreach (DijkstraData dd in agentData.wireIDsList)
                     {
                         Console.WriteLine("ADDED "+dd.routerID+" "+dd.wireID+" "+dd.wireDistance);
@@ -656,7 +656,7 @@ namespace Agent
             if (!sockets.TryGetValue(ip, out client))
             {
                 MessageBox.Show("Error in finding socket , method Send().", "ERROR");
-
+                return;
             }
             MemoryStream fs = new MemoryStream();
 
@@ -729,7 +729,7 @@ namespace Agent
                     routerOnline.TimeStamp = GetTimestamp(DateTime.Now);
                     //Console.WriteLine(GetTimestamp(DateTime.Now));
                     routerOnline.IsOnline = true;
-                    Console.WriteLine("ROUTER ONLINE " + routerOnline.Socket.RemoteEndPoint);
+                    //Console.WriteLine("ROUTER ONLINE " + routerOnline.Socket.RemoteEndPoint);
                 }, state);
             }
             catch (Exception e)
@@ -744,17 +744,19 @@ namespace Agent
             var router = OnlineRoutersList.FirstOrDefault(s => Equals(s.Socket.RemoteEndPoint, ipEndPoint));
             if (router == null) return;
             router.IsOnline = false;
-            //var ip = router.Socket.RemoteEndPoint as IPEndPoint;
+            var ip = ipEndPoint.Address.ToString();
             var routerId = Int32.Parse(ipEndPoint.Address.ToString().Substring(ipEndPoint.Address.ToString().Length - 1, 1));
             sockets.Remove(Convert.ToString((ipEndPoint).Address));
             router.Socket.Close();
             OnlineRoutersList.Remove(router);
-            var ddata = dijkstraDataList.FirstOrDefault(dd => dd.routerID == routerId);
-            if (ddata != null)
+            var dijkstraDataRemoveList = dijkstraDataList.Where(dd => dd.routerID == routerId).ToList();
             {
-                Console.WriteLine("DD REMOVED");
-                dijkstraDataList.Remove(ddata);
+                //Console.WriteLine("DD REMOVED");
+                dijkstraDataRemoveList.ForEach(dijkstraData => dijkstraDataList.Remove(dijkstraData));
             }
+            var myValue = clientMap.Where(x => x.Value == ip).ToList();
+            myValue.ForEach(strings => clientMap.Remove(strings.Key));
+            //todo usuwanie polaczen po usunieciu routera, szukanie alternatywnej drogi??
         }
 
         public static long GetTimestamp(DateTime value)

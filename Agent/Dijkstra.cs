@@ -8,20 +8,25 @@ namespace Agent
 {
     public class Dijkstra
     {
-
+        private Communication communication;
         private static int MAXNODES = 5;
         public static int INFINITY = 9999;//Int32.MaxValue;
-        int routersNum = 0;
+        //int routersNum = 0;
 
         public int RoutersNum
         {
-            get { return routersNum; }
-            set { routersNum = value; }
+            get { return communication.OnlineRoutersList.Count; }
+            private set { }
         }
 
         int[,] weight = new int[MAXNODES, MAXNODES];
         int[] distance = new int[MAXNODES];
         int[] precede = new int[MAXNODES];
+
+        public Dijkstra(Communication communication)
+        {
+            this.communication = communication;
+        }
 
         //todo zwracanie wagi drogi i jesli wieksza od infinity wtedy znaczy ze graf rozlaczny i chuj nie da sie
         public int[] evaluate(int[,] weights,int source, int destination)
@@ -66,7 +71,7 @@ namespace Agent
         {
             Boolean[] visit = new Boolean[MAXNODES];
 
-            for (int i = 0; i < routersNum; i++)
+            for (int i = 0; i < RoutersNum; i++)
             {
                 distance[i] = INFINITY;
                 precede[i] = INFINITY;
@@ -81,7 +86,7 @@ namespace Agent
                 int k = -1;
                 visit[current] = true;
 
-                for (int i = 0; i < routersNum; i++)
+                for (int i = 0; i < RoutersNum; i++)
                 {
                     if (visit[i])
                         continue;

@@ -360,46 +360,39 @@ namespace Router
 
         public void Send(ExtSrc.Data data, int[] route)
         {
-            
-            // ############################################ NEW START
-            int id = TOclientConnectionsTable.findClient(route[0], route[1]);
-            ClientSocket client;
-            if (clientSocketDictionary.TryGetValue(id, out client))
+            var id = TOclientConnectionsTable.findClient(route[0], route[1]);
+            ClientSocket clientSocketToSend;
+            if (clientSocketDictionary.TryGetValue(id, out clientSocketToSend))
             {
-                MemoryStream fs = new MemoryStream();
-                BinaryFormatter formatter = new BinaryFormatter();
+                var fs = new MemoryStream();
+                var formatter = new BinaryFormatter();
 
                 //znajduje adres poczatkowy polaczenia zeby odbiorca wiedzial skad to jest
-                String originatingAddr = String.Format("127.0.0." + FROMclientConnectionsTable.findClient(route[0], route[1]));
-                ClientData clientdata = new ClientData(data.bandwidthNeeded, data.info, originatingAddr); 
+                var originatingAddr = String.Format("127.0.0." + FROMclientConnectionsTable.findClient(route[0], route[1]));
+                var clientdata = new ClientData(data.bandwidthNeeded, data.info, originatingAddr); 
 
                 formatter.Serialize(fs, clientdata);
-                byte[] buffer = fs.ToArray();
-                client.socket.BeginSend(buffer, 0, buffer.Length, 0,
-                        new AsyncCallback(SendCallback), client.socket);
+                var buffer = fs.ToArray();
+                clientSocketToSend.socket.BeginSend(buffer, 0, buffer.Length, 0, SendCallback, clientSocketToSend.socket);
                 sendDone.WaitOne();
-                return;
             }
             else
             {                
-                List<Socket> sockets = localPhysicalWires.getSockets(route);
-                List<FrequencySlotUnit> units = localPhysicalWires.getFrequencySlotUnits(route);
+                var sockets = localPhysicalWires.getSockets(route);
+                var units = localPhysicalWires.getFrequencySlotUnits(route);
                 
-                MemoryStream fs = new MemoryStream();
-                BinaryFormatter formatter = new BinaryFormatter();
+                var fs = new MemoryStream();
+                var formatter = new BinaryFormatter();
                 formatter.Serialize(fs, data);
-                byte[] buffer = fs.ToArray();
+                var buffer = fs.ToArray();
 
                 // Begin sending the data to the remote device.
-                foreach (FrequencySlotUnit unit in units)
+                foreach (var unit in units)
                 {
-                    //unit.socket
-                    unit.socket.BeginSend(buffer, 0, buffer.Length, 0,
-                        new AsyncCallback(SendCallback), unit);
+                    unit.socket.BeginSend(buffer, 0, buffer.Length, 0, SendCallback, unit);
                     unit.sendDone.WaitOne();
                 }
             }
-            // ############################################ NEW END
         }
 
         public void Send(ExtSrc.Data data, int[] route, int fromID)
@@ -535,14 +528,13 @@ namespace Router
                 // to pierwszy FSU danego FS i tylko wtedy robic send, 
                 // jesli to kolejne FSU to juz nie robic send bo pierwszy wyslal.
                 Boolean canSend = false;
-                foreach (NewWire nw in localPhysicalWires.Wires)
+                foreach (var nw in localPhysicalWires.Wires)
                 {
                     if (nw.ID == wireAndFreqSlotID[0])
                     {
                         FrequencySlot fs;
                         nw.FrequencySlotDictionary.TryGetValue(wireAndFreqSlotID[1], out fs);
-                        if (fs.FSUList.ElementAt(0).port == Int32.Parse(port)) canSend = true;
-
+                        if (fs != null && fs.FSUList.ElementAt(0).port == Int32.Parse(port)) canSend = true;
                     }
                 }
                 // ###### WYNALAZEK STOP
@@ -626,7 +618,7 @@ namespace Router
                 var state = new StateObject();
                 AgentOnline.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, result =>
                 {
-                    Console.WriteLine("ROUTER RECEIVER ONLINE REQUEST AND SENDING RESPONSE");
+                    //Console.WriteLine("ROUTER RECEIVER ONLINE REQUEST AND SENDING RESPONSE");
                     var fs = new MemoryStream();
                     new BinaryFormatter().Serialize(fs, "ONLINE");
                     var buffer = fs.ToArray();

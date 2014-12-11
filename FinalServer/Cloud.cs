@@ -103,6 +103,13 @@ namespace Cloud
 
                 state.dt = (ExtSrc.Data) formattor.Deserialize(ms);
 
+                if (state.dt.info.Equals("CLOSING_UNIT"))
+                {
+                    handler.Close();
+                    sockets.Remove(handler);
+                    return;
+                }
+
                 Console.WriteLine("Read '{0}'[{1} bytes] from socket {2}.",
                     state.dt.ToString(), bytesRead,
                     IPAddress.Parse(((IPEndPoint) handler.RemoteEndPoint).Address.ToString()));
@@ -119,7 +126,7 @@ namespace Cloud
             {
                 localSocket.BeginAccept(AcceptCallback, localSocket);
             }
-            catch (SerializationException)
+            catch (Exception)
             {
                 //todo router disconnected
             }
