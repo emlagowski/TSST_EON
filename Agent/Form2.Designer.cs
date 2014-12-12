@@ -29,11 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.SetConnButton = new System.Windows.Forms.Button();
             this.RemoveConnButton = new System.Windows.Forms.Button();
@@ -53,38 +48,13 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.ConHashLabel = new System.Windows.Forms.Label();
-            this.ModComboBox = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.WireComboBox = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.communicationBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ConnDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.banwidthTrackBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.communicationBindingSource)).BeginInit();
             this.SuspendLayout();
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(1245, 819);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 33);
-            this.comboBox1.TabIndex = 0;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(1222, 726);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(105, 62);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label2
             // 
@@ -101,17 +71,17 @@
             this.SetConnButton.Name = "SetConnButton";
             this.SetConnButton.Size = new System.Drawing.Size(221, 51);
             this.SetConnButton.TabIndex = 10;
-            this.SetConnButton.Text = "Set Konekszyn";
+            this.SetConnButton.Text = "Set Connection";
             this.SetConnButton.UseVisualStyleBackColor = true;
             this.SetConnButton.Click += new System.EventHandler(this.SetConnButton_Click);
             // 
             // RemoveConnButton
             // 
-            this.RemoveConnButton.Location = new System.Drawing.Point(476, 542);
+            this.RemoveConnButton.Location = new System.Drawing.Point(472, 532);
             this.RemoveConnButton.Name = "RemoveConnButton";
             this.RemoveConnButton.Size = new System.Drawing.Size(221, 51);
             this.RemoveConnButton.TabIndex = 11;
-            this.RemoveConnButton.Text = "Remove Konekszyn";
+            this.RemoveConnButton.Text = "Remove Connection";
             this.RemoveConnButton.UseVisualStyleBackColor = true;
             this.RemoveConnButton.Click += new System.EventHandler(this.RemoveConnButton_Click);
             // 
@@ -171,7 +141,7 @@
             this.ConHashComboBox.FormattingEnabled = true;
             this.ConHashComboBox.Items.AddRange(new object[] {
             ""});
-            this.ConHashComboBox.Location = new System.Drawing.Point(172, 560);
+            this.ConHashComboBox.Location = new System.Drawing.Point(166, 550);
             this.ConHashComboBox.Name = "ConHashComboBox";
             this.ConHashComboBox.Size = new System.Drawing.Size(202, 33);
             this.ConHashComboBox.TabIndex = 17;
@@ -207,21 +177,21 @@
             // 
             // clientATextBox
             // 
-            this.clientATextBox.Location = new System.Drawing.Point(629, 489);
+            this.clientATextBox.Location = new System.Drawing.Point(633, 473);
             this.clientATextBox.Name = "clientATextBox";
             this.clientATextBox.Size = new System.Drawing.Size(100, 31);
             this.clientATextBox.TabIndex = 24;
             // 
             // routeTextBox
             // 
-            this.routeTextBox.Location = new System.Drawing.Point(153, 490);
+            this.routeTextBox.Location = new System.Drawing.Point(157, 474);
             this.routeTextBox.Name = "routeTextBox";
             this.routeTextBox.Size = new System.Drawing.Size(374, 31);
             this.routeTextBox.TabIndex = 25;
             // 
             // clientBTextBox
             // 
-            this.clientBTextBox.Location = new System.Drawing.Point(856, 490);
+            this.clientBTextBox.Location = new System.Drawing.Point(860, 474);
             this.clientBTextBox.Name = "clientBTextBox";
             this.clientBTextBox.Size = new System.Drawing.Size(100, 31);
             this.clientBTextBox.TabIndex = 26;
@@ -229,7 +199,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(760, 445);
+            this.label6.Location = new System.Drawing.Point(764, 429);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(193, 25);
             this.label6.TabIndex = 27;
@@ -238,7 +208,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(547, 445);
+            this.label7.Location = new System.Drawing.Point(551, 429);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(193, 25);
             this.label7.TabIndex = 28;
@@ -247,7 +217,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(148, 445);
+            this.label8.Location = new System.Drawing.Point(152, 429);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(357, 25);
             this.label8.TabIndex = 29;
@@ -256,55 +226,16 @@
             // ConHashLabel
             // 
             this.ConHashLabel.AutoSize = true;
-            this.ConHashLabel.Location = new System.Drawing.Point(167, 532);
+            this.ConHashLabel.Location = new System.Drawing.Point(161, 522);
             this.ConHashLabel.Name = "ConHashLabel";
             this.ConHashLabel.Size = new System.Drawing.Size(214, 25);
             this.ConHashLabel.TabIndex = 18;
             this.ConHashLabel.Text = "Connection HashKey";
             // 
-            // ModComboBox
-            // 
-            this.ModComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ModComboBox.FormattingEnabled = true;
-            this.ModComboBox.Items.AddRange(new object[] {
-            "QPSK",
-            "SixteenQAM"});
-            this.ModComboBox.Location = new System.Drawing.Point(1540, 599);
-            this.ModComboBox.Name = "ModComboBox";
-            this.ModComboBox.Size = new System.Drawing.Size(121, 33);
-            this.ModComboBox.TabIndex = 7;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1535, 571);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(118, 25);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Modulation";
-            // 
-            // WireComboBox
-            // 
-            this.WireComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.WireComboBox.FormattingEnabled = true;
-            this.WireComboBox.Location = new System.Drawing.Point(1540, 535);
-            this.WireComboBox.Name = "WireComboBox";
-            this.WireComboBox.Size = new System.Drawing.Size(121, 33);
-            this.WireComboBox.TabIndex = 8;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1537, 506);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 25);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "WireID";
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(760, 493);
+            this.label9.Location = new System.Drawing.Point(764, 477);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(90, 25);
             this.label9.TabIndex = 30;
@@ -313,32 +244,11 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(533, 493);
+            this.label10.Location = new System.Drawing.Point(537, 477);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(90, 25);
             this.label10.TabIndex = 31;
             this.label10.Text = "127.0.0.";
-            // 
-            // chart1
-            // 
-            this.chart1.BackColor = System.Drawing.Color.Transparent;
-            this.chart1.BorderlineColor = System.Drawing.Color.Black;
-            chartArea1.AxisX.IsMarginVisible = false;
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(1222, 109);
-            this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            series1.YValuesPerPoint = 2;
-            this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(691, 379);
-            this.chart1.TabIndex = 32;
-            this.chart1.Text = "chart1";
             // 
             // communicationBindingSource
             // 
@@ -348,8 +258,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1993, 1280);
-            this.Controls.Add(this.chart1);
+            this.ClientSize = new System.Drawing.Size(982, 1280);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -370,19 +279,12 @@
             this.Controls.Add(this.ConnDataGridView);
             this.Controls.Add(this.RemoveConnButton);
             this.Controls.Add(this.SetConnButton);
-            this.Controls.Add(this.WireComboBox);
-            this.Controls.Add(this.ModComboBox);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.comboBox1);
             this.Name = "Form2";
             this.Text = "NMS";
             this.Load += new System.EventHandler(this.Form2_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ConnDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.banwidthTrackBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.communicationBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -391,8 +293,6 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button SetConnButton;
         private System.Windows.Forms.Button RemoveConnButton;
@@ -413,12 +313,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label ConHashLabel;
-        private System.Windows.Forms.ComboBox ModComboBox;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox WireComboBox;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
     }
 }

@@ -47,95 +47,14 @@ namespace Agent
                 };
                 WireComboBox.DataSource = wiresBindingSource.DataSource;
             };*/
-            var list = new List<String> {"ssss", "seees"};
-            comboBox1.DataSource = new BindingSource(list, null);
+           
+           
 
-            initChart();
-
-        }
-
-        private void initChart()
-        {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 =
-                chart1.ChartAreas["ChartArea1"];//new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = chart1.Series["Series1"];//new System.Windows.Forms.DataVisualization.Charting.Series();
-           // System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-           // System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-
-            this.chart1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(223)))), ((int)(((byte)(240)))));
-            this.chart1.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            this.chart1.BorderlineColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(59)))), ((int)(((byte)(105)))));
-            this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            this.chart1.BorderlineWidth = 2;
-            this.chart1.BorderSkin.SkinStyle = System.Windows.Forms.DataVisualization.Charting.BorderSkinStyle.Emboss;
-            chartArea1.Area3DStyle.Inclination = 15;
-            chartArea1.Area3DStyle.IsClustered = true;
-            chartArea1.Area3DStyle.IsRightAngleAxes = false;
-            chartArea1.Area3DStyle.Perspective = 10;
-            chartArea1.Area3DStyle.Rotation = 10;
-            chartArea1.Area3DStyle.WallWidth = 0;
-            chartArea1.AxisX.IsMarginVisible = false;
-            chartArea1.AxisX.LabelStyle.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Bold);
-            chartArea1.AxisX.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            chartArea1.AxisY.LabelStyle.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Bold);
-            chartArea1.AxisY.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            chartArea1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(191)))), ((int)(((byte)(0)))));
-            chartArea1.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            chartArea1.BackSecondaryColor = System.Drawing.Color.Transparent;
-            chartArea1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            chartArea1.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea1.Name = "Default";
-            chartArea1.ShadowColor = System.Drawing.Color.Transparent;
-           // this.chart1.ChartAreas.Add(chartArea1);
-           // legend1.BackColor = System.Drawing.Color.Transparent;
-           // legend1.Enabled = false;
-           // legend1.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Bold);
-           // legend1.IsTextAutoFit = false;
-           // legend1.Name = "Default";
-           // this.chart1.Legends.Add(legend1);
-            //this.chart1.Location = new System.Drawing.Point(16, 53);
-            //chart1.AutoSize = true;
             
-          //  this.chart1.Name = "chart1";
-          /*  series1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(26)))), ((int)(((byte)(59)))), ((int)(((byte)(105)))));
-            series1.ChartArea = "Default";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.SplineRange;
-            series1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(224)))), ((int)(((byte)(64)))), ((int)(((byte)(10)))));
-            series1.Legend = "Default";
-            series1.Name = "Series2";
-            series1.YValuesPerPoint = 2;
-            series2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(26)))), ((int)(((byte)(59)))), ((int)(((byte)(105)))));
-            series2.ChartArea = "Default";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.SplineRange;
-            series2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(65)))), ((int)(((byte)(140)))), ((int)(((byte)(240)))));
-            series2.Legend = "Default";
-            series2.Name = "Default";
-            series2.YValuesPerPoint = 2;*/
-            //this.chart1.Series.Add(series1);
-          //  this.chart1.Series.Add(series2);
-          //  this.chart1.Size = new System.Drawing.Size(412, 296);
-          //  this.chart1.TabIndex = 1;
-            //chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-           // ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
-            // Populate series data with data
-            double[] yValue1 = { 50, 50/*, 50, 50, 50, 87, 50, 87, 64, 34*/ };
-            double[] yValue2 = { 30, 30/*, 30, 30, 30, 47, 40, 70, 34, 20 */};
-            chart1.Series["Series1"].Points.DataBindY(yValue1, yValue2);
 
-            // Set chart type 
-           // chart1.Series["Default"].ChartType = SeriesChartType.SplineRange;
-
-            // Set Spline Range line tension
-            chart1.Series["Series1"]["LineTension"] = "0.5";
-
-            // Disable X axis margin
-           // chart1.ChartAreas["Default"].AxisX.IsMarginVisible = false;
-
-            // Show as 3D
-            //chart1.ChartAreas["Default"].Area3DStyle.Enable3D = true;
         }
+
+      
         private void TimerEventProcessor(Object myObject, EventArgs myEventArgs)
         {//Console.WriteLine("dsd");
             
@@ -160,14 +79,7 @@ namespace Agent
             }
 
           
-            var wiresBindingSource = new BindingSource
-            {
-                DataSource = list
-            };
-            var prevSelWire = WireComboBox.SelectedItem;
-            WireComboBox.DataSource = wiresBindingSource.DataSource;
-            if (prevSelWire != null && WireComboBox.Items.Contains(prevSelWire))
-                WireComboBox.SelectedItem = prevSelWire;
+          
             if (cm.routeHistoryList.Keys.Count != 0)
             {
                 var list1 = new BindingList<string>();
@@ -185,11 +97,7 @@ namespace Agent
 
             }
            
-            if(cm.dijkstraDataList.Count != 0)
-            foreach (var v in cm.dijkstraDataList.Where(v => v.wireID.Equals(WireComboBox.SelectedItem)))
-            {
-                banwidthTrackBar.Maximum = v.wireDistance > 300 ? 500 : 1000;
-            }
+        
             var connections = new List<String[]>();
             foreach (var d in cm.routeHistoryList.Values)
             {
@@ -215,12 +123,6 @@ namespace Agent
           
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // refreshing comboBox after selecting
-            var list = cm.routeHistoryList.Keys.Select(i => i[2]).ToList();
-            comboBox1.DataSource = new BindingSource(list, null);
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
