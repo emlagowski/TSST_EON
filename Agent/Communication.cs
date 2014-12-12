@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using ExtSrc;
 using System;
@@ -19,6 +20,7 @@ namespace Agent
 {
     public class Communication
     {
+        public readonly int TIMEOUT = 2000;
         Action<DijkstraData> dijkstraDataAdder;
         private Form form;
         Socket socket;
@@ -175,7 +177,7 @@ namespace Agent
                                     if (x > 30000000)
                                     {
                                         //Console.WriteLine("CLOSING");
-                                       //todo CloseRouterSocket(ip);
+                                        CloseRouterSocket(ip);
                                         return;
                                     }
                                     //Console.WriteLine("NOT CLOSING");
@@ -252,9 +254,10 @@ namespace Agent
                 handler.BeginReceive(newState.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReadCallback), newState);
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
-                //todo
+                int line = (new StackTrace(e, true)).GetFrame(0).GetFileLineNumber();
+                Console.WriteLine("Router probably closed (ERROR LINE: "+line+")");
             }
         }
 
@@ -323,14 +326,14 @@ namespace Agent
             clientMap.TryGetValue(clientSourceIP, out senderRouterIP);
             if (senderRouterIP == null)
             {
-                Console.WriteLine("NIE MA TAKIEGO (BICIA) KLIENTA.(SENDER)");
+                Console.WriteLine("NIE MA TAKIEGO KLIENTA.(SENDER)");
                 return;
             }
             String recipientRouterIP;
             clientMap.TryGetValue(ClientDestinationIP, out recipientRouterIP);
             if (recipientRouterIP == null)
             {
-                Console.WriteLine("NIE MA TAKIEGO (BICIA) KLIENTA.(RECIPIENT)");
+                Console.WriteLine("NIE MA TAKIEGO KLIENTA.(RECIPIENT)");
                 return;
             }
             //String Client = Int32.Parse(sourceIP.Substring(sourceIP.Length - 1, 1));
@@ -467,14 +470,14 @@ namespace Agent
             clientMap.TryGetValue(clientSourceIP, out senderRouterIP);
             if (senderRouterIP == null)
             {
-                Console.WriteLine("NIE MA TAKIEGO (BICIA) KLIENTA.(SENDER)");
+                Console.WriteLine("NIE MA TAKIEGO KLIENTA.(SENDER)");
                 return;
             }
             String recipientRouterIP;
             clientMap.TryGetValue(ClientDestinationIP, out recipientRouterIP);
             if (recipientRouterIP == null)
             {
-                Console.WriteLine("NIE MA TAKIEGO (BICIA) KLIENTA.(RECIPIENT)");
+                Console.WriteLine("NIE MA TAKIEGO KLIENTA.(RECIPIENT)");
                 return;
             }
             int[] route = calculateRoute(senderRouterIP, recipientRouterIP, excludedWiresIDs);
@@ -499,36 +502,41 @@ namespace Agent
                         //   agentData.firstWireID, agentData.FSid, agentData.secondWireID, agentData.secondFSid
                         bufferRouterResponse = null;
                         Send(String.Format("127.0.1." + routeHistory.ElementAt(i)[0]), new ExtSrc.AgentData(ExtSrc.AgentComProtocol.DISROUTE, routeHistory.ElementAt(i)[1], routeHistory.ElementAt(i)[2]));
-
+                        var waitTime = 0;
                         while (bufferRouterResponse == null)
                         {
                             //w8 na odp od routera
                             Thread.Sleep(50);
+                            waitTime += 50;
+                            if (waitTime > TIMEOUT) break;
                         }
-                        if (bufferRouterResponse.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_IS_DONE))
+                        if (bufferRouterResponse != null && bufferRouterResponse.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_IS_DONE))
                             Console.WriteLine("DISROUTE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(i)[0]) + " IS DONE");
-                        else if (bufferRouterResponse.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR))
+                        else if (bufferRouterResponse == null || bufferRouterResponse.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR))
                         {
                             Console.WriteLine("DISROUTE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(i)[0]) + " ERROR!!!");
-                            return false;
+                            continue; //todo tu był return test aby disroutowało sie do konca nawet jak jest ktorys router off
                         }
                     }
                     else
                     {
                         bufferRouterResponse = null;
                         Send(String.Format("127.0.1." + routeHistory.ElementAt(i)[0]), new ExtSrc.AgentData(ExtSrc.AgentComProtocol.DISROUTE_EDGE, routeHistory.ElementAt(i)[1], routeHistory.ElementAt(i)[2]) { uniqueKey = hashKey });
+                        var waitTime = 0;
                         while (bufferRouterResponse == null)
                         {
                             //w8 na odp od routera
                             Thread.Sleep(50);
+                            waitTime += 50;
+                            if (waitTime > TIMEOUT) break;
                         }
 
-                        if (bufferRouterResponse.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_EDGE_IS_DONE))
+                        if (bufferRouterResponse != null && bufferRouterResponse.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_EDGE_IS_DONE))
                             Console.WriteLine("DISROUTE EDGE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(0)[0]) + " IS DONE");
-                        else if (bufferRouterResponse.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR_EDGE))
+                        else if (bufferRouterResponse == null || bufferRouterResponse.message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR_EDGE))
                         {
                             Console.WriteLine("DISROUTE EDGE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(0)[0]) + " ERROR!!!");
-                            return false;
+                            continue; //todo tu był return test aby disroutowało sie do konca nawet jak jest ktorys router off
                         }
 
                     }
@@ -704,9 +712,10 @@ namespace Agent
                 socketRouterOnline.BeginSend(buffer, 0, buffer.Length, 0, SendOnlineRequestCallback, socketRouterOnline);
                 sendDone.WaitOne(); //todo?
             }
-            catch(SocketException)
+            catch (SocketException e)
             {
-                //todo
+                int line = (new StackTrace(e, true)).GetFrame(0).GetFileLineNumber();
+                Console.WriteLine("Router not responding (ERROR LINE: " + line + ")");
             }
         }
 
@@ -729,7 +738,7 @@ namespace Agent
                     routerOnline.TimeStamp = GetTimestamp(DateTime.Now);
                     //Console.WriteLine(GetTimestamp(DateTime.Now));
                     routerOnline.IsOnline = true;
-                    Console.WriteLine("ROUTER ONLINE " + routerOnline.Socket.RemoteEndPoint);
+                    //Console.WriteLine("ROUTER ONLINE " + routerOnline.Socket.RemoteEndPoint);
                 }, state);
             }
             catch (Exception e)

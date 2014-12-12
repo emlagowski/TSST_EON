@@ -33,13 +33,13 @@ namespace ExtSrc
                     WriteLinePrivate(value);
                 }
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException e)
             {
-                //todo 
+                Console.WriteLine(e.ToString());
             }
-            catch (Win32Exception)
+            catch (Win32Exception e)
             {
-                //todo 
+                Console.WriteLine(e.ToString());
             }
         }
 
@@ -51,9 +51,9 @@ namespace ExtSrc
                 if (_output != null)
                     _output.AppendText(value.ToString());
             }
-            catch (ObjectDisposedException)
+            catch (ObjectDisposedException e)
             {
-                //todo router disconnected
+                Console.WriteLine(e.ToString());
             }
             
         }

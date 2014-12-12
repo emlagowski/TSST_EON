@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -126,9 +127,9 @@ namespace Cloud
             {
                 localSocket.BeginAccept(AcceptCallback, localSocket);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                //todo router disconnected
+                Console.WriteLine(e.ToString());
             }
         }
 
@@ -157,16 +158,24 @@ namespace Cloud
 
         private void Send(Socket handler, ExtSrc.Data data)
         {
-            var ep = handler.RemoteEndPoint as IPEndPoint;
-            var fs = new MemoryStream();
-            var formatter = new BinaryFormatter();
-            formatter.Serialize(fs, data);
+            try
+            {
+                var ep = handler.RemoteEndPoint as IPEndPoint;
+                var fs = new MemoryStream();
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(fs, data);
 
-            var buffer = fs.ToArray();
-            
-            // Begin sending the data to the remote device.
-            handler.BeginSend(buffer, 0, buffer.Length, 0,
-            new AsyncCallback(SendCallback), handler);
+                var buffer = fs.ToArray();
+
+                // Begin sending the data to the remote device.
+                handler.BeginSend(buffer, 0, buffer.Length, 0,
+                    new AsyncCallback(SendCallback), handler);
+            }
+            catch (Exception e)
+            {
+                int line = (new StackTrace(e, true)).GetFrame(0).GetFileLineNumber();
+                Console.WriteLine("Router not responding (ERROR LINE: " + line + ")");
+            }
         }
 
         private void SendCallback(IAsyncResult ar)
