@@ -41,7 +41,17 @@ namespace Router
         {
             _router = router;
             random = new Random();
-            colors = new List<Color>();
+            colors = new List<Color>(new Color[]{
+                Color.Black,
+                Color.Blue,
+                Color.Green,
+                Color.SaddleBrown,
+                Color.Pink,
+                Color.Yellow,
+                Color.Cyan,
+                Color.Gray,
+                Color.DarkViolet,
+            });
             InitializeComponent();
             LabelText = _router.address;
             Console.SetOut(new TextBoxWriter(consoleOutput));
@@ -174,8 +184,9 @@ namespace Router
                     var counter = 0;
                     foreach (var freqSlot in wire.FrequencySlotDictionary.Values)
                     {
-                        var height = freqSlot.FSUList.Count * 10;
+                        var height = freqSlot.FSUList.Count * 20;
                         var start = freqSlot.startingFreq;
+                        //Console.WriteLine("start = " + start + ", height = " + height);
                         var name = "Bandwidth " + Convert.ToString(start);
                         var guardName = "Guard Band " + Convert.ToString(start);
                         var seriesBand = new System.Windows.Forms.DataVisualization.Charting.Series
@@ -206,6 +217,7 @@ namespace Router
                         chart.Series[guardName].Points.DataBindY(yValue1Guard, yValue2Guard);
 
                         counter++;
+                        if (counter >= colors.Count) counter = 0;
                     }
                     
                 }

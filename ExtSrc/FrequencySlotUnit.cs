@@ -61,7 +61,7 @@ namespace ExtSrc
 
         public void close()
         {
-            Console.WriteLine("FSU closing");
+            //Console.WriteLine("FSU closing");
             var fs = new MemoryStream();
             var formatter = new BinaryFormatter();
             var data = new Data(0, "CLOSING_UNIT");
@@ -71,9 +71,9 @@ namespace ExtSrc
             {
                 socket.BeginSend(buffer, 0, buffer.Length, 0, ar => socket.Close(), socket);
             }
-            catch (ObjectDisposedException)
+            catch (ObjectDisposedException e)
             {
-                //todo
+                //Console.WriteLine(e.ToString());
             }
         }
     }

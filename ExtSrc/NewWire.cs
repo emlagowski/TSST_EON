@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.PerformanceData;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -13,8 +14,10 @@ namespace ExtSrc
     public class NewWire : Observer
     {
         static readonly int GUARD_BAND = 10;
-        static readonly int FREQ_SLOT_UNIT = 10;
+        static readonly int FREQ_SLOT_UNIT = 20;
         static readonly int EMPTY_VALUE = -1;
+
+        private int nextSlotID = -1;
 
         public int ID { get; set; }
         public int distance { get; set; }
@@ -35,27 +38,127 @@ namespace ExtSrc
 
         public int addFreqSlot(int startingFreq, int FSUcount, Modulation mod)
         {
-
-            int id = FrequencySlotDictionary.Values.Count();
+            //var id = FrequencySlotDictionary.Values.Count();
+            var id = ++nextSlotID;
             FrequencySlot slot = new FrequencySlot(id, Modulation.QPSK, startingFreq);
 
             FrequencySlotDictionary.Add(id, slot);
 
-            for (int i = 0; i < FSUcount; i++)
+//            for (int i = 0; i < FSUcount; i++)
+//            {
+//                foreach (FrequencySlotUnit unit in FrequencySlotUnitList)
+//                {
+//                    if (!unit.isUsed)
+//                    {
+//                        unit.isUsed = true;
+//                        slot.FSUList.Add(unit);
+//                        break;
+//                    }
+//                }
+//            }
+            // todo
+            /*var freeUnits = FrequencySlotUnitList.Where(x => !x.isUsed).ToList().Count;
+            var maxFreeInRow = 0;
+            var maxFreeInRowTmp = 0;
+            foreach (var frequencySlotUnit in FrequencySlotUnitList)
             {
-                foreach (FrequencySlotUnit unit in FrequencySlotUnitList)
+                if (!frequencySlotUnit.isUsed) maxFreeInRowTmp++;
+                else
                 {
-                    if (!unit.isUsed)
-                    {
-                        unit.isUsed = true;
-                        slot.FSUList.Add(unit);
-                        break;
-                    }
+                    if (maxFreeInRowTmp > maxFreeInRow) maxFreeInRow = maxFreeInRowTmp;
+                    maxFreeInRowTmp = 0;
                 }
             }
+            if (freeUnits < FSUcount)
+            {
+                Console.WriteLine("Method addFreqSlot error! There is no enough space.");
+                return -1;
+            }
+            if (FSUcount > maxFreeInRow & FSUcount <= freeUnits) SlideDown();*/
+            // todo
+            var count = 0;
+            foreach (var unit in FrequencySlotUnitList)
+            {
+                if (!unit.isUsed)
+                {
+                    unit.isUsed = true;
+                    slot.FSUList.Add(unit);
+                    count++;
+                }
+                if (count == FSUcount) break;
+            }
+//            if (count != FSUcount) Console.WriteLine("addFreqSlot error! Needed = " + FSUcount + " got = " + count);
+            // todo
             takeSpectralWidth(startingFreq, FSUcount * FREQ_SLOT_UNIT + GUARD_BAND, id);
             return id;
         }
+
+        public void SlideDown()
+        {
+            Console.WriteLine("SLIDEDOWN");
+            var list = FrequencySlotDictionary.Values.ToList();
+            list.Sort((x, y) => x.startingFreq.CompareTo(y.startingFreq));
+            var idx = 0;
+            foreach (var frequencySlot in list)
+            {
+                if (frequencySlot.startingFreq == idx)
+                {
+                    idx += frequencySlot.FSUList.Count;
+                }
+                else
+                {
+                    var tmpList = new List<FrequencySlotUnit>();
+                    foreach (var fsuOld in frequencySlot.FSUList)
+                    {
+                        fsuOld.isUsed = false;
+                        var fsuNew = FrequencySlotUnitList[idx];
+                        fsuNew.isUsed = true;
+                        tmpList.Add(fsuNew);
+                    }
+                    frequencySlot.FSUList.Clear();
+                    frequencySlot.FSUList = tmpList;
+                }
+            }
+            this.spectralWidth = Enumerable.Repeat(EMPTY_VALUE, spectralWidth.Count()).ToArray();
+            var idxSpectralWidth = 0;
+            foreach (var frequencySlotUnit in FrequencySlotUnitList)
+            {
+                if (frequencySlotUnit.isUsed)
+                {
+                    for (int i = 0; i < FREQ_SLOT_UNIT; i++)
+                    {
+                        spectralWidth[idxSpectralWidth] = frequencySlotUnit.ID;
+                        idxSpectralWidth++;
+                    }
+                }
+                else
+                    idxSpectralWidth += FREQ_SLOT_UNIT;
+            }
+        }
+
+        public Boolean IsPossibleToSlide(int FSUcount)
+        {
+            var freeUnits = FrequencySlotUnitList.Where(x => !x.isUsed).ToList().Count;
+            /*var maxFreeInRow = 0;
+            var maxFreeInRowTmp = 0;
+            foreach (var frequencySlotUnit in FrequencySlotUnitList)
+            {
+                if (!frequencySlotUnit.isUsed) maxFreeInRowTmp++;
+                else
+                {
+                    if (maxFreeInRowTmp > maxFreeInRow) maxFreeInRow = maxFreeInRowTmp;
+                    maxFreeInRowTmp = 0;
+                }
+            }
+            if (freeUnits < FSUcount)
+            {
+                Console.WriteLine("Method addFreqSlot error! There is no enough space.");
+                return false;
+            }
+            if (FSUcount > maxFreeInRow & FSUcount <= freeUnits) SlideDown();*/
+            return freeUnits > FSUcount;
+        }
+        
 
         public Boolean removeFreqSlot(int id)
         {

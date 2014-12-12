@@ -138,7 +138,7 @@ namespace Client
                 receiveDone.Set();
                 allReceive.Set();
                 Console.WriteLine("User {0} Received '{1}'[{2} bytes] from router {3}.", client.LocalEndPoint.ToString(),
-                          state.dt.ToString(), bytesRead, client.RemoteEndPoint.ToString());
+                          state.dt.info, bytesRead, state.dt.EndAddress/*client.RemoteEndPoint.ToString()*/);
                 messages.Add(new KeyValuePair<MsgType, string>(MsgType.RECEIVED, state.dt.ToString()));
                 //addLog("Receive", client.RemoteEndPoint.ToString(), client.LocalEndPoint.ToString(), state.dt.ToString());
 
@@ -152,6 +152,11 @@ namespace Client
         public void Send(int bandwidth, String data, String endAddress)
         
         {
+            if (endAddress.Equals(localAddress))
+            {
+                Console.WriteLine("Sent msg to yourself: "+data);
+                return;
+            }
             MemoryStream fs = new MemoryStream();
 
             BinaryFormatter formatter = new BinaryFormatter();

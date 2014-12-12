@@ -718,12 +718,23 @@ namespace Router
                     Console.WriteLine("ROUTE_FOR_U_EDGE");
                     int startfreqEdge=0;
                     if (agentData.startingFreq == -1)
-                        startfreqEdge = localPhysicalWires.getWireByID(agentData.wireID).findSpaceForFS(agentData.FSUCount);
+                    {
+                        startfreqEdge =
+                            localPhysicalWires.getWireByID(agentData.wireID).findSpaceForFS(agentData.FSUCount);
+                        if (startfreqEdge == -1 &
+                        localPhysicalWires.getWireByID(agentData.wireID).IsPossibleToSlide(agentData.FSUCount))
+                        {
+                            localPhysicalWires.getWireByID(agentData.wireID).SlideDown();
+                            startfreqEdge = localPhysicalWires.getWireByID(agentData.wireID).findSpaceForFS(agentData.FSUCount);
+                        }
+                    }
                     else
                         startfreqEdge = agentData.startingFreq;
+                    Console.WriteLine("startfreqEdge = "+ startfreqEdge);
                     id1 = localPhysicalWires.getWireByID(agentData.wireID).addFreqSlot(startfreqEdge, agentData.FSUCount, agentData.mod);
                     TOclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
-                    FROMclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
+                    var id = Int32.Parse(agentData.originatingAddress.Substring(agentData.originatingAddress.Length - 1, 1));
+                    FROMclientConnectionsTable.add(agentData.wireID, id1, id);
                     var ucon = UniqueConnections.FirstOrDefault(x => x.UniqueKey.Equals(agentData.uniqueKey));
                     if (ucon == null)
                     {
@@ -743,7 +754,13 @@ namespace Router
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U:
                     ///od agenta: fsucount, mod, firstwireid,secondwireid, startingfreq dla odbierajacego kabla bo juz obliczone w poprzednim roouterze
                     Console.WriteLine("ROUTE_FOR_U");
-                    int startfreq = localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
+                    var startfreq = localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
+                    if (startfreq == -1 &
+                        localPhysicalWires.getWireByID(agentData.secondWireID).IsPossibleToSlide(agentData.FSUCount))
+                    {
+                        localPhysicalWires.getWireByID(agentData.secondWireID).SlideDown();
+                        startfreq = localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
+                    }
                     if (startfreq >= 0)
                     {
                         id1 = localPhysicalWires.getWireByID(agentData.firstWireID).addFreqSlot(agentData.startingFreq, agentData.lastFSUCount, agentData.lastMod);
