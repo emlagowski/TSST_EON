@@ -105,11 +105,12 @@ namespace Router
             chart.ChartAreas.Add(chartArea1);
 
             legend1.BackColor = System.Drawing.Color.Transparent;
-            legend1.Enabled = false;
+            legend1.Enabled = true;
             legend1.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Bold);
             legend1.IsTextAutoFit = false;
             legend1.Name = "Default";
             chart.Legends.Add(legend1);
+            chart.Dock = System.Windows.Forms.DockStyle.Fill;
         }
 
         public void Bind()
@@ -187,13 +188,22 @@ namespace Router
                         var height = freqSlot.FSUList.Count * 20;
                         var start = freqSlot.startingFreq;
                         //Console.WriteLine("start = " + start + ", height = " + height);
-                        var name = "Bandwidth " + Convert.ToString(start);
+                        var key =
+                            _router.UniqueConnections.Where(d => d.WireAndFsu[0] == wire.ID && d.WireAndFsu[1] == freqSlot.ID).Select(d => d.UniqueKey).FirstOrDefault();
+                        string name;
+                        if (key != null)
+                            name = "Bandwidth " + key;//Convert.ToString(start);
+                        else
+                        {
+                            name = "Bandwidth not known" + Convert.ToString(start);
+                            //
+                        }
                         var guardName = "Guard Band " + Convert.ToString(start);
                         var seriesBand = new System.Windows.Forms.DataVisualization.Charting.Series
                         {
                             Name = name,
                             Color = colors[counter],
-                            IsVisibleInLegend = false,
+                            IsVisibleInLegend = true,
                             IsXValueIndexed = false,
                             ChartType = SeriesChartType.Range
                         };
@@ -215,6 +225,16 @@ namespace Router
 
                         chart.Series[name].Points.DataBindY(yValue1, yValue2);
                         chart.Series[guardName].Points.DataBindY(yValue1Guard, yValue2Guard);
+
+                       /* var legendItem = new LegendItem();
+                        legendItem.SeriesName = name;
+                        legendItem.ImageStyle = LegendImageStyle.Rectangle;
+                        legendItem.BorderColor = Color.Transparent;
+                        legendItem.Name = name + "_legend_item";
+                        legendItem.Color = seriesGuardBand.Color;
+                        
+                        chart.Legends["Default"].CustomItems.Add(legendItem);*/
+
 
                         counter++;
                         if (counter >= colors.Count) counter = 0;
