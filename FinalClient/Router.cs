@@ -205,7 +205,7 @@ namespace Router
                             ReceiveFromCloud(unit.socket);
                         }
                     }
-                    Console.WriteLine("WszySTkie LaMbDY NaSlUccHuJA FalA SuPEr!");
+                    Console.WriteLine("Wszystkie sockety nasłuchuja!");
                     allReceive.WaitOne();
                 }
             }
