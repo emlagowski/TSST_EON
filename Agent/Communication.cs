@@ -177,7 +177,7 @@ namespace Agent
                                     if (x > 30000000)
                                     {
                                         //Console.WriteLine("CLOSING");
-                                        CloseRouterSocket(ip);
+                                        //CloseRouterSocket(ip);
                                         return;
                                     }
                                     //Console.WriteLine("NOT CLOSING");
