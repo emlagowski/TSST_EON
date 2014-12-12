@@ -87,7 +87,7 @@ namespace ExtSrc
                 }
                 if (count == FSUcount) break;
             }
-//            if (count != FSUcount) Console.WriteLine("addFreqSlot error! Needed = " + FSUcount + " got = " + count);
+            if (count != FSUcount) Console.WriteLine("addFreqSlot error! Needed = " + FSUcount + " got = " + count);
             // todo
             takeSpectralWidth(startingFreq, FSUcount * FREQ_SLOT_UNIT + GUARD_BAND, id);
             return id;
@@ -95,7 +95,10 @@ namespace ExtSrc
 
         public void SlideDown()
         {
+            var freeSpectrumBefore = spectralWidth.Where(x => x==-1).ToList().Count;
             Console.WriteLine("SLIDEDOWN");
+            this.spectralWidth = Enumerable.Repeat(EMPTY_VALUE, spectralWidth.Count()).ToArray();
+            var idxSpectralWidth = 0;
             var list = FrequencySlotDictionary.Values.ToList();
             list.Sort((x, y) => x.startingFreq.CompareTo(y.startingFreq));
             var idx = 0;
@@ -104,59 +107,93 @@ namespace ExtSrc
                 if (frequencySlot.startingFreq == idx)
                 {
                     idx += frequencySlot.FSUList.Count;
+                    idxSpectralWidth += FREQ_SLOT_UNIT;
                 }
                 else
                 {
+                    var newStartingFreq = idxSpectralWidth;
                     var tmpList = new List<FrequencySlotUnit>();
                     foreach (var fsuOld in frequencySlot.FSUList)
                     {
                         fsuOld.isUsed = false;
                         var fsuNew = FrequencySlotUnitList[idx];
+                        idx++;
                         fsuNew.isUsed = true;
                         tmpList.Add(fsuNew);
+                        for (var i = 0; i < FREQ_SLOT_UNIT; i++, idxSpectralWidth++)
+                        {
+                            spectralWidth[idxSpectralWidth] = frequencySlot.ID;
+                        }
+                    }
+                    for (var i = 0; i < GUARD_BAND; i++, idxSpectralWidth++)
+                    {
+                        spectralWidth[idxSpectralWidth] = frequencySlot.ID;
                     }
                     frequencySlot.FSUList.Clear();
-                    frequencySlot.FSUList = tmpList;
+                    frequencySlot.FSUList.AddRange(tmpList);
+                    frequencySlot.startingFreq = newStartingFreq;
                 }
             }
-            this.spectralWidth = Enumerable.Repeat(EMPTY_VALUE, spectralWidth.Count()).ToArray();
-            var idxSpectralWidth = 0;
-            foreach (var frequencySlotUnit in FrequencySlotUnitList)
-            {
-                if (frequencySlotUnit.isUsed)
-                {
-                    for (int i = 0; i < FREQ_SLOT_UNIT; i++)
-                    {
-                        spectralWidth[idxSpectralWidth] = frequencySlotUnit.ID;
-                        idxSpectralWidth++;
-                    }
-                }
-                else
-                    idxSpectralWidth += FREQ_SLOT_UNIT;
-            }
+            //this.spectralWidth = Enumerable.Repeat(EMPTY_VALUE, spectralWidth.Count()).ToArray();
+            //var idxSpectralWidth = 0;
+//            foreach (var frequencySlotUnit in FrequencySlotUnitList)
+//            {
+//                if (frequencySlotUnit.isUsed)
+//                {
+//                    for (var i = 0; i < FREQ_SLOT_UNIT; i++, idxSpectralWidth++)
+//                    {
+//                        spectralWidth[idxSpectralWidth] = frequencySlotUnit.ID;
+//                    }
+//                }
+//                else
+//                    idxSpectralWidth += FREQ_SLOT_UNIT;
+//            }
+//            foreach (var frequencySlot in FrequencySlotDictionary.Values)
+//            {
+//                foreach (var frequencySlotUnit in frequencySlot.FSUList)
+//                {
+//                    if (frequencySlotUnit.isUsed)
+//                    {
+//                        for (var i = 0; i < FREQ_SLOT_UNIT; i++, idxSpectralWidth++)
+//                        {
+//                            spectralWidth[idxSpectralWidth] = frequencySlot.ID;
+//                        }
+//                    }
+//                    else
+//                        idxSpectralWidth += FREQ_SLOT_UNIT;
+//                }
+//            }
+            var freeSpectrumAfter = spectralWidth.Where(x => x == -1).ToList().Count;
+            Console.WriteLine("SLIDING TEST" + (freeSpectrumBefore == freeSpectrumAfter) + " Before:" + freeSpectrumBefore + " After:" + freeSpectrumAfter);
         }
 
         public Boolean IsPossibleToSlide(int FSUcount)
         {
             var freeUnits = FrequencySlotUnitList.Where(x => !x.isUsed).ToList().Count;
-            /*var maxFreeInRow = 0;
-            var maxFreeInRowTmp = 0;
-            foreach (var frequencySlotUnit in FrequencySlotUnitList)
-            {
-                if (!frequencySlotUnit.isUsed) maxFreeInRowTmp++;
-                else
-                {
-                    if (maxFreeInRowTmp > maxFreeInRow) maxFreeInRow = maxFreeInRowTmp;
-                    maxFreeInRowTmp = 0;
-                }
-            }
-            if (freeUnits < FSUcount)
-            {
-                Console.WriteLine("Method addFreqSlot error! There is no enough space.");
-                return false;
-            }
-            if (FSUcount > maxFreeInRow & FSUcount <= freeUnits) SlideDown();*/
             return freeUnits > FSUcount;
+        }
+
+        public bool IsTherePlace(int startfreq1, int fsuCount)
+        {
+//            var result = false;
+//            var maxFreeInRow = 0;
+//            var maxFreeInRowTmp = 0;
+//            foreach (var frequencySlotUnit in FrequencySlotUnitList)
+//            {
+//                if (!frequencySlotUnit.isUsed) maxFreeInRowTmp++;
+//                else
+//                {
+//                    if (maxFreeInRowTmp > maxFreeInRow) maxFreeInRow = maxFreeInRowTmp;
+//                    maxFreeInRowTmp = 0;
+//                }
+//            }
+//            if (fsuCount < maxFreeInRow) result = true;
+//            return result;
+            for (int i = startfreq1; i < startfreq1 + fsuCount * FREQ_SLOT_UNIT + GUARD_BAND; i++)
+            {
+                if (spectralWidth[i] != -1) return false;
+            }
+            return true;
         }
         
 

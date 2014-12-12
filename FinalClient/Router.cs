@@ -754,20 +754,30 @@ namespace Router
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U:
                     ///od agenta: fsucount, mod, firstwireid,secondwireid, startingfreq dla odbierajacego kabla bo juz obliczone w poprzednim roouterze
                     Console.WriteLine("ROUTE_FOR_U");
-                    var startfreq = localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
-                    if (startfreq == -1 &
+                    //sprawdzanie 1 kabla
+                    var startfreq1 = agentData.startingFreq;
+                    if (!localPhysicalWires.getWireByID(agentData.firstWireID).IsTherePlace(startfreq1, agentData.lastFSUCount) || 
+                        startfreq1 == -1 &
+                        localPhysicalWires.getWireByID(agentData.firstWireID).IsPossibleToSlide(agentData.lastFSUCount))
+                    {
+                        localPhysicalWires.getWireByID(agentData.firstWireID).SlideDown();
+                        startfreq1 = localPhysicalWires.getWireByID(agentData.firstWireID).findSpaceForFS(agentData.lastFSUCount);
+                    }
+                    //sprawdzanie 2 kabla
+                    var startfreq2 = localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
+                    if (startfreq2 == -1 &
                         localPhysicalWires.getWireByID(agentData.secondWireID).IsPossibleToSlide(agentData.FSUCount))
                     {
                         localPhysicalWires.getWireByID(agentData.secondWireID).SlideDown();
-                        startfreq = localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
+                        startfreq2 = localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
                     }
-                    if (startfreq >= 0)
+                    if (startfreq2 >= 0)
                     {
-                        id1 = localPhysicalWires.getWireByID(agentData.firstWireID).addFreqSlot(agentData.startingFreq, agentData.lastFSUCount, agentData.lastMod);
-                        id2 = localPhysicalWires.getWireByID(agentData.secondWireID).addFreqSlot(startfreq, agentData.FSUCount, agentData.mod);
+                        id1 = localPhysicalWires.getWireByID(agentData.firstWireID).addFreqSlot(startfreq1, agentData.lastFSUCount, agentData.lastMod);
+                        id2 = localPhysicalWires.getWireByID(agentData.secondWireID).addFreqSlot(startfreq2, agentData.FSUCount, agentData.mod);
                         freqSlotSwitchingTable.add(agentData.firstWireID, id1, agentData.secondWireID, id2);
                         Console.WriteLine("ROUTE SET, NOT EDGE");
-                        AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreq, id2));
+                        AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreq2, id2));
                     }
                     else
                     {
