@@ -46,35 +46,35 @@ namespace Router
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tabs = new System.Windows.Forms.TabControl();
             this.generalTab = new System.Windows.Forms.TabPage();
-            this.advancedTab = new System.Windows.Forms.TabPage();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.advancedTab = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.frequencySlotsTable = new System.Windows.Forms.DataGridView();
-            this.clientTable = new System.Windows.Forms.DataGridView();
-            this.messagesTable = new System.Windows.Forms.DataGridView();
-            this.toClientTable = new System.Windows.Forms.DataGridView();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.fromClientTable = new System.Windows.Forms.DataGridView();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.messagesTable = new System.Windows.Forms.DataGridView();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.toClientTable = new System.Windows.Forms.DataGridView();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.clientTable = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.connectedWiresTable)).BeginInit();
             this.tabs.SuspendLayout();
             this.generalTab.SuspendLayout();
-            this.advancedTab.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            this.groupBox6.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.advancedTab.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.frequencySlotsTable)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clientTable)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.messagesTable)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.toClientTable)).BeginInit();
+            this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fromClientTable)).BeginInit();
+            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.messagesTable)).BeginInit();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.toClientTable)).BeginInit();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.clientTable)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -120,7 +120,7 @@ namespace Router
             this.consoleOutput.Multiline = true;
             this.consoleOutput.Name = "consoleOutput";
             this.consoleOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.consoleOutput.Size = new System.Drawing.Size(778, 483);
+            this.consoleOutput.Size = new System.Drawing.Size(778, 487);
             this.consoleOutput.TabIndex = 8;
             // 
             // contextMenuStrip2
@@ -153,6 +153,26 @@ namespace Router
             this.generalTab.Text = "General";
             this.generalTab.UseVisualStyleBackColor = true;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.connectedWiresTable);
+            this.groupBox2.Location = new System.Drawing.Point(6, 85);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(798, 286);
+            this.groupBox2.TabIndex = 10;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Connected wires";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.consoleOutput);
+            this.groupBox1.Location = new System.Drawing.Point(3, 377);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(801, 523);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Console output";
+            // 
             // advancedTab
             // 
             this.advancedTab.Controls.Add(this.groupBox7);
@@ -167,66 +187,6 @@ namespace Router
             this.advancedTab.TabIndex = 1;
             this.advancedTab.Text = "Advanced";
             this.advancedTab.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.consoleOutput);
-            this.groupBox1.Location = new System.Drawing.Point(3, 377);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(801, 523);
-            this.groupBox1.TabIndex = 9;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Console output";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.connectedWiresTable);
-            this.groupBox2.Location = new System.Drawing.Point(6, 85);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(798, 286);
-            this.groupBox2.TabIndex = 10;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Connected wires";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.clientTable);
-            this.groupBox3.Location = new System.Drawing.Point(6, 6);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(922, 274);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Client list";
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.toClientTable);
-            this.groupBox4.Location = new System.Drawing.Point(6, 286);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(922, 274);
-            this.groupBox4.TabIndex = 3;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "To Client";
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.messagesTable);
-            this.groupBox5.Location = new System.Drawing.Point(6, 853);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(922, 274);
-            this.groupBox5.TabIndex = 4;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Waiting messages";
-            // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.fromClientTable);
-            this.groupBox6.Location = new System.Drawing.Point(6, 566);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(922, 274);
-            this.groupBox6.TabIndex = 5;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "From Client";
             // 
             // groupBox7
             // 
@@ -247,14 +207,34 @@ namespace Router
             this.frequencySlotsTable.Size = new System.Drawing.Size(903, 300);
             this.frequencySlotsTable.TabIndex = 0;
             // 
-            // clientTable
+            // groupBox6
             // 
-            this.clientTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.clientTable.Location = new System.Drawing.Point(6, 30);
-            this.clientTable.Name = "clientTable";
-            this.clientTable.RowTemplate.Height = 33;
-            this.clientTable.Size = new System.Drawing.Size(906, 238);
-            this.clientTable.TabIndex = 0;
+            this.groupBox6.Controls.Add(this.fromClientTable);
+            this.groupBox6.Location = new System.Drawing.Point(6, 566);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(922, 274);
+            this.groupBox6.TabIndex = 5;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "From Client";
+            // 
+            // fromClientTable
+            // 
+            this.fromClientTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.fromClientTable.Location = new System.Drawing.Point(6, 30);
+            this.fromClientTable.Name = "fromClientTable";
+            this.fromClientTable.RowTemplate.Height = 33;
+            this.fromClientTable.Size = new System.Drawing.Size(906, 238);
+            this.fromClientTable.TabIndex = 1;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.messagesTable);
+            this.groupBox5.Location = new System.Drawing.Point(6, 853);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(922, 274);
+            this.groupBox5.TabIndex = 4;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Waiting messages";
             // 
             // messagesTable
             // 
@@ -265,6 +245,16 @@ namespace Router
             this.messagesTable.Size = new System.Drawing.Size(906, 238);
             this.messagesTable.TabIndex = 1;
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.toClientTable);
+            this.groupBox4.Location = new System.Drawing.Point(6, 286);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(922, 274);
+            this.groupBox4.TabIndex = 3;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "To Client";
+            // 
             // toClientTable
             // 
             this.toClientTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -274,14 +264,24 @@ namespace Router
             this.toClientTable.Size = new System.Drawing.Size(903, 238);
             this.toClientTable.TabIndex = 1;
             // 
-            // fromClientTable
+            // groupBox3
             // 
-            this.fromClientTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.fromClientTable.Location = new System.Drawing.Point(6, 30);
-            this.fromClientTable.Name = "fromClientTable";
-            this.fromClientTable.RowTemplate.Height = 33;
-            this.fromClientTable.Size = new System.Drawing.Size(906, 238);
-            this.fromClientTable.TabIndex = 1;
+            this.groupBox3.Controls.Add(this.clientTable);
+            this.groupBox3.Location = new System.Drawing.Point(6, 6);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(922, 274);
+            this.groupBox3.TabIndex = 2;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Client list";
+            // 
+            // clientTable
+            // 
+            this.clientTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.clientTable.Location = new System.Drawing.Point(6, 30);
+            this.clientTable.Name = "clientTable";
+            this.clientTable.RowTemplate.Height = 33;
+            this.clientTable.Size = new System.Drawing.Size(906, 238);
+            this.clientTable.TabIndex = 0;
             // 
             // RouterForm
             // 
@@ -296,20 +296,20 @@ namespace Router
             this.tabs.ResumeLayout(false);
             this.generalTab.ResumeLayout(false);
             this.generalTab.PerformLayout();
-            this.advancedTab.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox6.ResumeLayout(false);
+            this.advancedTab.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.frequencySlotsTable)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clientTable)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.messagesTable)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.toClientTable)).EndInit();
+            this.groupBox6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fromClientTable)).EndInit();
+            this.groupBox5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.messagesTable)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.toClientTable)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.clientTable)).EndInit();
             this.ResumeLayout(false);
 
         }

@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtSrc", "ExtSrc\ExtSrc.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent", "Agent\Agent.csproj", "{D92E0D03-3D52-40F1-BD39-EACFC8DDB8C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DijkstraAlgorithm", "DijkstraAlgorithm\DijkstraAlgorithm.csproj", "{E380C4A8-5F69-4410-A8B6-5C1F63B1325F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Router10", "RouterNN\Router10.csproj", "{CDEA1C1D-57DA-4629-961D-149250F4B303}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Router20", "Router20\Router20.csproj", "{6AF6B856-5F35-4645-93AC-DE7EBD1BA6FA}"
@@ -93,15 +91,6 @@ Global
 		{D92E0D03-3D52-40F1-BD39-EACFC8DDB8C3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D92E0D03-3D52-40F1-BD39-EACFC8DDB8C3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D92E0D03-3D52-40F1-BD39-EACFC8DDB8C3}.Release|Win32.ActiveCfg = Release|Any CPU
-		{E380C4A8-5F69-4410-A8B6-5C1F63B1325F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E380C4A8-5F69-4410-A8B6-5C1F63B1325F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E380C4A8-5F69-4410-A8B6-5C1F63B1325F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E380C4A8-5F69-4410-A8B6-5C1F63B1325F}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{E380C4A8-5F69-4410-A8B6-5C1F63B1325F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E380C4A8-5F69-4410-A8B6-5C1F63B1325F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E380C4A8-5F69-4410-A8B6-5C1F63B1325F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E380C4A8-5F69-4410-A8B6-5C1F63B1325F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E380C4A8-5F69-4410-A8B6-5C1F63B1325F}.Release|Win32.ActiveCfg = Release|Any CPU
 		{CDEA1C1D-57DA-4629-961D-149250F4B303}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDEA1C1D-57DA-4629-961D-149250F4B303}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDEA1C1D-57DA-4629-961D-149250F4B303}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

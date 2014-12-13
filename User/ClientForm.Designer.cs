@@ -58,7 +58,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label1.Location = new System.Drawing.Point(15, 9);
+            this.label1.Location = new System.Drawing.Point(38, 9);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(167, 63);
@@ -220,11 +220,11 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.consoleOutput);
-            this.groupBox3.Location = new System.Drawing.Point(26, 712);
+            this.groupBox3.Location = new System.Drawing.Point(26, 575);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(6);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(6);
-            this.groupBox3.Size = new System.Drawing.Size(918, 358);
+            this.groupBox3.Size = new System.Drawing.Size(918, 259);
             this.groupBox3.TabIndex = 14;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "History Log";
@@ -235,7 +235,7 @@
             this.consoleOutput.Multiline = true;
             this.consoleOutput.Name = "consoleOutput";
             this.consoleOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.consoleOutput.Size = new System.Drawing.Size(885, 316);
+            this.consoleOutput.Size = new System.Drawing.Size(885, 209);
             this.consoleOutput.TabIndex = 0;
             // 
             // groupBox4
@@ -243,7 +243,7 @@
             this.groupBox4.Controls.Add(this.messageHistory);
             this.groupBox4.Location = new System.Drawing.Point(26, 309);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(918, 394);
+            this.groupBox4.Size = new System.Drawing.Size(918, 257);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Message history";
@@ -254,14 +254,14 @@
             this.messageHistory.Location = new System.Drawing.Point(9, 30);
             this.messageHistory.Name = "messageHistory";
             this.messageHistory.RowTemplate.Height = 33;
-            this.messageHistory.Size = new System.Drawing.Size(885, 348);
+            this.messageHistory.Size = new System.Drawing.Size(885, 213);
             this.messageHistory.TabIndex = 0;
             // 
             // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(960, 1086);
+            this.ClientSize = new System.Drawing.Size(960, 843);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);

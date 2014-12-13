@@ -55,7 +55,6 @@ namespace ExtSrc
             {
                 Console.WriteLine(e.ToString());
             }
-            
         }
 
         public override Encoding Encoding

@@ -59,7 +59,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 2);
+            this.label2.Location = new System.Drawing.Point(24, 2);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(87, 25);
             this.label2.TabIndex = 3;
@@ -67,9 +67,9 @@
             // 
             // SetConnButton
             // 
-            this.SetConnButton.Location = new System.Drawing.Point(683, 330);
+            this.SetConnButton.Location = new System.Drawing.Point(586, 319);
             this.SetConnButton.Name = "SetConnButton";
-            this.SetConnButton.Size = new System.Drawing.Size(221, 51);
+            this.SetConnButton.Size = new System.Drawing.Size(329, 90);
             this.SetConnButton.TabIndex = 10;
             this.SetConnButton.Text = "Set Connection";
             this.SetConnButton.UseVisualStyleBackColor = true;
@@ -77,9 +77,9 @@
             // 
             // RemoveConnButton
             // 
-            this.RemoveConnButton.Location = new System.Drawing.Point(472, 532);
+            this.RemoveConnButton.Location = new System.Drawing.Point(487, 540);
             this.RemoveConnButton.Name = "RemoveConnButton";
-            this.RemoveConnButton.Size = new System.Drawing.Size(221, 51);
+            this.RemoveConnButton.Size = new System.Drawing.Size(428, 51);
             this.RemoveConnButton.TabIndex = 11;
             this.RemoveConnButton.Text = "Remove Connection";
             this.RemoveConnButton.UseVisualStyleBackColor = true;
@@ -115,7 +115,7 @@
             this.consoleOutput.Multiline = true;
             this.consoleOutput.Name = "consoleOutput";
             this.consoleOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.consoleOutput.Size = new System.Drawing.Size(914, 659);
+            this.consoleOutput.Size = new System.Drawing.Size(903, 306);
             this.consoleOutput.TabIndex = 14;
             // 
             // bandwidthTextBox
@@ -143,7 +143,7 @@
             ""});
             this.ConHashComboBox.Location = new System.Drawing.Point(166, 550);
             this.ConHashComboBox.Name = "ConHashComboBox";
-            this.ConHashComboBox.Size = new System.Drawing.Size(202, 33);
+            this.ConHashComboBox.Size = new System.Drawing.Size(300, 33);
             this.ConHashComboBox.TabIndex = 17;
             // 
             // routerListBox
@@ -162,14 +162,14 @@
             this.clientListBox.Location = new System.Drawing.Point(12, 291);
             this.clientListBox.Name = "clientListBox";
             this.clientListBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.clientListBox.Size = new System.Drawing.Size(120, 229);
+            this.clientListBox.Size = new System.Drawing.Size(120, 279);
             this.clientListBox.TabIndex = 20;
             this.clientListBox.SelectedIndexChanged += new System.EventHandler(this.clientListBox_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 262);
+            this.label4.Location = new System.Drawing.Point(33, 262);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(78, 25);
             this.label4.TabIndex = 21;
@@ -179,7 +179,7 @@
             // 
             this.clientATextBox.Location = new System.Drawing.Point(633, 473);
             this.clientATextBox.Name = "clientATextBox";
-            this.clientATextBox.Size = new System.Drawing.Size(100, 31);
+            this.clientATextBox.Size = new System.Drawing.Size(60, 31);
             this.clientATextBox.TabIndex = 24;
             // 
             // routeTextBox
@@ -191,7 +191,7 @@
             // 
             // clientBTextBox
             // 
-            this.clientBTextBox.Location = new System.Drawing.Point(860, 474);
+            this.clientBTextBox.Location = new System.Drawing.Point(804, 474);
             this.clientBTextBox.Name = "clientBTextBox";
             this.clientBTextBox.Size = new System.Drawing.Size(100, 31);
             this.clientBTextBox.TabIndex = 26;
@@ -199,7 +199,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(764, 429);
+            this.label6.Location = new System.Drawing.Point(711, 429);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(193, 25);
             this.label6.TabIndex = 27;
@@ -208,7 +208,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(551, 429);
+            this.label7.Location = new System.Drawing.Point(515, 429);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(193, 25);
             this.label7.TabIndex = 28;
@@ -235,7 +235,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(764, 477);
+            this.label9.Location = new System.Drawing.Point(711, 477);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(90, 25);
             this.label9.TabIndex = 30;
@@ -258,7 +258,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(982, 1280);
+            this.ClientSize = new System.Drawing.Size(923, 942);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);

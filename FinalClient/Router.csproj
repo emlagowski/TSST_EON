@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentCommunication.cs" />
-    <Compile Include="IObservable.cs" />
     <Compile Include="Router.cs" />
     <Compile Include="RouterForm.cs">
       <SubType>Form</SubType>
@@ -74,7 +73,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Signaling.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

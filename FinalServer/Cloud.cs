@@ -53,7 +53,7 @@ namespace Cloud
                     allDone.Reset();
 
                     // Start an asynchronous socket to listen for connections.
-                    localSocket.BeginAccept(AcceptCallback, localSocket);
+                    if(localSocket!=null) localSocket.BeginAccept(AcceptCallback, localSocket);
 
                     // Wait until a connection is made before continuing.
                     allDone.WaitOne();
@@ -64,23 +64,28 @@ namespace Cloud
             {
                 Console.WriteLine(e.ToString());
             }
-            Console.WriteLine("\nPress ENTER to continue...");
-            Console.Read();
         }
 
         public void AcceptCallback(IAsyncResult ar)
         {
-            // Signal the main thread to continue.
-            allDone.Set();
+            try
+            {
+                // Signal the main thread to continue.
+                allDone.Set();
 
-            // Get the socket that handles the client request.
-            var listener = (Socket)ar.AsyncState;
-            var handler = listener.EndAccept(ar);
-            sockets.Add(handler);
+                // Get the socket that handles the client request.
+                var listener = (Socket) ar.AsyncState;
+                var handler = listener.EndAccept(ar);
+                sockets.Add(handler);
 
-            // Create the state object.
-            var state = new StateObject {workSocket = handler};
-            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
+                // Create the state object.
+                var state = new StateObject {workSocket = handler};
+                handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
+            }
+            catch (Exception)
+            {
+                //todo
+            }
         }
 
         public void ReadCallback(IAsyncResult ar)
@@ -111,9 +116,10 @@ namespace Cloud
                     return;
                 }
 
-                Console.WriteLine("Read '{0}'[{1} bytes] from socket {2}.",
+                /*Console.WriteLine("R: '{0}' [{1} bytes] from {2}",
                     state.dt.ToString(), bytesRead,
-                    IPAddress.Parse(((IPEndPoint) handler.RemoteEndPoint).Address.ToString()));
+                    IPAddress.Parse(((IPEndPoint) handler.RemoteEndPoint).Address.ToString()));*/
+                Console.WriteLine("R: {0} bytes from {1}", bytesRead, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
 
                 var s = FindTarget((IPEndPoint) handler.RemoteEndPoint);
                 var newState = new StateObject {workSocket = handler};
@@ -152,7 +158,7 @@ namespace Cloud
                     }
                 }
             }
-            Console.WriteLine("Target was not found in the CloudWires.");
+            //Console.WriteLine("Target was not found in the CloudWires.");
             return null;
         }
 
@@ -173,8 +179,8 @@ namespace Cloud
             }
             catch (Exception e)
             {
-                int line = (new StackTrace(e, true)).GetFrame(0).GetFileLineNumber();
-                Console.WriteLine("Router not responding (ERROR LINE: " + line + ")");
+                //int line = (new StackTrace(e, true)).GetFrame(0).GetFileLineNumber();
+                //Console.WriteLine("Router not responding (ERROR LINE: " + line + ")");
             }
         }
 
@@ -187,12 +193,20 @@ namespace Cloud
 
                 // Complete sending the data to the remote device.
                 var bytesSent = handler.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes to client {1}.", bytesSent, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
+                Console.WriteLine("S: {0} bytes to {1}.", bytesSent, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
+        }
+
+        public void Close()
+        {
+            localSocket.Close();
+            sockets.Where(s => s!=null).ToList().ForEach(s => s.Close());
+            System.Windows.Forms.Application.Exit();
+            System.Environment.Exit(1);
         }
     }
 

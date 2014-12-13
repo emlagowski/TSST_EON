@@ -49,7 +49,6 @@ namespace Client
         {
             base.OnClosing(e);
             _user.closing();
-            Console.WriteLine("papa");
         }
     }
 }

@@ -254,7 +254,6 @@ namespace Router
         {
             base.OnClosing(e);
             _router.closing();
-            Console.WriteLine("papa");
         }
     }
 }

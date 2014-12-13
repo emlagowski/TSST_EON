@@ -123,20 +123,6 @@ namespace Agent
           
         }
 
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            // send disroute by cm
-            Console.WriteLine("x");
-//            var key = comboBox1.SelectedItem as String;
-//            List<int[]> route = null;
-//            foreach (var i in cm.routeHistoryList.Keys.Where(i => i[2] == key))
-//            {
-//                route = cm.routeHistoryList[i];
-//            }
-//            cm.disroute(route, key);
-        }
-
         private void Form2_Load(object sender, EventArgs e)
         {
 
@@ -163,7 +149,7 @@ namespace Agent
 
             else
             {
-                Console.WriteLine("error, no connection with this haskey in routeHistoryList");
+                Console.WriteLine("Error, no connection with this haskey in RouteHistoryList");
             }
         }
 
@@ -227,15 +213,11 @@ namespace Agent
 
         }
 
-      
-        /*void SetWiresSource()
+
+        protected override void OnClosing(CancelEventArgs e)
         {
-            BindingSource wiresBindingSource = new BindingSource
-            {
-                DataSource = cm.dijkstraDataList.
-                    Where(d => d.routerID.Equals(RouterComboBox.SelectedItem)).Select(d => d.wireID).ToList()
-            };
-            WireComboBox.DataSource = wiresBindingSource.DataSource;
-        }*/
+            base.OnClosing(e);
+            cm.Close();
+        }
     }
 }

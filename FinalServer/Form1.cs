@@ -34,5 +34,11 @@ namespace Cloud
 //
 //            graphicsObj.DrawLine(myPen, 20, 20, 200, 210);
 //        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            _server.Close();
+        }
     }
 }

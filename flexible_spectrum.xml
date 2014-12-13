@@ -1,0 +1,9 @@
+<flexible-spectrum>
+  <modulation name="DP-QPSK" fixed-grid="50" bandwidth="25" guard-band="10" bit-rate="40"></modulation>
+  <modulation name="DP-QPSK" fixed-grid="50" bandwidth="37.5" guard-band="10" bit-rate="100"></modulation>
+  <modulation name="DP-16QAM" fixed-grid="50" bandwidth="25" guard-band="10" bit-rate="100"></modulation>
+  <modulation name="DP-QPSK" fixed-grid="200" bandwidth="75" guard-band="10" bit-rate="400"></modulation>
+  <modulation name="DP-16QAM" fixed-grid="100" bandwidth="75" guard-band="10" bit-rate="400"></modulation>
+  <modulation name="DP-QPSK" fixed-grid="500" bandwidth="190" guard-band="10" bit-rate="1000"></modulation>
+  <modulation name="DP-16QAM" fixed-grid="250" bandwidth="190" guard-band="10" bit-rate="1000"></modulation>
+</flexible-spectrum>

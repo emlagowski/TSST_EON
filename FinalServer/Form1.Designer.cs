@@ -28,11 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
-            //this.serverBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.consoleOutput = new System.Windows.Forms.TextBox();
-            //((System.ComponentModel.ISupportInitialize)(this.serverBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -46,31 +43,25 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Cloud";
             // 
-            // serverBindingSource
-            // 
-            //this.serverBindingSource.DataSource = typeof(Cloud.Cloud);
-            // 
             // consoleOutput
             // 
             this.consoleOutput.Location = new System.Drawing.Point(13, 84);
             this.consoleOutput.Multiline = true;
             this.consoleOutput.Name = "consoleOutput";
             this.consoleOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.consoleOutput.Size = new System.Drawing.Size(937, 752);
+            this.consoleOutput.Size = new System.Drawing.Size(937, 382);
             this.consoleOutput.TabIndex = 1;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(962, 848);
+            this.ClientSize = new System.Drawing.Size(962, 476);
             this.Controls.Add(this.consoleOutput);
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "Form1";
             this.Text = "Cloud";
-            //this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
-            //((System.ComponentModel.ISupportInitialize)(this.serverBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -41,12 +41,17 @@ namespace Client
             socket.Bind(localEndPoint);
         }
 
+        public string IpToString(EndPoint endPoint)
+        {
+            return (endPoint as IPEndPoint).Address.ToString();
+        }
+
         /**
          * Metoda wołana w celu nawiazania połaczenia z routerem brzegowym.
          **/
         public void connect(String router_ip)
         {
-            Console.WriteLine("Zaczynam nawiazywac polaczenie");
+            Console.WriteLine("Connecting to " + router_ip);
             remoteAddress = router_ip;
             remoteEndPoint = new IPEndPoint(IPAddress.Parse(remoteAddress), 7000);
             Thread t = new Thread(Run);
@@ -62,14 +67,13 @@ namespace Client
         {
             try
             {
-                Console.WriteLine("Nawiazalem polaczenie");
                 // Retrieve the socket from the state object.
                 Socket client = (Socket)ar.AsyncState;
 
                 // Complete the connection.
                 client.EndConnect(ar);
 
-                Console.WriteLine("{0} User connected to {1} Router", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
+                Console.WriteLine("Connected to {0}", IpToString(client.RemoteEndPoint));
 
                 // Signal that the connection has been made.
                 connectDone.Set();
@@ -137,8 +141,8 @@ namespace Client
                 state.dt = (ExtSrc.ClientData)formattor.Deserialize(ms);
                 receiveDone.Set();
                 allReceive.Set();
-                Console.WriteLine("User {0} Received '{1}'[{2} bytes] from router {3}.", client.LocalEndPoint.ToString(),
-                          state.dt.info, bytesRead, state.dt.EndAddress/*client.RemoteEndPoint.ToString()*/);
+                Console.WriteLine("R: '{0}'[{1} bytes] from router {2}.",
+                          state.dt.info, bytesRead, state.dt.EndAddress);
                 messages.Add(new KeyValuePair<MsgType, string>(MsgType.RECEIVED, state.dt.ToString()));
                 //addLog("Receive", client.RemoteEndPoint.ToString(), client.LocalEndPoint.ToString(), state.dt.ToString());
 
@@ -154,7 +158,7 @@ namespace Client
         {
             if (endAddress.Equals(localAddress))
             {
-                Console.WriteLine("Sent msg to yourself: "+data);
+                Console.WriteLine("Sent to yourself: "+data);
                 return;
             }
             MemoryStream fs = new MemoryStream();
@@ -182,7 +186,7 @@ namespace Client
 
                 // Complete sending the data to the remote device.
                 int bytesSent = client.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes from {1} to router {2}.", bytesSent, client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
+                Console.WriteLine("S: {0} bytes to {1}.", bytesSent, IpToString(client.RemoteEndPoint));
                 // Signal that all bytes have been sent.
                 sendDone.Set();
             }
@@ -194,8 +198,9 @@ namespace Client
 
         public void closing()
         {
-            Console.WriteLine("CLOSING");
             socket.Close();
+            System.Windows.Forms.Application.Exit();
+            System.Environment.Exit(1);
         }
     }
 
