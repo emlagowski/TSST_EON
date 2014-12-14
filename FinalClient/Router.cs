@@ -254,7 +254,7 @@ namespace Router
             Socket handler = (Socket)listener.EndAccept(ar);
             //obsluga dla adresow od 0 do 9 dla 127.0.0.x
             int id = Int32.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString().Substring(((IPEndPoint)handler.RemoteEndPoint).Address.ToString().Length - 1, 1));
-           // client = handler;
+            //client = handler;
             //addWires(handler.RemoteEndPoint.ToString());
             //Console.WriteLine("User [{0}] {1} - {2} was added to sockets list", clientSocketDictionary.Count, handler.LocalEndPoint.ToString(), handler.RemoteEndPoint.ToString());
             Console.WriteLine("Client [{0}] {1} was connected.", clientSocketDictionary.Count+1, IpToString(handler.RemoteEndPoint));
@@ -273,6 +273,8 @@ namespace Router
         {
             var state = (ClientStateObject)ar.AsyncState;
             var clientSocket = state.workSocket;
+            var id = Int32.Parse(((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString().
+                        Substring(((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString().Length - 1, 1));
             try
             {
                 if (!IsListening) return;
@@ -320,10 +322,17 @@ namespace Router
                     });
                 }
                 
-                int id = Int32.Parse(((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString().
-                        Substring(((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString().Length - 1, 1));
+                
                 // dodac na liste oczekujacych wyslan
                 waitingMessages.Add(new KeyValuePair<string, DataAndID>(key, new ExtSrc.DataAndID(data,id)));
+            }
+            catch (SocketException e)
+            {
+                //todo klient sie rozłączył
+                clientSocketDictionary.Remove(id);
+                Console.WriteLine("Client disconnected.");
+                AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.CLIENT_DISCONNECTED, address, IpToString(clientSocket.RemoteEndPoint)));
+                return;
             }
             catch (Exception e)
             {

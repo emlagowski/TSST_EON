@@ -136,7 +136,7 @@ namespace ExtSrc
         public AgentData(AgentComProtocol msg, String ip, String unqKey)
             : this()
         {
-            if (msg == AgentComProtocol.REGISTER_CLIENT)
+            if (msg == AgentComProtocol.REGISTER_CLIENT || msg == AgentComProtocol.CLIENT_DISCONNECTED)
             {
                 //rejestracja klienta w w agencie, 
                 this.message = msg;
@@ -206,7 +206,9 @@ namespace ExtSrc
 
 
     }
-    public enum AgentComProtocol { NULL, REGISTER, REGISTER_CLIENT, SET_ROUTE_FOR_ME, ROUTE_FOR_U_EDGE, ROUTE_FOR_U, U_CAN_SEND, DISROUTE, DISROUTE_EDGE, DISROUTE_IS_DONE, CONNECTION_IS_ON, CONNECTION_UNAVAILABLE, MSG_DELIVERED, DISROUTE_ERROR_EDGE, DISROUTE_ERROR, DISROUTE_EDGE_IS_DONE }
+    public enum AgentComProtocol { NULL, REGISTER, REGISTER_CLIENT, SET_ROUTE_FOR_ME, ROUTE_FOR_U_EDGE, ROUTE_FOR_U, U_CAN_SEND, DISROUTE, DISROUTE_EDGE, DISROUTE_IS_DONE, CONNECTION_IS_ON, CONNECTION_UNAVAILABLE, MSG_DELIVERED, DISROUTE_ERROR_EDGE, DISROUTE_ERROR, DISROUTE_EDGE_IS_DONE,
+        CLIENT_DISCONNECTED
+    }
     ///    ###########     MSG TYPES    ##########
     ///    NULL                 -
     ///    REGISTER             - router rejestruje sie u NMS'a
