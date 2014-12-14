@@ -313,6 +313,10 @@ namespace Agent
                     Console.WriteLine("Client {0} connected to router {1}.", agentData.clientIPAddress, agentData.routerIPAddress);
                     clientMap.Add(agentData.clientIPAddress, agentData.routerIPAddress);
                     break;
+                case ExtSrc.AgentComProtocol.CLIENT_DISCONNECTED:
+                    Console.WriteLine("Client {0} disconnected from router {1}.", agentData.clientIPAddress, agentData.routerIPAddress);
+                    clientMap.Remove(agentData.clientIPAddress);
+                    break;
                 default:
                     //Console.WriteLine("Zły msg przybył");
                     break;
