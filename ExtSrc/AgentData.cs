@@ -206,7 +206,9 @@ namespace ExtSrc
 
 
     }
-    public enum AgentComProtocol { NULL, REGISTER, REGISTER_CLIENT, SET_ROUTE_FOR_ME, ROUTE_FOR_U_EDGE, ROUTE_FOR_U, U_CAN_SEND, DISROUTE, DISROUTE_EDGE, DISROUTE_IS_DONE, CONNECTION_IS_ON, CONNECTION_UNAVAILABLE, MSG_DELIVERED, DISROUTE_ERROR_EDGE, DISROUTE_ERROR, DISROUTE_EDGE_IS_DONE }
+    public enum AgentComProtocol { NULL, REGISTER, REGISTER_CLIENT, SET_ROUTE_FOR_ME, ROUTE_FOR_U_EDGE, ROUTE_FOR_U_EDGE_MANUAL, ROUTE_FOR_U, 
+        ROUTE_FOR_U_MANUAL, U_CAN_SEND, DISROUTE, DISROUTE_EDGE, DISROUTE_IS_DONE, CONNECTION_IS_ON, CONNECTION_UNAVAILABLE, MSG_DELIVERED, 
+        DISROUTE_ERROR_EDGE, DISROUTE_ERROR, DISROUTE_EDGE_IS_DONE }
     ///    ###########     MSG TYPES    ##########
     ///    NULL                 -
     ///    REGISTER             - router rejestruje sie u NMS'a
@@ -218,8 +220,10 @@ namespace ExtSrc
     ///    DISROUTE_EDGE        - rozłącz połączenie klienta z routerem brzegowym
     ///    CONNECTION_IS_ON     - wysyła router do nmsa informując o tym ze zestawil zadane polaczenie
     ///    MSG_DELIVERED        - router edge wysyla do nmsa ze dostał wiadomosc
-
-
+    ///    ROUTE_FOR_U_EDGE_MANUAL     - NMS odpowiada routerowi ze ma zestawic konkretne placzenie u siebie (klieckie u router edge )
+    ///                                  Z NMSA wysyłane są też sloty które zajmie połączenie
+    ///    ROUTE_FOR_U_MANUAL          - NMS odpowiada routerowi ze ma zestawic konkretne placzenie u siebie ( wew. u router interior)
+    ///                                  Z NMSA wysyłane są też sloty które zajmie połączenie
 
 }
 

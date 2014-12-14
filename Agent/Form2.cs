@@ -190,7 +190,7 @@ namespace Agent
             string pattern1 = @"(\s*\d\s*)*";
             Regex rgx = new Regex(pattern);
             Regex rgx1 = new Regex(pattern1);
-            if (!rgx.IsMatch(clientATextBox.Text) || !rgx.IsMatch(clientBTextBox.Text) || !rgx1.IsMatch(routeTextBox.Text))
+            if (!rgx.IsMatch(clientATextBox.Text) || !rgx.IsMatch(clientBTextBox.Text) || !rgx1.IsMatch(routeTextBox.Text) || !rgx.IsMatch(startFreqTextBox.Text))
             {
                 Console.WriteLine("regex doesn't match");
                 MessageBox.Show("Wrong text format int textboxes.", "ERROR");
@@ -204,7 +204,8 @@ namespace Agent
             {
                 route[i] = Convert.ToInt32(r[i].Trim());
             }
-            cm.setRoute("127.0.0." + clientATextBox.Text, "127.0.0." + clientBTextBox.Text, banwidthTrackBar.Value, null, hashKey, route);
+            cm.setRoute("127.0.0." + clientATextBox.Text, "127.0.0." + clientBTextBox.Text, banwidthTrackBar.Value, null, hashKey, route, 
+                Convert.ToInt32(startFreqTextBox.Text));
 
         }
 

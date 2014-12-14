@@ -320,7 +320,7 @@ namespace Agent
         }
         //metoda uzywana w agencie gdzie recznie podajemy droge
         //niestety zdublowana czesc kodu bo drugi setroute liczy juz senderRouterID itp ale nie chce nic zepsuc wiec niech tak zostanie narazie
-        public void setRoute(String clientSourceIP, String ClientDestinationIP, int bitrate, int[] excludedWiresIDs, String hashKey, int[] route)
+        public void setRoute(String clientSourceIP, String ClientDestinationIP, int bitrate, int[] excludedWiresIDs, String hashKey, int[] route, int startF = -1)
         {
             List<int[]> routeHistory = new List<int[]>();
             int startfrequency = -1;
@@ -365,7 +365,8 @@ namespace Agent
                                                         {
                                                             originatingAddress = clientSourceIP,
                                                             targetAddress = ClientDestinationIP,
-                                                            uniqueKey = hashKey
+                                                            uniqueKey = hashKey,
+                                                            startingFreq = startF
                                                         });
                     int rSid = Int32.Parse(senderRouterIP.Substring(senderRouterIP.Length - 1, 1));
                     edgeRouterIDs.Add(hashKey, new int[2] { rSid, -1 });
@@ -396,7 +397,8 @@ namespace Agent
                     {
                         originatingAddress = clientSourceIP,
                         targetAddress = ClientDestinationIP,
-                        uniqueKey = hashKey
+                        uniqueKey = hashKey,
+                        startingFreq = startfrequency
                     });
                     //Console.WriteLine("WYSYLALEM DO OSTATNIEGO EDGE ROUTERA DANE ROUTINGOWE (" + ip + ")");
                 }

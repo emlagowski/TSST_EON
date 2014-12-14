@@ -735,6 +735,43 @@ namespace Router
                     //Console.WriteLine("ROUTE SET, EDGE");
                     AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreqEdge, id1));
                     break;
+               /* case ExtSrc.AgentComProtocol.ROUTE_FOR_U_EDGE_MANUAL:
+                    //Console.WriteLine("ROUTE_FOR_U_EDGE");
+                    int startfreqEdge = 0;
+                    if (agentData.startingFreq == -1)
+                    {
+                        startfreqEdge =
+                            localPhysicalWires.getWireByID(agentData.wireID).findSpaceForFS(agentData.FSUCount);
+                        if (startfreqEdge == -1 &
+                        localPhysicalWires.getWireByID(agentData.wireID).IsPossibleToSlide(agentData.FSUCount))
+                        {
+                            localPhysicalWires.getWireByID(agentData.wireID).SlideDown();
+                            startfreqEdge = localPhysicalWires.getWireByID(agentData.wireID).findSpaceForFS(agentData.FSUCount);
+                        }
+                    }
+                    else
+                        startfreqEdge = agentData.startingFreq;
+                    //Console.WriteLine("startfreqEdge = "+ startfreqEdge);
+                    id1 = localPhysicalWires.getWireByID(agentData.wireID).addFreqSlot(startfreqEdge, agentData.FSUCount, agentData.mod);
+                    TOclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
+                    var id = Int32.Parse(agentData.originatingAddress.Substring(agentData.originatingAddress.Length - 1, 1));
+                    FROMclientConnectionsTable.add(agentData.wireID, id1, id);
+                    var ucon = UniqueConnections.FirstOrDefault(x => x.UniqueKey.Equals(agentData.uniqueKey));
+                    if (ucon == null)
+                    {
+                        ucon = new UniqueConnection()
+                        {
+                            AddressA = agentData.originatingAddress,
+                            AddressB = agentData.targetAddress,
+                            UniqueKey = agentData.uniqueKey,
+                            isOnline = true
+                        };
+                        UniqueConnections.Add(ucon);
+                    }
+                    ucon.WireAndFsu = new int[] { agentData.wireID, id1 };
+                    //Console.WriteLine("ROUTE SET, EDGE");
+                    AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreqEdge, id1));
+                    break;*/
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U:
                     ///od agenta: fsucount, mod, firstwireid,secondwireid, startingfreq dla odbierajacego kabla bo juz obliczone w poprzednim roouterze
                     //Console.WriteLine("ROUTE_FOR_U");
@@ -748,7 +785,8 @@ namespace Router
                         startfreq1 = localPhysicalWires.getWireByID(agentData.firstWireID).findSpaceForFS(agentData.lastFSUCount);
                     }
                     //sprawdzanie 2 kabla
-                    var startfreq2 = localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
+                    //todo sf2=sf1 na potrzeby pierwszego etapu do poprawy
+                    var startfreq2 = startfreq1;//localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
                     if (startfreq2 == -1 &
                         localPhysicalWires.getWireByID(agentData.secondWireID).IsPossibleToSlide(agentData.FSUCount))
                     {

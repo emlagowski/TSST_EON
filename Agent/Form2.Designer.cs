@@ -51,6 +51,8 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.communicationBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.startFreqTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ConnDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.banwidthTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.communicationBindingSource)).BeginInit();
@@ -111,11 +113,11 @@
             // 
             // consoleOutput
             // 
-            this.consoleOutput.Location = new System.Drawing.Point(12, 599);
+            this.consoleOutput.Location = new System.Drawing.Point(12, 665);
             this.consoleOutput.Multiline = true;
             this.consoleOutput.Name = "consoleOutput";
             this.consoleOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.consoleOutput.Size = new System.Drawing.Size(903, 306);
+            this.consoleOutput.Size = new System.Drawing.Size(903, 240);
             this.consoleOutput.TabIndex = 14;
             // 
             // bandwidthTextBox
@@ -254,11 +256,29 @@
             // 
             this.communicationBindingSource.DataSource = typeof(Agent.Communication);
             // 
+            // startFreqTextBox
+            // 
+            this.startFreqTextBox.Location = new System.Drawing.Point(344, 608);
+            this.startFreqTextBox.Name = "startFreqTextBox";
+            this.startFreqTextBox.Size = new System.Drawing.Size(100, 31);
+            this.startFreqTextBox.TabIndex = 32;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(124, 614);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(194, 25);
+            this.label1.TabIndex = 33;
+            this.label1.Text = "Starting Frequency";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(923, 942);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.startFreqTextBox);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -315,5 +335,7 @@
         private System.Windows.Forms.Label ConHashLabel;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox startFreqTextBox;
+        private System.Windows.Forms.Label label1;
     }
 }

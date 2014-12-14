@@ -187,17 +187,34 @@ namespace Router
                     {
                         var height = freqSlot.FSUList.Count * 20;
                         var start = freqSlot.startingFreq;
-                        //Console.WriteLine("start = " + start + ", height = " + height);
-                        var key =
-                            _router.UniqueConnections.Where(d => d.WireAndFsu[0] == wire.ID && d.WireAndFsu[1] == freqSlot.ID).Select(d => d.UniqueKey).FirstOrDefault();
                         string name;
+                        //Console.WriteLine("start = " + start + ", height = " + height);
+                       KeyValuePair<int[], int> k = _router.FROMclientConnectionsTable.clientConnectionTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
+                       KeyValuePair<int[], int> s = _router.TOclientConnectionsTable.clientConnectionTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
+                                
+                       
+                       KeyValuePair<int[], int[]> z = _router.freqSlotSwitchingTable.freqSlotSwitchingTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
+                        if (k.Key != null)
+                        {
+                            name = "Start -> wireID = " + k.Key[0] + " FS_ID = " + k.Key[1];
+                        }
+                        else if (s.Key != null)
+                        {
+                            name = "FS_ID = " + s.Key[1]+" -> END";
+                        }
+                        else
+                        {
+                            name = "{FS_ID = " + z.Key[1] + "} -> {wireID = " + z.Value[0] + " FS_ID = " + z.Value[1]+"}";
+                        }
+                       
+                      /*  var key = "gg";
                         if (key != null)
                             name = "Bandwidth " + key;//Convert.ToString(start);
                         else
                         {
                             name = "Bandwidth not known" + Convert.ToString(start);
                             //
-                        }
+                        }*/
                         var guardName = "Guard Band " + Convert.ToString(start);
                         var seriesBand = new System.Windows.Forms.DataVisualization.Charting.Series
                         {
