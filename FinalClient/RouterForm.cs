@@ -237,7 +237,7 @@ namespace Router
                             name = "Bandwidth not known" + Convert.ToString(start);
                             //
                         }*/
-                        var guardName = "Guard Band " + Convert.ToString(start);
+                        var guardName = "Guard Band " + Convert.ToString(freqSlot.ID);
                         var seriesBand = new System.Windows.Forms.DataVisualization.Charting.Series
                         {
                             Name = name,
@@ -250,7 +250,7 @@ namespace Router
                         {
                             Name = guardName,
                             Color = Color.Crimson,
-                            IsVisibleInLegend = true,
+                            IsVisibleInLegend = false,
                             IsXValueIndexed = false,
                             ChartType = SeriesChartType.Range
                         };
@@ -258,7 +258,7 @@ namespace Router
                         {
                             Name = guardName+"_1",
                             Color = Color.Crimson,
-                            IsVisibleInLegend = true,
+                            IsVisibleInLegend = false,
                             IsXValueIndexed = false,
                             ChartType = SeriesChartType.Range
                         };
