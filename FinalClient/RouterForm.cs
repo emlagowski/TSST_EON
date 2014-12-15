@@ -15,6 +15,8 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Router
 {
+
+
     public partial class RouterForm : Form
     {
         // to samo jest w NewWire
@@ -41,7 +43,7 @@ namespace Router
         {
             _router = router;
             random = new Random();
-            colors = new List<Color>(new Color[]{
+            colors = new List<Color>(/*new Color[]{
                 Color.Black,
                 Color.Blue,
                 Color.Green,
@@ -51,7 +53,13 @@ namespace Router
                 Color.Cyan,
                 Color.Gray,
                 Color.DarkViolet,
-            });
+            }*/);
+            foreach (var colorValue in Enum.GetValues(typeof (KnownColor)))
+            {
+                 colors.Add(Color.FromKnownColor((KnownColor)colorValue));
+            }
+            colors.Remove(Color.Crimson);
+           // Shuffle(colors);
             InitializeComponent();
             LabelText = _router.address;
             Console.SetOut(new TextBoxWriter(consoleOutput));
@@ -71,6 +79,20 @@ namespace Router
                 chartsByWireIDs.Add(wire.ID, chart);
             }
              
+        }
+
+        public static void Shuffle<T>(IList<T> list)
+        {
+            Random rng = new Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
         }
 
         private void initChart(Chart chart)
@@ -187,9 +209,9 @@ namespace Router
                     {
                         var height = freqSlot.FSUList.Count * 20;
                         var start = freqSlot.startingFreq;
-                        string name;
+                        string name = "FSid = " + freqSlot.ID;
                         //Console.WriteLine("start = " + start + ", height = " + height);
-                       KeyValuePair<int[], int> k = _router.FROMclientConnectionsTable.clientConnectionTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
+                      /* KeyValuePair<int[], int> k = _router.FROMclientConnectionsTable.clientConnectionTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
                        KeyValuePair<int[], int> s = _router.TOclientConnectionsTable.clientConnectionTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
                                 
                        
@@ -205,7 +227,7 @@ namespace Router
                         else
                         {
                             name = "{FS_ID = " + z.Key[1] + "} -> {wireID = " + z.Value[0] + " FS_ID = " + z.Value[1]+"}";
-                        }
+                        }*/
                        
                       /*  var key = "gg";
                         if (key != null)
@@ -219,7 +241,7 @@ namespace Router
                         var seriesBand = new System.Windows.Forms.DataVisualization.Charting.Series
                         {
                             Name = name,
-                            Color = colors[counter],
+                            Color = colors[freqSlot.ID],
                             IsVisibleInLegend = true,
                             IsXValueIndexed = false,
                             ChartType = SeriesChartType.Range
@@ -232,16 +254,28 @@ namespace Router
                             IsXValueIndexed = false,
                             ChartType = SeriesChartType.Range
                         };
+                        var seriesGuardBand1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                        {
+                            Name = guardName+"_1",
+                            Color = Color.Crimson,
+                            IsVisibleInLegend = true,
+                            IsXValueIndexed = false,
+                            ChartType = SeriesChartType.Range
+                        };
                         chart.Series.Add(seriesBand);
                         chart.Series.Add(seriesGuardBand);
+                        chart.Series.Add(seriesGuardBand1);
 
-                        double[] yValue1 = { start + height, start + height };
-                        double[] yValue2 = { start, start};
-                        double[] yValue1Guard = { start + height + GUARD_BAND, start + height + GUARD_BAND};
-                        double[] yValue2Guard = { start + height, start + height };
+                        double[] yValue1 = { start + height - GUARD_BAND, start + height - GUARD_BAND };
+                        double[] yValue2 = { start + GUARD_BAND, start + GUARD_BAND};
+                        double[] yValue1Guard = { start + height, start + height};
+                        double[] yValue2Guard = { start + height - GUARD_BAND, start + height - GUARD_BAND};
+                        double[] yValue1Guard1 = { start + GUARD_BAND, start + GUARD_BAND};
+                        double[] yValue2Guard1= { start, start};
 
                         chart.Series[name].Points.DataBindY(yValue1, yValue2);
                         chart.Series[guardName].Points.DataBindY(yValue1Guard, yValue2Guard);
+                        chart.Series[guardName+"_1"].Points.DataBindY(yValue1Guard1, yValue2Guard1);
 
                        /* var legendItem = new LegendItem();
                         legendItem.SeriesName = name;
