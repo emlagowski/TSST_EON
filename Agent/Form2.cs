@@ -25,7 +25,7 @@ namespace Agent
 
             InitializeComponent();
             Console.SetOut(new TextBoxWriter(consoleOutput));
-            bandwidthTextBox.Text = "10";
+            bandwidthTextBox.Text = "50";
             cm = new Communication(this);
             //cm.Initialize();
             myTimer = new System.Windows.Forms.Timer();

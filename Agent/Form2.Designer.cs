@@ -102,13 +102,13 @@
             this.banwidthTrackBar.LargeChange = 10;
             this.banwidthTrackBar.Location = new System.Drawing.Point(150, 319);
             this.banwidthTrackBar.Maximum = 1000;
-            this.banwidthTrackBar.Minimum = 10;
+            this.banwidthTrackBar.Minimum = 50;
             this.banwidthTrackBar.Name = "banwidthTrackBar";
             this.banwidthTrackBar.Size = new System.Drawing.Size(430, 90);
             this.banwidthTrackBar.SmallChange = 10;
             this.banwidthTrackBar.TabIndex = 13;
             this.banwidthTrackBar.TickFrequency = 10;
-            this.banwidthTrackBar.Value = 10;
+            this.banwidthTrackBar.Value = 50;
             this.banwidthTrackBar.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // consoleOutput
