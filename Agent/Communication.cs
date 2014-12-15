@@ -181,7 +181,7 @@ namespace Agent
                                     {
                                         //Console.WriteLine("CLOSING");
                                         //todo closing routers
-                                        //CloseRouterSocket(ip);
+                                        CloseRouterSocket(ip);
                                         return;
                                     }
                                     //Console.WriteLine("NOT CLOSING");
@@ -688,11 +688,17 @@ namespace Agent
             byte[] buffer = fs.ToArray();
 
 
-
-            // Begin sending the data to the remote device.
-            client.BeginSend(buffer, 0, buffer.Length, 0,
-                new AsyncCallback(SendCallback), client);
-            sendDone.WaitOne();
+            try
+            {
+                // Begin sending the data to the remote device.
+                client.BeginSend(buffer, 0, buffer.Length, 0,
+                    new AsyncCallback(SendCallback), client);
+                sendDone.WaitOne();
+            }
+            catch (SocketException)
+            {
+                Console.WriteLine("Router offline.");
+            }
         }
 
         private void SendCallback(IAsyncResult ar)

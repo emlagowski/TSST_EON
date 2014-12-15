@@ -19,3 +19,5 @@ ping 192.0.2.8 -n 1 -w 1000 > nul
 start User\bin\Debug\Client.exe 127.0.0.4
 ping 192.0.2.9 -n 1 -w 1000 > nul
 start User\bin\Debug\Client.exe 127.0.0.8
+ping 192.0.2.9 -n 1 -w 1000 > nul
+start User\bin\Debug\Client.exe 127.0.0.6

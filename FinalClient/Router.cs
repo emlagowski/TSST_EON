@@ -878,9 +878,7 @@ namespace Router
             formatter.Serialize(fs, conn);
 
             byte[] buffer = fs.ToArray();
-
-
-
+            
             // Begin sending the data to the remote device.
             agentSocket.BeginSend(buffer, 0, buffer.Length, 0,
                 new AsyncCallback(AgentSendCallback), agentSocket);

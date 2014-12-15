@@ -147,6 +147,11 @@ namespace Client
                 //addLog("Receive", client.RemoteEndPoint.ToString(), client.LocalEndPoint.ToString(), state.dt.ToString());
 
             }
+            catch (SocketException e)
+            {
+                Console.WriteLine("Router disconnected.");
+                socket.Close();
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
