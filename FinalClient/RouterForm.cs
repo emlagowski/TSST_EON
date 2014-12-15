@@ -207,7 +207,7 @@ namespace Router
                     var counter = 0;
                     foreach (var freqSlot in wire.FrequencySlotDictionary.Values)
                     {
-                        var height = freqSlot.FSUList.Count * 20;
+                        var height = freqSlot.FSUList.Count * 10;
                         var start = freqSlot.startingFreq;
                         string name = "FSid = " + freqSlot.ID;
                         //Console.WriteLine("start = " + start + ", height = " + height);

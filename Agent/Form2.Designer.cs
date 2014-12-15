@@ -50,9 +50,9 @@
             this.ConHashLabel = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.communicationBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.startFreqTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.communicationBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ConnDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.banwidthTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.communicationBindingSource)).BeginInit();
@@ -133,9 +133,9 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(287, 291);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(188, 25);
+            this.label5.Size = new System.Drawing.Size(163, 25);
             this.label5.TabIndex = 16;
-            this.label5.Text = "Bandwidth [Mbit/s]";
+            this.label5.Text = "Spectrum [GHz]";
             // 
             // ConHashComboBox
             // 
@@ -252,10 +252,6 @@
             this.label10.TabIndex = 31;
             this.label10.Text = "127.0.0.";
             // 
-            // communicationBindingSource
-            // 
-            this.communicationBindingSource.DataSource = typeof(Agent.Communication);
-            // 
             // startFreqTextBox
             // 
             this.startFreqTextBox.Location = new System.Drawing.Point(344, 608);
@@ -271,6 +267,10 @@
             this.label1.Size = new System.Drawing.Size(194, 25);
             this.label1.TabIndex = 33;
             this.label1.Text = "Starting Frequency";
+            // 
+            // communicationBindingSource
+            // 
+            this.communicationBindingSource.DataSource = typeof(Agent.Communication);
             // 
             // Form2
             // 

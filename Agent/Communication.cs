@@ -604,8 +604,8 @@ namespace Agent
                         mod = Modulation.SixteenQAM;
                     }
                     int modVal = (int) mod;
-                    //todo te 20 trzeba przemyslec
-                    FSUcount = Math.Round((double)(bitrate) / 20.0 * (double)modVal);
+                    //todo modulacja wylaczona z obiegu narazie
+                    FSUcount = Math.Round((double) (bitrate)/10.0); /** (double)modVal)*/;
                     //Console.WriteLine("bitrate "+bitrate+" fsucnt "+FSUcount+" modvl "+ modVal);
                 }
 
