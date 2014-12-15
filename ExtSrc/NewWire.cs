@@ -36,9 +36,9 @@ namespace ExtSrc
             this.spectralWidth = Enumerable.Repeat(EMPTY_VALUE, spectralWidth).ToArray(); //new int[spectralWidth];
         }
 
-        public int addFreqSlot(int startingFreq, int FSUcount, Modulation mod)
+        public int addFreqSlot(int startingFreq, int FSUcount, Modulation mod, int FSid)
         {
-            var id = ++nextSlotID;
+            var id = FSid;//++nextSlotID;
             var slot = new FrequencySlot(id, Modulation.QPSK, startingFreq);
             FrequencySlotDictionary.Add(id, slot);
             var count = 0;

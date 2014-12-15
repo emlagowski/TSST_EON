@@ -20,6 +20,7 @@ namespace Agent
 {
     public class Communication
     {
+        private int FSidCounter = -1;
         public readonly int TIMEOUT = 2000;
         Action<DijkstraData> dijkstraDataAdder;
         private Form form;
@@ -353,7 +354,7 @@ namespace Agent
                 Console.WriteLine("AKTUALNIE NIE MOŻNA ZNALEŹĆ DROGI Z " + clientSourceIP + " DO " + ClientDestinationIP);
                 return;
             }*/
-
+            FSidCounter++;
             for (int j = 0; j < route.Length; j++)
             {
                 bufferRouterResponse = null;
@@ -370,7 +371,8 @@ namespace Agent
                                                             originatingAddress = clientSourceIP,
                                                             targetAddress = ClientDestinationIP,
                                                             uniqueKey = hashKey,
-                                                            startingFreq = startF
+                                                            startingFreq = startF,
+                                                            FSid = FSidCounter
                                                         });
                     int rSid = Int32.Parse(senderRouterIP.Substring(senderRouterIP.Length - 1, 1));
                     edgeRouterIDs.Add(hashKey, new int[2] { rSid, -1 });
@@ -387,7 +389,7 @@ namespace Agent
                     if ((int)ar[0] == 0 || (int)ar[1] == 0) return;
                     String ip = String.Format("127.0.1." + route[j]);
                     Send(ip, new ExtSrc.AgentData(ExtSrc.AgentComProtocol.ROUTE_FOR_U, (int)ar0[1], (Modulation)ar0[0], (int)ar[1], (Modulation)ar[0],
-                                                    FindWireId(route[j - 1], route[j]), FindWireId(route[j], route[j + 1]), startfrequency));
+                                                    FindWireId(route[j - 1], route[j]), FindWireId(route[j], route[j + 1]), startfrequency){FSid = FSidCounter});
                     //Console.WriteLine("WYSYLALEM DO SRODKOWEGO ROUTERA DANE ROUTINGOWE (" + ip + ")");
                 }
                 else if (j == route.Length - 1)
@@ -402,7 +404,9 @@ namespace Agent
                         originatingAddress = clientSourceIP,
                         targetAddress = ClientDestinationIP,
                         uniqueKey = hashKey,
-                        startingFreq = startfrequency
+                        startingFreq = startfrequency,
+                        FSid = FSidCounter
+
                     });
                     //Console.WriteLine("WYSYLALEM DO OSTATNIEGO EDGE ROUTERA DANE ROUTINGOWE (" + ip + ")");
                 }
