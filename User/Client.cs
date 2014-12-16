@@ -151,6 +151,8 @@ namespace Client
             {
                 Console.WriteLine("Router disconnected.");
                 socket.Close();
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                socket.Bind(localEndPoint);
             }
             catch (Exception e)
             {

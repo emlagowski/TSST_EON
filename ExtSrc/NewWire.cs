@@ -90,10 +90,10 @@ namespace ExtSrc
                             spectralWidth[idxSpectralWidth] = frequencySlot.ID;
                         }
                     }
-                    for (var i = 0; i < GUARD_BAND; i++, idxSpectralWidth++)
-                    {
-                        spectralWidth[idxSpectralWidth] = frequencySlot.ID;
-                    }
+//                    for (var i = 0; i < GUARD_BAND; i++, idxSpectralWidth++)
+//                    {
+//                        spectralWidth[idxSpectralWidth] = frequencySlot.ID;
+//                    }
                     frequencySlot.FSUList.Clear();
                     frequencySlot.FSUList.AddRange(tmpList);
                     frequencySlot.startingFreq = newStartingFreq;
@@ -127,7 +127,7 @@ namespace ExtSrc
                 {
                     fsu.isUsed = false;
                 }
-                removeSpectralWidth(freqSlot.startingFreq, freqSlot.FSUList.Count * FREQ_SLOT_UNIT/* + GUARD_BAND*/);
+                removeSpectralWidth(freqSlot.startingFreq, freqSlot.FSUList.Count * FREQ_SLOT_UNIT /*+ GUARD_BAND*/);
                 FrequencySlotDictionary.Remove(id);
                 return true;
             }

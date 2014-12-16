@@ -112,7 +112,7 @@ namespace Cloud
                 if (state.dt.info.Equals("CLOSING_UNIT"))
                 {
                     handler.Close();
-                    sockets.Remove(handler);
+                    Console.WriteLine(sockets.Remove(handler)+" "+sockets.Count);
                     return;
                 }
 
