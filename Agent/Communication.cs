@@ -780,7 +780,10 @@ namespace Agent
             var routerId = Int32.Parse(ipEndPoint.Address.ToString().Substring(ipEndPoint.Address.ToString().Length - 1, 1));
             sockets.Remove(Convert.ToString((ipEndPoint).Address));
             router.Socket.Close();
-            OnlineRoutersList.Remove(router);
+            lock (((ICollection) OnlineRoutersList).SyncRoot)
+            {
+                OnlineRoutersList.Remove(router);
+            }
             var dijkstraDataRemoveList = dijkstraDataList.Where(dd => dd.routerID == routerId).ToList();
             {
                 //Console.WriteLine("DD REMOVED");

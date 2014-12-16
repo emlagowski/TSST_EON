@@ -14,7 +14,7 @@ namespace ExtSrc
     public class NewWire : Observer
     {
         static readonly int GUARD_BAND = 10;
-        static readonly int FREQ_SLOT_UNIT = 20;
+        static readonly int FREQ_SLOT_UNIT = 10;
         static readonly int EMPTY_VALUE = -1;
 
         private int nextSlotID = -1;
@@ -54,7 +54,7 @@ namespace ExtSrc
             }
             //if (count != FSUcount) Console.WriteLine("addFreqSlot error! Needed = " + FSUcount + " got = " + count);
             // todo
-            takeSpectralWidth(startingFreq, FSUcount * FREQ_SLOT_UNIT + GUARD_BAND, id);
+            takeSpectralWidth(startingFreq, FSUcount * FREQ_SLOT_UNIT /*+ GUARD_BAND*/, id);
             return id;
         }
 
@@ -90,10 +90,10 @@ namespace ExtSrc
                             spectralWidth[idxSpectralWidth] = frequencySlot.ID;
                         }
                     }
-                    for (var i = 0; i < GUARD_BAND; i++, idxSpectralWidth++)
-                    {
-                        spectralWidth[idxSpectralWidth] = frequencySlot.ID;
-                    }
+//                    for (var i = 0; i < GUARD_BAND; i++, idxSpectralWidth++)
+//                    {
+//                        spectralWidth[idxSpectralWidth] = frequencySlot.ID;
+//                    }
                     frequencySlot.FSUList.Clear();
                     frequencySlot.FSUList.AddRange(tmpList);
                     frequencySlot.startingFreq = newStartingFreq;
@@ -127,7 +127,7 @@ namespace ExtSrc
                 {
                     fsu.isUsed = false;
                 }
-                removeSpectralWidth(freqSlot.startingFreq, freqSlot.FSUList.Count * FREQ_SLOT_UNIT + GUARD_BAND);
+                removeSpectralWidth(freqSlot.startingFreq, freqSlot.FSUList.Count * FREQ_SLOT_UNIT /*+ GUARD_BAND*/);
                 FrequencySlotDictionary.Remove(id);
                 return true;
             }
