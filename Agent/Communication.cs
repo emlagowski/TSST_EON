@@ -182,7 +182,7 @@ namespace Agent
                                     {
                                         //Console.WriteLine("CLOSING");
                                         //todo closing routers
-                                        CloseRouterSocket(ip);
+                                        //CloseRouterSocket(ip);
                                         return;
                                     }
                                     //Console.WriteLine("NOT CLOSING");

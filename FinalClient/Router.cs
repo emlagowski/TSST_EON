@@ -311,15 +311,18 @@ namespace Router
                 }
                 else
                 {
-                    key = generateUniqueKey();
-                    AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.SET_ROUTE_FOR_ME, address, IpToString(clientSocket.RemoteEndPoint), target, key, state.cdt.bandwidthNeeded));
-                    UniqueConnections.Add(new UniqueConnection()
-                    {
-                        UniqueKey = key,
-                        AddressA = (clientSocket.RemoteEndPoint as IPEndPoint).Address.ToString(),
-                        AddressB = target,
-                        isOnline = false
-                    });
+                    // todo
+//                    key = generateUniqueKey();
+//                    AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.SET_ROUTE_FOR_ME, address, IpToString(clientSocket.RemoteEndPoint), target, key, state.cdt.bandwidthNeeded));
+//                    UniqueConnections.Add(new UniqueConnection()
+//                    {
+//                        UniqueKey = key,
+//                        AddressA = (clientSocket.RemoteEndPoint as IPEndPoint).Address.ToString(),
+//                        AddressB = target,
+//                        isOnline = false
+//                    });
+                    clientSocket.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReceiveFromClientCallback, state);//todo tego ma nie byc jesli odkomentujemy to wyzej, czyli routowanie
+                    return;//todo tego ma nie byc jesli odkomentujemy to wyzej, czyli routowanie
                 }
                 
                 
