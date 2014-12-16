@@ -198,7 +198,7 @@ namespace Agent
             }
             String hashKey = generateUniqueKey();
             int[] route;
-            string[] r = routeTextBox.Text.Split(' ');
+            string[] r = routeTextBox.Text.Trim().Split(' ');
             route = new int[r.Count()];
             for (var i = 0; i < r.Count(); i++)
             {
