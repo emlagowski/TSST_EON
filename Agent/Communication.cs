@@ -412,7 +412,7 @@ namespace Agent
                     });
                     //Console.WriteLine("WYSYLALEM DO OSTATNIEGO EDGE ROUTERA DANE ROUTINGOWE (" + ip + ")");
                 }
-                //sprawdz czy dostepne bitrejty
+                //sprawdz czy dostepne bitrejtyy
                 var waitTime = 0;
                 while (bufferRouterResponse == null)
                 {
