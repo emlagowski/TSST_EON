@@ -201,6 +201,7 @@
             // 
             // band
             // 
+            this.band.Enabled = false;
             this.band.Location = new System.Drawing.Point(581, 67);
             this.band.Margin = new System.Windows.Forms.Padding(6);
             this.band.Name = "band";

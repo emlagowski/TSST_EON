@@ -59,6 +59,13 @@ namespace Router
             this.toClientTable = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.clientTable = new System.Windows.Forms.DataGridView();
+            this.MsgTextBox = new System.Windows.Forms.TextBox();
+            this.FSTextBox = new System.Windows.Forms.TextBox();
+            this.PortTextBox = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.SendButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.connectedWiresTable)).BeginInit();
             this.tabs.SuspendLayout();
             this.generalTab.SuspendLayout();
@@ -141,6 +148,13 @@ namespace Router
             // 
             // generalTab
             // 
+            this.generalTab.Controls.Add(this.SendButton);
+            this.generalTab.Controls.Add(this.label4);
+            this.generalTab.Controls.Add(this.label3);
+            this.generalTab.Controls.Add(this.label2);
+            this.generalTab.Controls.Add(this.PortTextBox);
+            this.generalTab.Controls.Add(this.FSTextBox);
+            this.generalTab.Controls.Add(this.MsgTextBox);
             this.generalTab.Controls.Add(this.groupBox2);
             this.generalTab.Controls.Add(this.groupBox1);
             this.generalTab.Controls.Add(this.label1);
@@ -283,6 +297,64 @@ namespace Router
             this.clientTable.Size = new System.Drawing.Size(906, 238);
             this.clientTable.TabIndex = 0;
             // 
+            // MsgTextBox
+            // 
+            this.MsgTextBox.Location = new System.Drawing.Point(131, 1015);
+            this.MsgTextBox.Name = "MsgTextBox";
+            this.MsgTextBox.Size = new System.Drawing.Size(100, 31);
+            this.MsgTextBox.TabIndex = 11;
+            // 
+            // FSTextBox
+            // 
+            this.FSTextBox.Location = new System.Drawing.Point(452, 1015);
+            this.FSTextBox.Name = "FSTextBox";
+            this.FSTextBox.Size = new System.Drawing.Size(100, 31);
+            this.FSTextBox.TabIndex = 12;
+            // 
+            // PortTextBox
+            // 
+            this.PortTextBox.Location = new System.Drawing.Point(301, 1015);
+            this.PortTextBox.Name = "PortTextBox";
+            this.PortTextBox.Size = new System.Drawing.Size(100, 31);
+            this.PortTextBox.TabIndex = 13;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(296, 957);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(80, 25);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Port id:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(447, 957);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(68, 25);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "FS id:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(126, 957);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(59, 25);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "Msg:";
+            // 
+            // SendButton
+            // 
+            this.SendButton.Location = new System.Drawing.Point(610, 1000);
+            this.SendButton.Name = "SendButton";
+            this.SendButton.Size = new System.Drawing.Size(107, 46);
+            this.SendButton.TabIndex = 17;
+            this.SendButton.Text = "Send";
+            this.SendButton.UseVisualStyleBackColor = true;
+            this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
+            // 
             // RouterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -337,5 +409,12 @@ namespace Router
         private System.Windows.Forms.DataGridView messagesTable;
         private System.Windows.Forms.DataGridView toClientTable;
         private System.Windows.Forms.DataGridView clientTable;
+        private System.Windows.Forms.Button SendButton;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox PortTextBox;
+        private System.Windows.Forms.TextBox FSTextBox;
+        private System.Windows.Forms.TextBox MsgTextBox;
     }
 }

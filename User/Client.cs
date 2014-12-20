@@ -32,6 +32,7 @@ namespace Client
         {
             localAddress = ip;
             messages = new List<KeyValuePair<MsgType, string>>();
+            
         }
 
         public void initialization()

@@ -1,42 +1,5 @@
 <wires>
-	<wire WireId="2" Distance="500" MaxFreqSlots="50" PortPrefix="113" SpectralWidth="1000">Ni</wire>	  
-	<wire WireId="4" Distance="500" MaxFreqSlots="50" PortPrefix="135" SpectralWidth="1000">Yon</wire>	
-	<wire WireId="5" Distance="500" MaxFreqSlots="50" PortPrefix="134" SpectralWidth="1000">Go</wire>	
-<!--
-<wire WireId="2" Distance="500" Lambdas="10">Two</wire>
-	  <lambda  FirstPort="10300" Id="0" WireId="1">Two</lambda>
-	  <lambda  FirstPort="10301" Id="1" WireId="1">Two</lambda>
-	  <lambda  FirstPort="10302" Id="2" WireId="1">Two</lambda>
-	  <lambda  FirstPort="10303" Id="3" WireId="1">Two</lambda>
-	  <lambda  FirstPort="10304" Id="4" WireId="1">Two</lambda>
-	  <lambda  FirstPort="10305" Id="5" WireId="1">Two</lambda>
-	  <lambda  FirstPort="10306" Id="6" WireId="1">Two</lambda>
-	  <lambda  FirstPort="10307" Id="7" WireId="1">Two</lambda>
-	  <lambda  FirstPort="10308" Id="8" WireId="1">Two</lambda>
-	  <lambda  FirstPort="10309" Id="9" WireId="1">Two</lambda>
-	  
-<wire WireId="4" Distance="500" Lambdas="10">Four</wire>
-	  <lambda  FirstPort="30500" Id="0" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30501" Id="1" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30502" Id="2" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30503" Id="3" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30504" Id="4" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30505" Id="5" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30506" Id="6" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30507" Id="7" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30508" Id="8" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30509" Id="9" WireId="1">Four</lambda>
-	  
-  <wire WireId="5" Distance="500" Lambdas="10">Five</wire>
-	  <lambda  FirstPort="30400" Id="0" WireId="1">Five</lambda>
-	  <lambda  FirstPort="30401" Id="1" WireId="1">Five</lambda>
-	  <lambda  FirstPort="30402" Id="2" WireId="1">Five</lambda>
-	  <lambda  FirstPort="30403" Id="3" WireId="1">Five</lambda>
-	  <lambda  FirstPort="30404" Id="4" WireId="1">Five</lambda>
-	  <lambda  FirstPort="30405" Id="5" WireId="1">Five</lambda>
-	  <lambda  FirstPort="30406" Id="6" WireId="1">Five</lambda>
-	  <lambda  FirstPort="30407" Id="7" WireId="1">Five</lambda>
-	  <lambda  FirstPort="30408" Id="8" WireId="1">Five</lambda>
-	  <lambda  FirstPort="30409" Id="9" WireId="1">Five</lambda>
-	  -->
+	<wire WireId="2" Distance="500" MaxFreqSlots="50" PortPrefix="113" SpectralWidth="1000"></wire>	  
+	<wire WireId="4" Distance="500" MaxFreqSlots="50" PortPrefix="135" SpectralWidth="1000"></wire>	
+	<wire WireId="5" Distance="500" MaxFreqSlots="50" PortPrefix="134" SpectralWidth="1000"></wire>	
 </wires>

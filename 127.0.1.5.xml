@@ -1,57 +1,6 @@
-<wires>
-	
-	<wire WireId="3" Distance="500" MaxFreqSlots="50" PortPrefix="115" SpectralWidth="1000">San</wire>	
-	<wire WireId="4" Distance="500" MaxFreqSlots="50" PortPrefix="135" SpectralWidth="1000">Yon</wire>	
-	<wire WireId="6" Distance="500" MaxFreqSlots="50" PortPrefix="145" SpectralWidth="1000">Roku</wire>	
-	<wire WireId="7" Distance="500" MaxFreqSlots="50" PortPrefix="125" SpectralWidth="1000">Nana</wire>
-	
-<!--
-<wire WireId="3" Distance="500" Lambdas="10">Three</wire>
-	  <lambda  FirstPort="10500" Id="0" WireId="1">Three</lambda>
-	  <lambda  FirstPort="10501" Id="1" WireId="1">Three</lambda>
-	  <lambda  FirstPort="10502" Id="2" WireId="1">Three</lambda>
-	  <lambda  FirstPort="10503" Id="3" WireId="1">Three</lambda>
-	  <lambda  FirstPort="10504" Id="4" WireId="1">Three</lambda>
-	  <lambda  FirstPort="10505" Id="5" WireId="1">Three</lambda>
-	  <lambda  FirstPort="10506" Id="6" WireId="1">Three</lambda>
-	  <lambda  FirstPort="10507" Id="7" WireId="1">Three</lambda>
-	  <lambda  FirstPort="10508" Id="8" WireId="1">Three</lambda>
-	  <lambda  FirstPort="10509" Id="9" WireId="1">Three</lambda>
-
-  <wire WireId="4" Distance="500" Lambdas="10">Four</wire>
-	  <lambda  FirstPort="30500" Id="0" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30501" Id="1" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30502" Id="2" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30503" Id="3" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30504" Id="4" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30505" Id="5" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30506" Id="6" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30507" Id="7" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30508" Id="8" WireId="1">Four</lambda>
-	  <lambda  FirstPort="30509" Id="9" WireId="1">Four</lambda>
-	  
-<wire WireId="6" Distance="500" Lambdas="10">Six</wire>
-	  <lambda  FirstPort="40500" Id="0" WireId="1">Six</lambda>
-	  <lambda  FirstPort="40501" Id="1" WireId="1">Six</lambda>
-	  <lambda  FirstPort="40502" Id="2" WireId="1">Six</lambda>
-	  <lambda  FirstPort="40503" Id="3" WireId="1">Six</lambda>
-	  <lambda  FirstPort="40504" Id="4" WireId="1">Six</lambda>
-	  <lambda  FirstPort="40505" Id="5" WireId="1">Six</lambda>
-	  <lambda  FirstPort="40506" Id="6" WireId="1">Six</lambda>
-	  <lambda  FirstPort="40507" Id="7" WireId="1">Six</lambda>
-	  <lambda  FirstPort="40508" Id="8" WireId="1">Six</lambda>
-	  <lambda  FirstPort="40509" Id="9" WireId="1">Six</lambda>
-	  
-  <wire WireId="7" Distance="500" Lambdas="10">Seven</wire>
-	  <lambda  FirstPort="20500" Id="0" WireId="1">Seven</lambda>
-	  <lambda  FirstPort="20501" Id="1" WireId="1">Seven</lambda>
-	  <lambda  FirstPort="20502" Id="2" WireId="1">Seven</lambda>
-	  <lambda  FirstPort="20503" Id="3" WireId="1">Seven</lambda>
-	  <lambda  FirstPort="20504" Id="4" WireId="1">Seven</lambda>
-	  <lambda  FirstPort="20505" Id="5" WireId="1">Seven</lambda>
-	  <lambda  FirstPort="20506" Id="6" WireId="1">Seven</lambda>
-	  <lambda  FirstPort="20507" Id="7" WireId="1">Seven</lambda>
-	  <lambda  FirstPort="20508" Id="8" WireId="1">Seven</lambda>
-	  <lambda  FirstPort="20509" Id="9" WireId="1">Seven</lambda>
-	  -->
+<wires>	
+	<wire WireId="3" Distance="500" MaxFreqSlots="50" PortPrefix="115" SpectralWidth="1000"></wire>	
+	<wire WireId="4" Distance="500" MaxFreqSlots="50" PortPrefix="135" SpectralWidth="1000"></wire>	
+	<wire WireId="6" Distance="500" MaxFreqSlots="50" PortPrefix="145" SpectralWidth="1000"></wire>	
+	<wire WireId="7" Distance="500" MaxFreqSlots="50" PortPrefix="125" SpectralWidth="1000"></wire>
 </wires>

@@ -1,5 +1,7 @@
 <wires>
-  <wire WireId="1" Distance="500" MaxFreqSlots="50" PortPrefix="112" SpectralWidth="1000">Ichi</wire>	  
-  <wire WireId="2" Distance="500" MaxFreqSlots="50" PortPrefix="113" SpectralWidth="1000">Ni</wire>	  
-  <wire WireId="3" Distance="500" MaxFreqSlots="50" PortPrefix="115" SpectralWidth="1000">San</wire>	     
+  <wire WireId="1" Distance="500" MaxFreqSlots="50" PortPrefix="112" SpectralWidth="1000"></wire>	  
+  <wire WireId="2" Distance="500" MaxFreqSlots="50" PortPrefix="113" SpectralWidth="1000"></wire>	  
+  <wire WireId="3" Distance="500" MaxFreqSlots="50" PortPrefix="115" SpectralWidth="1000"></wire>	     
+  <wire WireId="8" Distance="500" MaxFreqSlots="50" PortPrefix="117" SpectralWidth="1000"></wire>	     
+  <wire WireId="9" Distance="500" MaxFreqSlots="50" PortPrefix="118" SpectralWidth="1000"></wire>	     
 </wires>

@@ -21,6 +21,7 @@ namespace Client
             InitializeComponent();
             labelName.Text = _user.localAddress;
             Console.SetOut(new TextBoxWriter(consoleOutput));
+            band.Text = "0";
             var t = new Timer { Enabled = true, Interval = 1 * 1000 };
             t.Tick += delegate { Bind(); };
         }

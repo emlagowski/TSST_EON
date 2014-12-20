@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -158,13 +159,13 @@ namespace Router
             })).ToList();
             //            messagesTable;
             messagesTable.DataSource = null;
-            messagesTable.DataSource = (_router.waitingMessages.Select(d => new
+          /*  messagesTable.DataSource = (_router.waitingMessages.Select(d => new
             {
                 UNIQUE = d.Key,
                 CLIENT_ID = d.Value.ID,
                 BANDWITDHT = d.Value.data.bandwidthNeeded,
                 DATA = d.Value.data.info
-            })).ToList();
+            })).ToList();*/
             //            toClientTable;
             toClientTable.DataSource = null;
             toClientTable.DataSource = (_router.TOclientConnectionsTable.clientConnectionTable.Select(d => new
@@ -305,6 +306,30 @@ namespace Router
         {
             base.OnClosing(e);
             _router.closing();
+        }
+
+        private void SendButton_Click(object sender, EventArgs e)
+        {
+            if (MsgTextBox.Text.Equals("") || PortTextBox.Text.Equals("") || FSTextBox.Text.Equals(""))
+            {
+                MessageBox.Show("All fields must be filled.", "ERROR");
+                return;
+            }
+            string pattern = @"\d*";
+            
+            Regex rgx = new Regex(pattern);
+
+            if (!rgx.IsMatch(PortTextBox.Text) || !rgx.IsMatch(FSTextBox.Text))
+            {
+                Console.WriteLine("regex doesn't match");
+                MessageBox.Show("Wrong text format in textboxes.", "ERROR");
+                return;
+            }
+            Data data = new Data(/*bandwidthNeeded*/0, MsgTextBox.Text);
+           
+            var id = _router.address.Substring(_router.address.Length - 1, 1);
+            _router.waitingMsgs.Add(new KeyValuePair<int[], DataAndID>
+                (new int[] { Convert.ToInt32(PortTextBox.Text), Convert.ToInt32(FSTextBox.Text) }, new ExtSrc.DataAndID(data, Int32.Parse(id))));
         }
     }
 }

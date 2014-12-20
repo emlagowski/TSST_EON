@@ -19,14 +19,25 @@ namespace ExtSrc
         public void add(int wireA, int FSidA, int wireB, int FSidB)
         {
             freqSlotSwitchingTable.Add(new int[] { wireA, FSidA }, new int[] { wireB, FSidB });
-            freqSlotSwitchingTable.Add(new int[] { wireB, FSidB }, new int[] { wireA, FSidA });
+           // freqSlotSwitchingTable.Add(new int[] { wireB, FSidB }, new int[] { wireA, FSidA });
         }
 
         public void remove(int wireA, int FSidA, int wireB, int FSidB)
         {
             //todo dobrze usuwa bo jest uzyty MyEqualityComparer ktory sprawdza wartosci?
             freqSlotSwitchingTable.Remove(new int[] { wireA, FSidA });
-            freqSlotSwitchingTable.Remove(new int[] { wireB, FSidB });
+            //freqSlotSwitchingTable.Remove(new int[] { wireB, FSidB });
+        }
+
+        public void removeEdge(int wireA, int FSidA)
+        {
+            //todo dobrze usuwa bo jest uzyty MyEqualityComparer ktory sprawdza wartosci?
+            if (!freqSlotSwitchingTable.Remove(new int[] { wireA, FSidA }))
+            {
+                var toDelete = freqSlotSwitchingTable.Values.FirstOrDefault(x => x[0] == -1 && x[1] == -1);
+                if (toDelete != null)
+                    freqSlotSwitchingTable.Remove(toDelete);
+            }
         }
 
         public int[] findRoute(int wire, int FSid)

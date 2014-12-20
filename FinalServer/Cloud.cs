@@ -112,7 +112,8 @@ namespace Cloud
                 if (state.dt.info.Equals("CLOSING_UNIT"))
                 {
                     handler.Close();
-                    Console.WriteLine(sockets.Remove(handler)+" "+sockets.Count);
+                    Console.WriteLine(sockets.Remove(handler) + " " + sockets.Count);
+                    
                     return;
                 }
 
@@ -120,8 +121,11 @@ namespace Cloud
                     state.dt.ToString(), bytesRead,
                     IPAddress.Parse(((IPEndPoint) handler.RemoteEndPoint).Address.ToString()));*/
                 Console.WriteLine("R: {0} bytes from {1}", bytesRead, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
-
-                var s = FindTarget((IPEndPoint) handler.RemoteEndPoint);
+                Socket s;
+                
+                
+                    s = FindTarget((IPEndPoint) handler.RemoteEndPoint);
+                
                 var newState = new StateObject {workSocket = handler};
 
                 Send(s, state.dt);

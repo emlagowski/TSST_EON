@@ -180,9 +180,9 @@ namespace Agent
                                     var x = GetTimestamp(DateTime.Now) - ro.TimeStamp;
                                     if (x > 30000000)
                                     {
-                                        //Console.WriteLine("CLOSING");
+                                        Console.WriteLine("CLOSING");
                                         //todo closing routers
-                                        //CloseRouterSocket(ip);
+                                        CloseRouterSocket(ip);
                                         return;
                                     }
                                     //Console.WriteLine("NOT CLOSING");
@@ -330,7 +330,7 @@ namespace Agent
             List<int[]> routeHistory = new List<int[]>();
             int startfrequency = -1;
             // zamiana ip koncowego klienta na ip jego routera
-            String senderRouterIP;
+           /* String senderRouterIP;
             clientMap.TryGetValue(clientSourceIP, out senderRouterIP);
             if (senderRouterIP == null)
             {
@@ -343,7 +343,7 @@ namespace Agent
             {
                 Console.WriteLine("Setting route error.");
                 return;
-            }
+            }*/
             //String Client = Int32.Parse(sourceIP.Substring(sourceIP.Length - 1, 1));
             int ClientSenderID = Int32.Parse(clientSourceIP.Substring(clientSourceIP.Length - 1, 1));
             //int RouterRecipientID = Int32.Parse(destinationIP.Substring(destinationIP.Length - 1, 1));
@@ -372,9 +372,10 @@ namespace Agent
                                                             targetAddress = ClientDestinationIP,
                                                             uniqueKey = hashKey,
                                                             startingFreq = startF,
-                                                            FSid = FSidCounter
+                                                            FSid = FSidCounter,
+                                                            isStartEdge = true
                                                         });
-                    int rSid = Int32.Parse(senderRouterIP.Substring(senderRouterIP.Length - 1, 1));
+                    int rSid = Int32.Parse(clientSourceIP.Substring(clientSourceIP.Length - 1, 1));
                     edgeRouterIDs.Add(hashKey, new int[2] { rSid, -1 });
 
                     //Console.WriteLine("WYSYLALEM DO PIERWSZEGO EDGE ROUTERA DANE ROUTINGOWE (" + ip + ")");
@@ -405,7 +406,8 @@ namespace Agent
                         targetAddress = ClientDestinationIP,
                         uniqueKey = hashKey,
                         startingFreq = startfrequency,
-                        FSid = FSidCounter
+                        FSid = FSidCounter,
+                        isStartEdge = false
 
                     });
                     //Console.WriteLine("WYSYLALEM DO OSTATNIEGO EDGE ROUTERA DANE ROUTINGOWE (" + ip + ")");
@@ -438,7 +440,7 @@ namespace Agent
                         routeHistory.Add(new int[3] { route[j], FindWireId(route[j - 1], route[j]), bufferRouterResponse.FSid });
                         routeHistoryList.Add(new String[3] { clientSourceIP, ClientDestinationIP, hashKey }, routeHistory);
 
-                        int rRid = Int32.Parse(recipientRouterIP.Substring(recipientRouterIP.Length - 1, 1));
+                        int rRid = Int32.Parse(ClientDestinationIP.Substring(ClientDestinationIP.Length - 1, 1));
                         // edgeRouterIDs.Add(hashKey, new int[2] { rSid, rRid });
 
                         int[] tmp = edgeRouterIDs[hashKey];

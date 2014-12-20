@@ -17,6 +17,8 @@ namespace ExtSrc
         public String targetAddress { get; set; }
         public String routerIPAddress{ get; set; }
         public String clientIPAddress { get; set; }
+        public bool isStartEdge { get; set; }
+
         //addfreqslot
         public int startingFreq { get; set; }
         public int FSUCount { get; set; }

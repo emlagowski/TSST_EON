@@ -34,7 +34,8 @@ namespace Router
         public ExtSrc.ClientConnectionsTable TOclientConnectionsTable { get; set; }
         public ExtSrc.ClientConnectionsTable FROMclientConnectionsTable { get; set; }
         public Dictionary<int, ClientSocket> clientSocketDictionary { get; set; }
-        public List<KeyValuePair<String, ExtSrc.DataAndID>> waitingMessages { get; set; }
+       // public List<KeyValuePair<String, ExtSrc.DataAndID>> waitingMessages { get; set; }
+        public List<KeyValuePair<int[], ExtSrc.DataAndID>> waitingMsgs { get; set; }
         public List<UniqueConnection> UniqueConnections { get; set; }
 
         public class UniqueConnection
@@ -79,7 +80,8 @@ namespace Router
         {
             observers = new List<Observer>();
             freqSlotSwitchingTable = new ExtSrc.FrequencySlotSwitchingTable();
-            waitingMessages = new List<KeyValuePair<string, DataAndID>>();
+            //waitingMessages = new List<KeyValuePair<string, DataAndID>>();
+            waitingMsgs = new List<KeyValuePair<int[], DataAndID>>();
             UniqueConnections = new List<UniqueConnection>();
             cloudEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
             
@@ -119,7 +121,7 @@ namespace Router
             {
                 while (true)
                 {
-                    if (UniqueConnections.Count(x => x.isOnline)!=0 && waitingMessages.Count!=0)
+                    /*if (UniqueConnections.Count(x => x.isOnline)!=0 && waitingMessages.Count!=0)
                     {
                         var list = UniqueConnections.Where(x => x.isOnline).ToList();
                         foreach (var uc in list)
@@ -143,6 +145,17 @@ namespace Router
                             }
                             tmpList.ForEach(x=>waitingMessages.Remove(x));
                         }
+                       
+                    }*/
+                    if (waitingMsgs.Count != 0)
+                    {
+                        var tmpList = new List<KeyValuePair<int[], DataAndID>>();
+                        foreach (var keyValuePair in waitingMsgs)
+                        {
+                            Send(keyValuePair.Value.data, keyValuePair.Key/*, keyValuePair.Value.ID*/);
+                            tmpList.Add(keyValuePair);
+                        }
+                        tmpList.ForEach(x => waitingMsgs.Remove(x));
                     }
                     Thread.Sleep(500);
                 }
@@ -327,7 +340,8 @@ namespace Router
                 
                 
                 // dodac na liste oczekujacych wyslan
-                waitingMessages.Add(new KeyValuePair<string, DataAndID>(key, new ExtSrc.DataAndID(data,id)));
+                //todo zakomentowane dodawanie do wyslania
+              //  waitingMessages.Add(new KeyValuePair<string, DataAndID>(key, new ExtSrc.DataAndID(data,id)));
             }
             catch (SocketException e)
             {
@@ -353,7 +367,7 @@ namespace Router
 
         public void Send(ExtSrc.Data data, int[] route)
         {
-            var id = TOclientConnectionsTable.findClient(route[0], route[1]);
+            /*var id = TOclientConnectionsTable.findClient(route[0], route[1]);
             ClientSocket clientSocketToSend;
             if (clientSocketDictionary.TryGetValue(id, out clientSocketToSend))
             {
@@ -369,7 +383,7 @@ namespace Router
                 clientSocketToSend.socket.BeginSend(buffer, 0, buffer.Length, 0, SendCallback, clientSocketToSend.socket);
                 sendDone.WaitOne();
             }
-            else
+            else*/
             {                
                 var sockets = localPhysicalWires.getSockets(route);
                 var units = localPhysicalWires.getFrequencySlotUnits(route);
@@ -548,6 +562,14 @@ namespace Router
 
                 if (canSend)
                 {
+                    //na pon
+                    if (route[0] == -1 && route[1] == -1)
+                    {
+                        Console.WriteLine("R: '{0}'[{1} bytes].",
+                          state.dt.info, bytesRead);
+                        return;
+                        
+                    }
                     Send(state.dt, route);
                 }
 
@@ -728,10 +750,18 @@ namespace Router
                         startfreqEdge = agentData.startingFreq;
                     //Console.WriteLine("startfreqEdge = "+ startfreqEdge);
                     id1 = localPhysicalWires.getWireByID(agentData.wireID).addFreqSlot(startfreqEdge, agentData.FSUCount, agentData.mod, agentData.FSid);
-                    TOclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
+                  //  TOclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
                     var id = Int32.Parse(agentData.originatingAddress.Substring(agentData.originatingAddress.Length - 1, 1));
-                    FROMclientConnectionsTable.add(agentData.wireID, id1, id);
+                   // FROMclientConnectionsTable.add(agentData.wireID, id1, id);
                     var ucon = UniqueConnections.FirstOrDefault(x => x.UniqueKey.Equals(agentData.uniqueKey));
+
+                    //na poniedz
+                    if(agentData.isStartEdge)
+                        freqSlotSwitchingTable.add(-1, -1, agentData.wireID, agentData.FSid);
+                    else
+                        freqSlotSwitchingTable.add(agentData.wireID, agentData.FSid, -1, -1);
+
+                    //
                     if (ucon == null)
                     {
                         ucon = new UniqueConnection()
@@ -747,43 +777,7 @@ namespace Router
                     //Console.WriteLine("ROUTE SET, EDGE");
                     AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreqEdge, id1));
                     break;
-               /* case ExtSrc.AgentComProtocol.ROUTE_FOR_U_EDGE_MANUAL:
-                    //Console.WriteLine("ROUTE_FOR_U_EDGE");
-                    int startfreqEdge = 0;
-                    if (agentData.startingFreq == -1)
-                    {
-                        startfreqEdge =
-                            localPhysicalWires.getWireByID(agentData.wireID).findSpaceForFS(agentData.FSUCount);
-                        if (startfreqEdge == -1 &
-                        localPhysicalWires.getWireByID(agentData.wireID).IsPossibleToSlide(agentData.FSUCount))
-                        {
-                            localPhysicalWires.getWireByID(agentData.wireID).SlideDown();
-                            startfreqEdge = localPhysicalWires.getWireByID(agentData.wireID).findSpaceForFS(agentData.FSUCount);
-                        }
-                    }
-                    else
-                        startfreqEdge = agentData.startingFreq;
-                    //Console.WriteLine("startfreqEdge = "+ startfreqEdge);
-                    id1 = localPhysicalWires.getWireByID(agentData.wireID).addFreqSlot(startfreqEdge, agentData.FSUCount, agentData.mod);
-                    TOclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
-                    var id = Int32.Parse(agentData.originatingAddress.Substring(agentData.originatingAddress.Length - 1, 1));
-                    FROMclientConnectionsTable.add(agentData.wireID, id1, id);
-                    var ucon = UniqueConnections.FirstOrDefault(x => x.UniqueKey.Equals(agentData.uniqueKey));
-                    if (ucon == null)
-                    {
-                        ucon = new UniqueConnection()
-                        {
-                            AddressA = agentData.originatingAddress,
-                            AddressB = agentData.targetAddress,
-                            UniqueKey = agentData.uniqueKey,
-                            isOnline = true
-                        };
-                        UniqueConnections.Add(ucon);
-                    }
-                    ucon.WireAndFsu = new int[] { agentData.wireID, id1 };
-                    //Console.WriteLine("ROUTE SET, EDGE");
-                    AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreqEdge, id1));
-                    break;*/
+               
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U:
                     ///od agenta: fsucount, mod, firstwireid,secondwireid, startingfreq dla odbierajacego kabla bo juz obliczone w poprzednim roouterze
                     //Console.WriteLine("ROUTE_FOR_U");
@@ -840,6 +834,9 @@ namespace Router
                     {
                         TOclientConnectionsTable.remove(agentData.firstWireID, agentData.FSid);
                         FROMclientConnectionsTable.remove(agentData.firstWireID, agentData.FSid);
+                        //na pon
+                        freqSlotSwitchingTable.removeEdge(agentData.firstWireID, agentData.FSid);
+
                         UniqueConnection uconnn = null;
                         foreach (var uniqueConnection in UniqueConnections)
                         {
