@@ -1,0 +1,3 @@
+<wires>	
+	<wire WireId="11" Distance="500" MaxFreqSlots="50" PortPrefix="116" SpectralWidth="1000"></wire>	
+</wires>

@@ -1,5 +1,5 @@
 <wires>
 	<wire WireId="5" Distance="500" MaxFreqSlots="50" PortPrefix="134" SpectralWidth="1000"></wire>	
 	<wire WireId="6" Distance="500" MaxFreqSlots="50" PortPrefix="145" SpectralWidth="1000"></wire>	
-	<wire WireId="11" Distance="500" MaxFreqSlots="50" PortPrefix="146" SpectralWidth="1000"></wire>	
+	<wire WireId="11" Distance="500" MaxFreqSlots="50" PortPrefix="149" SpectralWidth="1000"></wire>	
 </wires>
