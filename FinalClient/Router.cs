@@ -37,7 +37,7 @@ namespace Router
        // public List<KeyValuePair<String, ExtSrc.DataAndID>> waitingMessages { get; set; }
         public List<KeyValuePair<int[], ExtSrc.DataAndID>> waitingMsgs { get; set; }
         public List<UniqueConnection> UniqueConnections { get; set; }
-
+        public List<KeyValuePair<string, Data>> messageHistory { get; set; }
         public class UniqueConnection
         {
             public String UniqueKey { get; set; }
@@ -74,6 +74,7 @@ namespace Router
             address = ip;
             localPhysicalWires = new ExtSrc.PhysicalWires();
             readLocalPhysicalWires();
+            messageHistory = new List<KeyValuePair<string, Data>>();
         }
 
         public void initialize()
@@ -152,7 +153,7 @@ namespace Router
                         var tmpList = new List<KeyValuePair<int[], DataAndID>>();
                         foreach (var keyValuePair in waitingMsgs)
                         {
-                            Send(keyValuePair.Value.data, keyValuePair.Key/*, keyValuePair.Value.ID*/);
+                            Send(keyValuePair.Value.data, keyValuePair.Key/*, keyValuePair.Value.ID*/, true);
                             tmpList.Add(keyValuePair);
                         }
                         tmpList.ForEach(x => waitingMsgs.Remove(x));
@@ -165,7 +166,7 @@ namespace Router
             List<DijkstraData> wiresIds = new List<DijkstraData>();
             foreach (NewWire nw in localPhysicalWires.Wires)
             {
-                wiresIds.Add(new DijkstraData(ID, nw.ID, nw.distance));
+                wiresIds.Add(new DijkstraData(ID, nw.ID, nw.distance, nw.RouterIds));
             }
             AgentSend(new ExtSrc.AgentData(ExtSrc.AgentComProtocol.REGISTER, wiresIds){ originatingAddress = address});
             RouterForm.Bind();
@@ -176,6 +177,7 @@ namespace Router
             String xmlString = File.ReadAllText(address+".xml");
             using (XmlReader reader = XmlReader.Create(new StringReader(xmlString)))
             {
+                var idx = 1;
                 while (reader.ReadToFollowing("wire"))
                 {
                     reader.MoveToFirstAttribute();
@@ -189,7 +191,9 @@ namespace Router
                     reader.MoveToNextAttribute();
                     string spectralWidth = reader.Value;
 
-                    ExtSrc.NewWire nw = new ExtSrc.NewWire(Int32.Parse(wireID), Int32.Parse(wireDistance), Int32.Parse(maxFreqSlots), Int32.Parse(spectralWidth));
+                    //ExtSrc.NewWire nw = new ExtSrc.NewWire(Int32.Parse(wireID), Int32.Parse(wireDistance), Int32.Parse(maxFreqSlots), Int32.Parse(spectralWidth), Int32.Parse(portPrefix));
+                    ExtSrc.NewWire nw = new ExtSrc.NewWire(idx, Int32.Parse(wireDistance), Int32.Parse(maxFreqSlots), Int32.Parse(spectralWidth), Int32.Parse(portPrefix));
+                    idx++;
                     //stworz nowy wire z otrzymanych danych i dodaj go na liste wires
                     for (int i = 0; i < Int32.Parse(maxFreqSlots); i++)
                     {
@@ -365,7 +369,7 @@ namespace Router
             }
         }
 
-        public void Send(ExtSrc.Data data, int[] route)
+        public void Send(ExtSrc.Data data, int[] route, bool isFirst = false)
         {
             /*var id = TOclientConnectionsTable.findClient(route[0], route[1]);
             ClientSocket clientSocketToSend;
@@ -384,10 +388,13 @@ namespace Router
                 sendDone.WaitOne();
             }
             else*/
-            {                
+            int[] newRoute = freqSlotSwitchingTable.findRoute(route[0], route[1]);
+            if (newRoute==null || newRoute[0] != -1 && newRoute[1] != -1)
+            {// router poczatkowy || napewno nie router koncowy
+
                 var sockets = localPhysicalWires.getSockets(route);
                 var units = localPhysicalWires.getFrequencySlotUnits(route);
-                
+
                 var fs = new MemoryStream();
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(fs, data);
@@ -399,6 +406,11 @@ namespace Router
                     unit.socket.BeginSend(buffer, 0, buffer.Length, 0, SendCallback, unit);
                     unit.sendDone.WaitOne();
                 }
+                if (isFirst) messageHistory.Add(new KeyValuePair<string, Data>("SENT", data));
+            }
+            else
+            {
+                Console.WriteLine("There is no connection.");
             }
         }
 
@@ -565,8 +577,8 @@ namespace Router
                     //na pon
                     if (route[0] == -1 && route[1] == -1)
                     {
-                        Console.WriteLine("R: '{0}'[{1} bytes].",
-                          state.dt.info, bytesRead);
+                        Console.WriteLine("R: '{0}'[{1} bytes].", state.dt.info, bytesRead);
+                        messageHistory.Add(new KeyValuePair<string, Data>("RECEIVED", state.dt));
                         return;
                         
                     }
@@ -755,10 +767,10 @@ namespace Router
                    // FROMclientConnectionsTable.add(agentData.wireID, id1, id);
                     var ucon = UniqueConnections.FirstOrDefault(x => x.UniqueKey.Equals(agentData.uniqueKey));
 
-                    //na poniedz
-                    if(agentData.isStartEdge)
-                        freqSlotSwitchingTable.add(-1, -1, agentData.wireID, agentData.FSid);
-                    else
+                    //todo na poniedz // usunalem dwie linijki bo nie mozna dodawac dwa razy -1,-1 do slownika
+                    if(!agentData.isStartEdge)
+                   //     freqSlotSwitchingTable.add(-1, -1, agentData.wireID, agentData.FSid);
+                   // else
                         freqSlotSwitchingTable.add(agentData.wireID, agentData.FSid, -1, -1);
 
                     //

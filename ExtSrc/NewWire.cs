@@ -24,9 +24,10 @@ namespace ExtSrc
         //public List<FrequencySlotUnit> lambdas { get; set; }
         public List<FrequencySlotUnit> FrequencySlotUnitList { get; set; }
         public Dictionary<int, FrequencySlot> FrequencySlotDictionary { get; set; }
-
+        public int PortPrefix { get; set; }
+        public int[] RouterIds { get; set; }
         public int[] spectralWidth{get;set;}
-        public NewWire(int id, int distance, int lambdasSize, int spectralWidth)
+        public NewWire(int id, int distance, int lambdasSize, int spectralWidth, int portPref)
         {
             this.ID = id;
             this.distance = distance;
@@ -34,6 +35,11 @@ namespace ExtSrc
             FrequencySlotDictionary = new Dictionary<int, FrequencySlot>();
             //represents 1000Ghz
             this.spectralWidth = Enumerable.Repeat(EMPTY_VALUE, spectralWidth).ToArray(); //new int[spectralWidth];
+            PortPrefix = portPref;
+            RouterIds = new int[2];
+            RouterIds[0] = portPref%10;
+            portPref /= 10;
+            RouterIds[1] = portPref % 10;
         }
 
         public int addFreqSlot(int startingFreq, int FSUcount, Modulation mod, int FSid)

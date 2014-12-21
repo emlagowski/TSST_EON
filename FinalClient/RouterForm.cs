@@ -138,16 +138,14 @@ namespace Router
 
         public void Bind()
         {
-            //            connectedWiresTable;
-            connectedWiresTable.DataSource = null;
-            connectedWiresTable.DataSource = (_router.localPhysicalWires.Wires.Select(w => new
+            //            messageHistoryTable;
+            messageHistoryTable.DataSource = null;
+            //Console.WriteLine(_router.messageHistory.Count);
+            messageHistoryTable.DataSource = (_router.messageHistory.Select(w => new
             {
-                Wire_ID = w.ID,
-                Distance = w.distance,
-                Width = w.spectralWidth,
-                FSUCount = w.FrequencySlotUnitList.Count,
-                FSUDictCount = w.FrequencySlotDictionary.Count
-            }));
+                Type = w.Key,
+                Message = w.Value.info
+            })).ToList();
             //            clientTable;
             clientTable.DataSource = null;
             clientTable.DataSource = (_router.clientSocketDictionary.Select(d => new
@@ -158,30 +156,7 @@ namespace Router
                 REMOTE = d.Value.socket.RemoteEndPoint
             })).ToList();
             //            messagesTable;
-            messagesTable.DataSource = null;
-          /*  messagesTable.DataSource = (_router.waitingMessages.Select(d => new
-            {
-                UNIQUE = d.Key,
-                CLIENT_ID = d.Value.ID,
-                BANDWITDHT = d.Value.data.bandwidthNeeded,
-                DATA = d.Value.data.info
-            })).ToList();*/
-            //            toClientTable;
-            toClientTable.DataSource = null;
-            toClientTable.DataSource = (_router.TOclientConnectionsTable.clientConnectionTable.Select(d => new
-            {
-                WireID = d.Key[0],
-                FS_ID = d.Key[1],
-                Client_ID = d.Value
-            })).ToList();
-            //            fromClientTable;
-            fromClientTable.DataSource = null;
-            fromClientTable.DataSource = (_router.FROMclientConnectionsTable.clientConnectionTable.Select(d => new
-            {
-                WireID = d.Key[0],
-                FS_ID = d.Key[1],
-                Client_ID = d.Value
-            })).ToList();
+           
             //            frequencySlotsTable;
             frequencySlotsTable.DataSource = null;
             frequencySlotsTable.DataSource = (_router.freqSlotSwitchingTable.freqSlotSwitchingTable.Select(d => new
@@ -330,6 +305,21 @@ namespace Router
             var id = _router.address.Substring(_router.address.Length - 1, 1);
             _router.waitingMsgs.Add(new KeyValuePair<int[], DataAndID>
                 (new int[] { Convert.ToInt32(PortTextBox.Text), Convert.ToInt32(FSTextBox.Text) }, new ExtSrc.DataAndID(data, Int32.Parse(id))));
+        }
+
+        private void connectedWiresTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void clientTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

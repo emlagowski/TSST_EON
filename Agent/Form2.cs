@@ -204,9 +204,10 @@ namespace Agent
             {
                 route[i] = Convert.ToInt32(r[i].Trim());
             }
-            cm.setRoute("127.0.1." + clientATextBox.Text, "127.0.1." + clientBTextBox.Text, banwidthTrackBar.Value, null, hashKey, route, 
+//            cm.setRoute("127.0.1." + clientATextBox.Text, "127.0.1." + clientBTextBox.Text, banwidthTrackBar.Value, null, hashKey, route, 
+//                Convert.ToInt32(startFreqTextBox.Text));
+            cm.setRouteFromTo("127.0.1." + clientATextBox.Text, "127.0.1." + clientBTextBox.Text, banwidthTrackBar.Value, null, hashKey, route,
                 Convert.ToInt32(startFreqTextBox.Text));
-
         }
 
         private void clientListBox_SelectedIndexChanged(object sender, EventArgs e)

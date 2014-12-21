@@ -40,33 +40,27 @@ namespace Router
             this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.labelName = new System.Windows.Forms.Label();
-            this.connectedWiresTable = new System.Windows.Forms.DataGridView();
+            this.messageHistoryTable = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.consoleOutput = new System.Windows.Forms.TextBox();
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tabs = new System.Windows.Forms.TabControl();
             this.generalTab = new System.Windows.Forms.TabPage();
+            this.SendButton = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.PortTextBox = new System.Windows.Forms.TextBox();
+            this.FSTextBox = new System.Windows.Forms.TextBox();
+            this.MsgTextBox = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.advancedTab = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.frequencySlotsTable = new System.Windows.Forms.DataGridView();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.fromClientTable = new System.Windows.Forms.DataGridView();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.messagesTable = new System.Windows.Forms.DataGridView();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.toClientTable = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.clientTable = new System.Windows.Forms.DataGridView();
-            this.MsgTextBox = new System.Windows.Forms.TextBox();
-            this.FSTextBox = new System.Windows.Forms.TextBox();
-            this.PortTextBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.SendButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.connectedWiresTable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.messageHistoryTable)).BeginInit();
             this.tabs.SuspendLayout();
             this.generalTab.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -74,12 +68,6 @@ namespace Router
             this.advancedTab.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.frequencySlotsTable)).BeginInit();
-            this.groupBox6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fromClientTable)).BeginInit();
-            this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.messagesTable)).BeginInit();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.toClientTable)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.clientTable)).BeginInit();
             this.SuspendLayout();
@@ -106,14 +94,15 @@ namespace Router
             this.labelName.TabIndex = 4;
             this.labelName.Text = "127.0.0.1:8000";
             // 
-            // connectedWiresTable
+            // messageHistoryTable
             // 
-            this.connectedWiresTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.connectedWiresTable.Location = new System.Drawing.Point(9, 33);
-            this.connectedWiresTable.Margin = new System.Windows.Forms.Padding(6);
-            this.connectedWiresTable.Name = "connectedWiresTable";
-            this.connectedWiresTable.Size = new System.Drawing.Size(780, 244);
-            this.connectedWiresTable.TabIndex = 5;
+            this.messageHistoryTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.messageHistoryTable.Location = new System.Drawing.Point(9, 33);
+            this.messageHistoryTable.Margin = new System.Windows.Forms.Padding(6);
+            this.messageHistoryTable.Name = "messageHistoryTable";
+            this.messageHistoryTable.Size = new System.Drawing.Size(780, 244);
+            this.messageHistoryTable.TabIndex = 5;
+            this.messageHistoryTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.connectedWiresTable_CellContentClick);
             // 
             // contextMenuStrip1
             // 
@@ -167,15 +156,74 @@ namespace Router
             this.generalTab.Text = "General";
             this.generalTab.UseVisualStyleBackColor = true;
             // 
+            // SendButton
+            // 
+            this.SendButton.Location = new System.Drawing.Point(610, 1000);
+            this.SendButton.Name = "SendButton";
+            this.SendButton.Size = new System.Drawing.Size(107, 46);
+            this.SendButton.TabIndex = 17;
+            this.SendButton.Text = "Send";
+            this.SendButton.UseVisualStyleBackColor = true;
+            this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(126, 957);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(59, 25);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "Msg:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(447, 957);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(68, 25);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "FS id:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(296, 957);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(80, 25);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Port id:";
+            // 
+            // PortTextBox
+            // 
+            this.PortTextBox.Location = new System.Drawing.Point(301, 1015);
+            this.PortTextBox.Name = "PortTextBox";
+            this.PortTextBox.Size = new System.Drawing.Size(100, 31);
+            this.PortTextBox.TabIndex = 13;
+            // 
+            // FSTextBox
+            // 
+            this.FSTextBox.Location = new System.Drawing.Point(452, 1015);
+            this.FSTextBox.Name = "FSTextBox";
+            this.FSTextBox.Size = new System.Drawing.Size(100, 31);
+            this.FSTextBox.TabIndex = 12;
+            // 
+            // MsgTextBox
+            // 
+            this.MsgTextBox.Location = new System.Drawing.Point(131, 1015);
+            this.MsgTextBox.Name = "MsgTextBox";
+            this.MsgTextBox.Size = new System.Drawing.Size(100, 31);
+            this.MsgTextBox.TabIndex = 11;
+            // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.connectedWiresTable);
+            this.groupBox2.Controls.Add(this.messageHistoryTable);
             this.groupBox2.Location = new System.Drawing.Point(6, 85);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(798, 286);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Connected wires";
+            this.groupBox2.Text = "Messages history";
+            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // groupBox1
             // 
@@ -190,9 +238,6 @@ namespace Router
             // advancedTab
             // 
             this.advancedTab.Controls.Add(this.groupBox7);
-            this.advancedTab.Controls.Add(this.groupBox6);
-            this.advancedTab.Controls.Add(this.groupBox5);
-            this.advancedTab.Controls.Add(this.groupBox4);
             this.advancedTab.Controls.Add(this.groupBox3);
             this.advancedTab.Location = new System.Drawing.Point(4, 34);
             this.advancedTab.Name = "advancedTab";
@@ -205,7 +250,7 @@ namespace Router
             // groupBox7
             // 
             this.groupBox7.Controls.Add(this.frequencySlotsTable);
-            this.groupBox7.Location = new System.Drawing.Point(6, 1133);
+            this.groupBox7.Location = new System.Drawing.Point(6, 286);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(922, 344);
             this.groupBox7.TabIndex = 6;
@@ -220,63 +265,6 @@ namespace Router
             this.frequencySlotsTable.RowTemplate.Height = 33;
             this.frequencySlotsTable.Size = new System.Drawing.Size(903, 300);
             this.frequencySlotsTable.TabIndex = 0;
-            // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.fromClientTable);
-            this.groupBox6.Location = new System.Drawing.Point(6, 566);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(922, 274);
-            this.groupBox6.TabIndex = 5;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "From Client";
-            // 
-            // fromClientTable
-            // 
-            this.fromClientTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.fromClientTable.Location = new System.Drawing.Point(6, 30);
-            this.fromClientTable.Name = "fromClientTable";
-            this.fromClientTable.RowTemplate.Height = 33;
-            this.fromClientTable.Size = new System.Drawing.Size(906, 238);
-            this.fromClientTable.TabIndex = 1;
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.messagesTable);
-            this.groupBox5.Location = new System.Drawing.Point(6, 853);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(922, 274);
-            this.groupBox5.TabIndex = 4;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Waiting messages";
-            // 
-            // messagesTable
-            // 
-            this.messagesTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.messagesTable.Location = new System.Drawing.Point(6, 30);
-            this.messagesTable.Name = "messagesTable";
-            this.messagesTable.RowTemplate.Height = 33;
-            this.messagesTable.Size = new System.Drawing.Size(906, 238);
-            this.messagesTable.TabIndex = 1;
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.toClientTable);
-            this.groupBox4.Location = new System.Drawing.Point(6, 286);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(922, 274);
-            this.groupBox4.TabIndex = 3;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "To Client";
-            // 
-            // toClientTable
-            // 
-            this.toClientTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.toClientTable.Location = new System.Drawing.Point(9, 30);
-            this.toClientTable.Name = "toClientTable";
-            this.toClientTable.RowTemplate.Height = 33;
-            this.toClientTable.Size = new System.Drawing.Size(903, 238);
-            this.toClientTable.TabIndex = 1;
             // 
             // groupBox3
             // 
@@ -296,64 +284,7 @@ namespace Router
             this.clientTable.RowTemplate.Height = 33;
             this.clientTable.Size = new System.Drawing.Size(906, 238);
             this.clientTable.TabIndex = 0;
-            // 
-            // MsgTextBox
-            // 
-            this.MsgTextBox.Location = new System.Drawing.Point(131, 1015);
-            this.MsgTextBox.Name = "MsgTextBox";
-            this.MsgTextBox.Size = new System.Drawing.Size(100, 31);
-            this.MsgTextBox.TabIndex = 11;
-            // 
-            // FSTextBox
-            // 
-            this.FSTextBox.Location = new System.Drawing.Point(452, 1015);
-            this.FSTextBox.Name = "FSTextBox";
-            this.FSTextBox.Size = new System.Drawing.Size(100, 31);
-            this.FSTextBox.TabIndex = 12;
-            // 
-            // PortTextBox
-            // 
-            this.PortTextBox.Location = new System.Drawing.Point(301, 1015);
-            this.PortTextBox.Name = "PortTextBox";
-            this.PortTextBox.Size = new System.Drawing.Size(100, 31);
-            this.PortTextBox.TabIndex = 13;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(296, 957);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 25);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Port id:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(447, 957);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(68, 25);
-            this.label3.TabIndex = 15;
-            this.label3.Text = "FS id:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(126, 957);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(59, 25);
-            this.label4.TabIndex = 16;
-            this.label4.Text = "Msg:";
-            // 
-            // SendButton
-            // 
-            this.SendButton.Location = new System.Drawing.Point(610, 1000);
-            this.SendButton.Name = "SendButton";
-            this.SendButton.Size = new System.Drawing.Size(107, 46);
-            this.SendButton.TabIndex = 17;
-            this.SendButton.Text = "Send";
-            this.SendButton.UseVisualStyleBackColor = true;
-            this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
+            this.clientTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.clientTable_CellContentClick);
             // 
             // RouterForm
             // 
@@ -364,7 +295,7 @@ namespace Router
             this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "RouterForm";
             this.Text = "Router";
-            ((System.ComponentModel.ISupportInitialize)(this.connectedWiresTable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.messageHistoryTable)).EndInit();
             this.tabs.ResumeLayout(false);
             this.generalTab.ResumeLayout(false);
             this.generalTab.PerformLayout();
@@ -374,12 +305,6 @@ namespace Router
             this.advancedTab.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.frequencySlotsTable)).EndInit();
-            this.groupBox6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.fromClientTable)).EndInit();
-            this.groupBox5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.messagesTable)).EndInit();
-            this.groupBox4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.toClientTable)).EndInit();
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.clientTable)).EndInit();
             this.ResumeLayout(false);
@@ -390,7 +315,7 @@ namespace Router
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelName;
-        private System.Windows.Forms.DataGridView connectedWiresTable;
+        private System.Windows.Forms.DataGridView messageHistoryTable;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.TextBox consoleOutput;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
@@ -399,15 +324,9 @@ namespace Router
         private System.Windows.Forms.TabPage advancedTab;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.DataGridView frequencySlotsTable;
-        private System.Windows.Forms.DataGridView fromClientTable;
-        private System.Windows.Forms.DataGridView messagesTable;
-        private System.Windows.Forms.DataGridView toClientTable;
         private System.Windows.Forms.DataGridView clientTable;
         private System.Windows.Forms.Button SendButton;
         private System.Windows.Forms.Label label4;

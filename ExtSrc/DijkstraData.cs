@@ -12,12 +12,13 @@ namespace ExtSrc
         public int routerID { get; set; }
         public int wireID { get; set; }
         public int wireDistance {get; set; }
-
-        public DijkstraData(int routerID, int wireID, int wireDistance)
+        public int[] RouterIds { get; set; }
+        public DijkstraData(int routerID, int wireID, int wireDistance, int[] routerIds)
         {
             this.routerID = routerID;
             this.wireID = wireID;
             this.wireDistance = wireDistance;
+            this.RouterIds = routerIds;
         }
 
 

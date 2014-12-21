@@ -182,7 +182,7 @@ namespace Agent
                                     {
                                         Console.WriteLine("CLOSING");
                                         //todo closing routers
-                                        CloseRouterSocket(ip);
+                                        //CloseRouterSocket(ip);
                                         return;
                                     }
                                     //Console.WriteLine("NOT CLOSING");
@@ -323,6 +323,158 @@ namespace Agent
                     break;
             }
         }
+
+        public void setRouteFromTo(String clientSourceIP, String ClientDestinationIP, int bitrate, int[] excludedWiresIDs, String hashKey, int[] route, int startF = -1)
+        {
+            List<int[]> routeHistory = new List<int[]>();
+            int startfrequency = -1;
+            // zamiana ip koncowego klienta na ip jego routera
+            /* String senderRouterIP;
+             clientMap.TryGetValue(clientSourceIP, out senderRouterIP);
+             if (senderRouterIP == null)
+             {
+                 Console.WriteLine("Setting route error.");
+                 return;
+             }
+             String recipientRouterIP;
+             clientMap.TryGetValue(ClientDestinationIP, out recipientRouterIP);
+             if (recipientRouterIP == null)
+             {
+                 Console.WriteLine("Setting route error.");
+                 return;
+             }*/
+            //String Client = Int32.Parse(sourceIP.Substring(sourceIP.Length - 1, 1));
+            int ClientSenderID = Int32.Parse(clientSourceIP.Substring(clientSourceIP.Length - 1, 1));
+            //int RouterRecipientID = Int32.Parse(destinationIP.Substring(destinationIP.Length - 1, 1));
+            int ClientRecipientID = Int32.Parse(ClientDestinationIP.Substring(ClientDestinationIP.Length - 1, 1));
+            /* int[] route = calculateRoute(senderRouterIP, recipientRouterIP, excludedWiresIDs);
+             if (route == null)
+             {
+                 Console.WriteLine("AKTUALNIE NIE MOŻNA ZNALEŹĆ DROGI Z " + clientSourceIP + " DO " + ClientDestinationIP);
+                 return;
+             }*/
+            FSidCounter++;
+            for (int j = 0; j < route.Length; j++)
+            {
+                bufferRouterResponse = null;
+
+                if (j == 0)
+                {
+                    //wyslij d source routera
+                    //Console.WriteLine("WYSYLAM DO PIERWSZEGO EDGE ROUTERA DANE ROUTINGOWE");
+                    ArrayList ar = calculateFSUcountFromTo(route[j], FindWireIdFromTo(route[j], route[j + 1], route[j]), bitrate);
+                    String ip = String.Format("127.0.1." + route[j]);
+                    Send(ip, new ExtSrc.AgentData(ExtSrc.AgentComProtocol.ROUTE_FOR_U_EDGE, (int)ar[1], (Modulation)ar[0],
+                                                        FindWireIdFromTo(route[j], route[j + 1], route[j]), ClientSenderID)
+                    {
+                        originatingAddress = clientSourceIP,
+                        targetAddress = ClientDestinationIP,
+                        uniqueKey = hashKey,
+                        startingFreq = startF,
+                        FSid = FSidCounter,
+                        isStartEdge = true
+                    });
+                    int rSid = Int32.Parse(clientSourceIP.Substring(clientSourceIP.Length - 1, 1));
+                    edgeRouterIDs.Add(hashKey, new int[2] { rSid, -1 });
+
+                    //Console.WriteLine("WYSYLALEM DO PIERWSZEGO EDGE ROUTERA DANE ROUTINGOWE (" + ip + ")");
+                }
+                else if (j > 0 && j < route.Length - 1)
+                {
+                    //fsucount, mod, firstwireid,secondwireid, startingfreq dla odbierajacego kabla bo juz obliczone w poprzednim roouterze
+                    //wyslij do zwyklych routerow
+                    //Console.WriteLine("WYSYLAM DO SRODKOWEGO ROUTERA DANE ROUTINGOWE");
+                    ArrayList ar0 = calculateFSUcountFromTo(route[j], FindWireIdFromTo(route[j - 1], route[j], route[j]), bitrate);
+                    ArrayList ar = calculateFSUcountFromTo(route[j], FindWireIdFromTo(route[j], route[j + 1], route[j]), bitrate);
+                    if ((int)ar[0] == 0 || (int)ar[1] == 0) return;
+                    String ip = String.Format("127.0.1." + route[j]);
+                    Send(ip, new ExtSrc.AgentData(ExtSrc.AgentComProtocol.ROUTE_FOR_U, (int)ar0[1], (Modulation)ar0[0], (int)ar[1], (Modulation)ar[0],
+                                                    FindWireIdFromTo(route[j - 1], route[j], route[j]), FindWireIdFromTo(route[j], route[j + 1], route[j]), startfrequency) { FSid = FSidCounter });
+                    //Console.WriteLine("WYSYLALEM DO SRODKOWEGO ROUTERA DANE ROUTINGOWE (" + ip + ")");
+                }
+                else if (j == route.Length - 1)
+                {
+                    //wyslij do destinationIP routra
+                    //Console.WriteLine("WYSYLAM DO OSTATNIEGO EDGE ROUTERA DANE ROUTINGOWE");
+                    ArrayList ar0 = calculateFSUcountFromTo(route[j], FindWireIdFromTo(route[j - 1], route[j], route[j]), bitrate);
+                    String ip = String.Format("127.0.1." + route[j]);
+                    Send(ip, new ExtSrc.AgentData(ExtSrc.AgentComProtocol.ROUTE_FOR_U_EDGE, (int)ar0[1], (Modulation)ar0[0],
+                                                        FindWireIdFromTo(route[j - 1], route[j], route[j]), ClientRecipientID)
+                    {
+                        originatingAddress = clientSourceIP,
+                        targetAddress = ClientDestinationIP,
+                        uniqueKey = hashKey,
+                        startingFreq = startfrequency,
+                        FSid = FSidCounter,
+                        isStartEdge = false
+
+                    });
+                    //Console.WriteLine("WYSYLALEM DO OSTATNIEGO EDGE ROUTERA DANE ROUTINGOWE (" + ip + ")");
+                }
+                //sprawdz czy dostepne bitrejtyy
+                var waitTime = 0;
+                while (bufferRouterResponse == null)
+                {
+                    //todo a co jak sie zatnie? coś nie dojdzie? router padnie?
+
+                    //w8 na odp od routera
+                    Thread.Sleep(50);
+                    //stestowac to
+                    /*waitTime += 50;
+                    if(waitTime > 10000)
+                        return;*/
+                }
+
+                if (bufferRouterResponse.message.Equals(ExtSrc.AgentComProtocol.CONNECTION_IS_ON))
+                {
+                    startfrequency = bufferRouterResponse.startingFreq;
+                    //dodawanie do routeHistory
+                    if (j < route.Length - 1)
+                    {
+                        //Console.WriteLine("Add to route {0} wire {1} and slot {2} ", route[j], FindWireId(route[j], route[j + 1]), bufferRouterResponse.FSid);
+                        routeHistory.Add(new int[3] { route[j], FindWireIdFromTo(route[j], route[j + 1], route[j]), bufferRouterResponse.FSid });
+                    }
+                    if (j == route.Length - 1)
+                    {
+                        routeHistory.Add(new int[3] { route[j], FindWireIdFromTo(route[j - 1], route[j], route[j]), bufferRouterResponse.FSid });
+                        routeHistoryList.Add(new String[3] { clientSourceIP, ClientDestinationIP, hashKey }, routeHistory);
+
+                        int rRid = Int32.Parse(ClientDestinationIP.Substring(ClientDestinationIP.Length - 1, 1));
+                        // edgeRouterIDs.Add(hashKey, new int[2] { rSid, rRid });
+
+                        int[] tmp = edgeRouterIDs[hashKey];
+                        //todo tutaj do edgeRouterIDs dopisuje rRid, a co gdy CONNECTION_UNAVAILABLE ? 
+                        //todo wpis zostanie nie kompletny, gdzie usuwanie? w disroute brak tego
+                        edgeRouterIDs[hashKey] = new int[] { tmp[0], rRid };
+                        Console.WriteLine("Route set.");
+                        foreach (int[] rh in routeHistory)
+                        {
+                            Console.WriteLine("Router {0} wire {1} and slot {2}. ", rh[0], rh[1], rh[2]);
+                        }
+                        return;
+                    }
+                }
+                else if (bufferRouterResponse.message.Equals(ExtSrc.AgentComProtocol.CONNECTION_UNAVAILABLE))
+                {
+                    //rozlaczyc to co juz zestawione i zaczac liczyc dijkstre bez kabla ktory nie mial miejsca
+                    if (disroute(routeHistory, hashKey))
+                    {
+                        int[] excWiresNext = new int[excludedWiresIDs.Length + 1];
+                        for (int i = 0; i < excludedWiresIDs.Length; i++)
+                        {
+                            excWiresNext[i] = excludedWiresIDs[i];
+                        }
+                        excWiresNext[excWiresNext.Length - 1] = FindWireIdFromTo(route[j], route[j + 1], route[j]);
+                        // gdy rozłączone
+                        //wyjsc z petli for, zapisac ktore kable sa zajete, i wywolac rekurencyjnie
+                        setRoute(clientSourceIP, ClientDestinationIP, bitrate, excWiresNext, hashKey);
+                    }
+                    break;
+                }
+            }
+
+        }
+
         //metoda uzywana w agencie gdzie recznie podajemy droge
         //niestety zdublowana czesc kodu bo drugi setroute liczy juz senderRouterID itp ale nie chce nic zepsuc wiec niech tak zostanie narazie
         public void setRoute(String clientSourceIP, String ClientDestinationIP, int bitrate, int[] excludedWiresIDs, String hashKey, int[] route, int startF = -1)
@@ -586,6 +738,18 @@ namespace Agent
             return 0;
         }
 
+        private int FindWireIdFromTo(int firstRouterId, int secondRouterId, int forRouter)
+        {
+            foreach (var dd in dijkstraDataList)
+            {
+                if (dd.routerID == forRouter && 
+                    (dd.RouterIds[0] == firstRouterId && dd.RouterIds[1] == secondRouterId ||
+                    dd.RouterIds[0] == secondRouterId && dd.RouterIds[1] == firstRouterId))
+                    return dd.wireID;
+            }
+            return -1;
+        }
+
         // Calculating FrequencySlotUnits needed for transport.
         // returns arraylist[modulation, fsucount]
         private ArrayList calculateFSUcount(int wireID, int bitrate)
@@ -618,6 +782,38 @@ namespace Agent
             return ar;
 
         }
+
+        private ArrayList calculateFSUcountFromTo(int routerId, int wireID, int bitrate)
+        {
+            Modulation mod = Modulation.NULL;
+            double FSUcount = 0;
+            foreach (ExtSrc.DijkstraData dt in dijkstraDataList)
+            {
+                if (dt.routerID == routerId && dt.wireID == wireID)
+                {
+                    if (dt.wireDistance > 300)
+                    {
+                        mod = Modulation.QPSK;
+
+                    }
+                    else if (dt.wireDistance > 0 && dt.wireDistance <= 300)
+                    {
+                        mod = Modulation.SixteenQAM;
+                    }
+                    int modVal = (int)mod;
+                    //todo modulacja wylaczona z obiegu narazie
+                    FSUcount = Math.Round((double)(bitrate) / 10.0); /** (double)modVal)*/;
+                    //Console.WriteLine("bitrate "+bitrate+" fsucnt "+FSUcount+" modvl "+ modVal);
+                }
+
+            }
+            ArrayList ar = new ArrayList();
+            ar.Add(mod);
+            ar.Add((int)FSUcount);
+            return ar;
+
+        }
+
         private int[] calculateRoute(String sourceIP, String destinationIP, int[] excludedWiresIDs)
         {
             int id1 = Int32.Parse(sourceIP.Substring(sourceIP.Length - 1, 1));
