@@ -761,7 +761,7 @@ namespace Router
                     else
                         startfreqEdge = agentData.startingFreq;
                     //Console.WriteLine("startfreqEdge = "+ startfreqEdge);
-                    id1 = localPhysicalWires.getWireByID(agentData.wireID).addFreqSlot(startfreqEdge, agentData.FSUCount, agentData.mod, agentData.FSid);
+                    id1 = localPhysicalWires.getWireByID(agentData.wireID).addFreqSlot(startfreqEdge, agentData.FSUCount, agentData.mod);
                   //  TOclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
                     var id = Int32.Parse(agentData.originatingAddress.Substring(agentData.originatingAddress.Length - 1, 1));
                    // FROMclientConnectionsTable.add(agentData.wireID, id1, id);
@@ -813,8 +813,8 @@ namespace Router
                     }
                     if (startfreq2 >= 0)
                     {
-                        id1 = localPhysicalWires.getWireByID(agentData.firstWireID).addFreqSlot(startfreq1, agentData.lastFSUCount, agentData.lastMod, agentData.FSid);
-                        id2 = localPhysicalWires.getWireByID(agentData.secondWireID).addFreqSlot(startfreq2, agentData.FSUCount, agentData.mod, agentData.FSid);
+                        id1 = localPhysicalWires.getWireByID(agentData.firstWireID).addFreqSlot(startfreq1, agentData.lastFSUCount, agentData.lastMod);
+                        id2 = localPhysicalWires.getWireByID(agentData.secondWireID).addFreqSlot(startfreq2, agentData.FSUCount, agentData.mod);
                         freqSlotSwitchingTable.add(agentData.firstWireID, id1, agentData.secondWireID, id2);
                         //Console.WriteLine("ROUTE SET, NOT EDGE");
                         AgentSend(new AgentData(ExtSrc.AgentComProtocol.CONNECTION_IS_ON, startfreq2, id2));

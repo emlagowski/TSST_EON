@@ -55,16 +55,7 @@ namespace Router
                 Color.Gray,
                 Color.DarkViolet,
             }*/);
-            if (!_router.isEdge)
-            {
-                MsgLabel.Visible = false;
-                PortIdLabel.Visible = false;
-                FsIdLabel.Visible = false;
-                MsgTextBox.Visible = false;
-                PortTextBox.Visible = false;
-                FSTextBox.Visible = false;
-                SendButton.Visible = false;
-            }
+          
             foreach (var colorValue in Enum.GetValues(typeof (KnownColor)))
             {
                  colors.Add(Color.FromKnownColor((KnownColor)colorValue));
@@ -335,7 +326,16 @@ namespace Router
 
         private void RouterForm_Load(object sender, EventArgs e)
         {
-
+            if (!_router.isEdge)
+            {
+                MsgLabel.Visible = false;
+                PortIdLabel.Visible = false;
+                FsIdLabel.Visible = false;
+                MsgTextBox.Visible = false;
+                PortTextBox.Visible = false;
+                FSTextBox.Visible = false;
+                SendButton.Visible = false;
+            }
         }
     }
 }

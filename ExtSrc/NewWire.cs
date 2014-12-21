@@ -42,9 +42,9 @@ namespace ExtSrc
             RouterIds[1] = portPref % 10;
         }
 
-        public int addFreqSlot(int startingFreq, int FSUcount, Modulation mod, int FSid)
+        public int addFreqSlot(int startingFreq, int FSUcount, Modulation mod/*, int FSid*/)
         {
-            var id = FSid;//++nextSlotID;
+            var id = ++nextSlotID;//FSid;
             var slot = new FrequencySlot(id, Modulation.QPSK, startingFreq);
             FrequencySlotDictionary.Add(id, slot);
             var count = 0;
