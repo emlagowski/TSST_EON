@@ -771,7 +771,7 @@ namespace Router
                     if(!agentData.isStartEdge)
                    //     freqSlotSwitchingTable.add(-1, -1, agentData.wireID, agentData.FSid);
                    // else
-                        freqSlotSwitchingTable.add(agentData.wireID, agentData.FSid, -1, -1);
+                        freqSlotSwitchingTable.add(agentData.wireID, /*agentData.FSid*/id1, -1, -1);
 
                     //
                     if (ucon == null)
