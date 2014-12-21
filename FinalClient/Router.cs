@@ -56,7 +56,7 @@ namespace Router
         public ManualResetEvent allDone = new ManualResetEvent(false);
         public ManualResetEvent allReceive = new ManualResetEvent(false);
 
-        Boolean isEdge = false;
+        public Boolean isEdge = false;
 
         // ######################## AGENT vars
         IPEndPoint agentLocalEP, agentEP;
@@ -70,7 +70,7 @@ namespace Router
 
         public Router(string ip, Boolean isEdge)
         {
-            if (isEdge) this.isEdge = true;
+            this.isEdge = isEdge;
             address = ip;
             localPhysicalWires = new ExtSrc.PhysicalWires();
             readLocalPhysicalWires();
@@ -828,7 +828,7 @@ namespace Router
                 case ExtSrc.AgentComProtocol.DISROUTE:
                     //Console.WriteLine("DISROUTE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.firstWireID + " FSid : " + agentData.FSid);
                     int[] inttab = new int[2];
-                    inttab = freqSlotSwitchingTable.findRoute(agentData.firstWireID, agentData.FSid);
+                    inttab = freqSlotSwitchingTable.findReverseRoute(agentData.firstWireID, agentData.FSid);
                     if (localPhysicalWires.getWireByID(agentData.firstWireID).removeFreqSlot(agentData.FSid) && 
                         localPhysicalWires.getWireByID(inttab[0]).removeFreqSlot(inttab[1]))
                     {
@@ -844,8 +844,8 @@ namespace Router
                     //Console.WriteLine("DISROUTE_EDGE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.firstWireID + " FSid : " + agentData.FSid);
                     if (localPhysicalWires.getWireByID(agentData.firstWireID).removeFreqSlot(agentData.FSid))
                     {
-                        TOclientConnectionsTable.remove(agentData.firstWireID, agentData.FSid);
-                        FROMclientConnectionsTable.remove(agentData.firstWireID, agentData.FSid);
+                        //TOclientConnectionsTable.remove(agentData.firstWireID, agentData.FSid);
+                        //FROMclientConnectionsTable.remove(agentData.firstWireID, agentData.FSid);
                         //na pon
                         freqSlotSwitchingTable.removeEdge(agentData.firstWireID, agentData.FSid);
 

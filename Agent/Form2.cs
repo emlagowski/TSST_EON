@@ -181,7 +181,7 @@ namespace Agent
         }
         private void SetConnButton_Click(object sender, EventArgs e)
         {
-            if (clientATextBox.Text.Equals("") || clientBTextBox.Text.Equals("") || routeTextBox.Text.Equals(""))
+            if ( startFreqTextBox.Text.Equals("") || routeTextBox.Text.Equals(""))
             {
                 MessageBox.Show("All fields must be filled.", "ERROR");
                 return;
@@ -190,7 +190,7 @@ namespace Agent
             string pattern1 = @"(\s*\d\s*)*";
             Regex rgx = new Regex(pattern);
             Regex rgx1 = new Regex(pattern1);
-            if (!rgx.IsMatch(clientATextBox.Text) || !rgx.IsMatch(clientBTextBox.Text) || !rgx1.IsMatch(routeTextBox.Text) || !rgx.IsMatch(startFreqTextBox.Text))
+            if (!rgx1.IsMatch(routeTextBox.Text) || !rgx.IsMatch(startFreqTextBox.Text))
             {
                 Console.WriteLine("regex doesn't match");
                 MessageBox.Show("Wrong text format int textboxes.", "ERROR");
@@ -206,7 +206,8 @@ namespace Agent
             }
 //            cm.setRoute("127.0.1." + clientATextBox.Text, "127.0.1." + clientBTextBox.Text, banwidthTrackBar.Value, null, hashKey, route, 
 //                Convert.ToInt32(startFreqTextBox.Text));
-            cm.setRouteFromTo("127.0.1." + clientATextBox.Text, "127.0.1." + clientBTextBox.Text, banwidthTrackBar.Value, null, hashKey, route,
+
+            cm.setRouteFromTo("127.0.1." + route[0], "127.0.1." + route[route.Length-1], banwidthTrackBar.Value, null, hashKey, route,
                 Convert.ToInt32(startFreqTextBox.Text));
         }
 

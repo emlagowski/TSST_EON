@@ -47,9 +47,9 @@ namespace Router
             this.tabs = new System.Windows.Forms.TabControl();
             this.generalTab = new System.Windows.Forms.TabPage();
             this.SendButton = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.MsgLabel = new System.Windows.Forms.Label();
+            this.FsIdLabel = new System.Windows.Forms.Label();
+            this.PortIdLabel = new System.Windows.Forms.Label();
             this.PortTextBox = new System.Windows.Forms.TextBox();
             this.FSTextBox = new System.Windows.Forms.TextBox();
             this.MsgTextBox = new System.Windows.Forms.TextBox();
@@ -79,9 +79,9 @@ namespace Router
             this.label1.Location = new System.Drawing.Point(6, 19);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(290, 63);
+            this.label1.Size = new System.Drawing.Size(228, 63);
             this.label1.TabIndex = 0;
-            this.label1.Text = "IP Address";
+            this.label1.Text = "Node id:";
             // 
             // labelName
             // 
@@ -90,9 +90,9 @@ namespace Router
             this.labelName.Location = new System.Drawing.Point(417, 19);
             this.labelName.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(387, 63);
+            this.labelName.Size = new System.Drawing.Size(57, 63);
             this.labelName.TabIndex = 4;
-            this.labelName.Text = "127.0.0.1:8000";
+            this.labelName.Text = "1";
             // 
             // messageHistoryTable
             // 
@@ -138,9 +138,9 @@ namespace Router
             // generalTab
             // 
             this.generalTab.Controls.Add(this.SendButton);
-            this.generalTab.Controls.Add(this.label4);
-            this.generalTab.Controls.Add(this.label3);
-            this.generalTab.Controls.Add(this.label2);
+            this.generalTab.Controls.Add(this.MsgLabel);
+            this.generalTab.Controls.Add(this.FsIdLabel);
+            this.generalTab.Controls.Add(this.PortIdLabel);
             this.generalTab.Controls.Add(this.PortTextBox);
             this.generalTab.Controls.Add(this.FSTextBox);
             this.generalTab.Controls.Add(this.MsgTextBox);
@@ -166,32 +166,32 @@ namespace Router
             this.SendButton.UseVisualStyleBackColor = true;
             this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
             // 
-            // label4
+            // MsgLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(126, 957);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(59, 25);
-            this.label4.TabIndex = 16;
-            this.label4.Text = "Msg:";
+            this.MsgLabel.AutoSize = true;
+            this.MsgLabel.Location = new System.Drawing.Point(126, 957);
+            this.MsgLabel.Name = "MsgLabel";
+            this.MsgLabel.Size = new System.Drawing.Size(59, 25);
+            this.MsgLabel.TabIndex = 16;
+            this.MsgLabel.Text = "Msg:";
             // 
-            // label3
+            // FsIdLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(447, 957);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(68, 25);
-            this.label3.TabIndex = 15;
-            this.label3.Text = "FS id:";
+            this.FsIdLabel.AutoSize = true;
+            this.FsIdLabel.Location = new System.Drawing.Point(447, 957);
+            this.FsIdLabel.Name = "FsIdLabel";
+            this.FsIdLabel.Size = new System.Drawing.Size(68, 25);
+            this.FsIdLabel.TabIndex = 15;
+            this.FsIdLabel.Text = "FS id:";
             // 
-            // label2
+            // PortIdLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(296, 957);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 25);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Port id:";
+            this.PortIdLabel.AutoSize = true;
+            this.PortIdLabel.Location = new System.Drawing.Point(296, 957);
+            this.PortIdLabel.Name = "PortIdLabel";
+            this.PortIdLabel.Size = new System.Drawing.Size(80, 25);
+            this.PortIdLabel.TabIndex = 14;
+            this.PortIdLabel.Text = "Port id:";
             // 
             // PortTextBox
             // 
@@ -294,7 +294,8 @@ namespace Router
             this.Controls.Add(this.tabs);
             this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "RouterForm";
-            this.Text = "Router";
+            this.Text = "Node";
+            this.Load += new System.EventHandler(this.RouterForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.messageHistoryTable)).EndInit();
             this.tabs.ResumeLayout(false);
             this.generalTab.ResumeLayout(false);
@@ -329,9 +330,9 @@ namespace Router
         private System.Windows.Forms.DataGridView frequencySlotsTable;
         private System.Windows.Forms.DataGridView clientTable;
         private System.Windows.Forms.Button SendButton;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label MsgLabel;
+        private System.Windows.Forms.Label FsIdLabel;
+        private System.Windows.Forms.Label PortIdLabel;
         private System.Windows.Forms.TextBox PortTextBox;
         private System.Windows.Forms.TextBox FSTextBox;
         private System.Windows.Forms.TextBox MsgTextBox;

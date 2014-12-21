@@ -55,6 +55,16 @@ namespace Router
                 Color.Gray,
                 Color.DarkViolet,
             }*/);
+            if (!_router.isEdge)
+            {
+                MsgLabel.Visible = false;
+                PortIdLabel.Visible = false;
+                FsIdLabel.Visible = false;
+                MsgTextBox.Visible = false;
+                PortTextBox.Visible = false;
+                FSTextBox.Visible = false;
+                SendButton.Visible = false;
+            }
             foreach (var colorValue in Enum.GetValues(typeof (KnownColor)))
             {
                  colors.Add(Color.FromKnownColor((KnownColor)colorValue));
@@ -62,7 +72,8 @@ namespace Router
             colors.Remove(Color.Crimson);
            // Shuffle(colors);
             InitializeComponent();
-            LabelText = _router.address;
+            LabelText = _router.address.Substring(_router.address.Length-1, 1);
+            this.Text = "Node " + LabelText;
             Console.SetOut(new TextBoxWriter(consoleOutput));
             var t = new Timer { Enabled = true, Interval = 1 * 1000 };
             t.Tick += delegate { Bind(); };
@@ -318,6 +329,11 @@ namespace Router
         }
 
         private void clientTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void RouterForm_Load(object sender, EventArgs e)
         {
 
         }

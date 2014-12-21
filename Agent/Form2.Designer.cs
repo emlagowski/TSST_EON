@@ -41,15 +41,9 @@
             this.routerListBox = new System.Windows.Forms.ListBox();
             this.clientListBox = new System.Windows.Forms.ListBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.clientATextBox = new System.Windows.Forms.TextBox();
             this.routeTextBox = new System.Windows.Forms.TextBox();
-            this.clientBTextBox = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.ConHashLabel = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.startFreqTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.communicationBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -177,44 +171,12 @@
             this.label4.TabIndex = 21;
             this.label4.Text = "Clients";
             // 
-            // clientATextBox
-            // 
-            this.clientATextBox.Location = new System.Drawing.Point(633, 473);
-            this.clientATextBox.Name = "clientATextBox";
-            this.clientATextBox.Size = new System.Drawing.Size(60, 31);
-            this.clientATextBox.TabIndex = 24;
-            // 
             // routeTextBox
             // 
             this.routeTextBox.Location = new System.Drawing.Point(157, 474);
             this.routeTextBox.Name = "routeTextBox";
             this.routeTextBox.Size = new System.Drawing.Size(374, 31);
             this.routeTextBox.TabIndex = 25;
-            // 
-            // clientBTextBox
-            // 
-            this.clientBTextBox.Location = new System.Drawing.Point(804, 474);
-            this.clientBTextBox.Name = "clientBTextBox";
-            this.clientBTextBox.Size = new System.Drawing.Size(100, 31);
-            this.clientBTextBox.TabIndex = 26;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(711, 429);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(193, 25);
-            this.label6.TabIndex = 27;
-            this.label6.Text = "Client B ip address";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(515, 429);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(193, 25);
-            this.label7.TabIndex = 28;
-            this.label7.Text = "Client A ip address";
             // 
             // label8
             // 
@@ -233,24 +195,6 @@
             this.ConHashLabel.Size = new System.Drawing.Size(214, 25);
             this.ConHashLabel.TabIndex = 18;
             this.ConHashLabel.Text = "Connection HashKey";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(711, 477);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(90, 25);
-            this.label9.TabIndex = 30;
-            this.label9.Text = "127.0.0.";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(537, 477);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(90, 25);
-            this.label10.TabIndex = 31;
-            this.label10.Text = "127.0.0.";
             // 
             // startFreqTextBox
             // 
@@ -279,14 +223,8 @@
             this.ClientSize = new System.Drawing.Size(923, 942);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.startFreqTextBox);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.clientBTextBox);
             this.Controls.Add(this.routeTextBox);
-            this.Controls.Add(this.clientATextBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.clientListBox);
             this.Controls.Add(this.routerListBox);
@@ -326,15 +264,9 @@
         private System.Windows.Forms.ListBox routerListBox;
         private System.Windows.Forms.ListBox clientListBox;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox clientATextBox;
         private System.Windows.Forms.TextBox routeTextBox;
-        private System.Windows.Forms.TextBox clientBTextBox;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label ConHashLabel;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox startFreqTextBox;
         private System.Windows.Forms.Label label1;
     }

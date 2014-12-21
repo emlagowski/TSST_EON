@@ -49,6 +49,14 @@ namespace ExtSrc
             else
                 return null;
         }
+        public int[] findReverseRoute(int wire, int FSid)
+        {
+            //return freqSlotSwitchingTable[new int[] {wire, FSid}];
+          
+            return freqSlotSwitchingTable.Where(x => x.Value[0] == wire && x.Value[1] == FSid).Select(x => x.Key).FirstOrDefault();
+          
+           
+        }
     }
 
     public class MyEqualityComparer : IEqualityComparer<int[]>
