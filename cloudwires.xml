@@ -2,12 +2,12 @@
 	<wire AddressA="127.0.1.1" AddressB="127.0.1.2" WireId="1" Distance="500" MaxFreqSlots="50" PortPrefix="112" SpectralWidth="1000"></wire>	  
 	<wire AddressA="127.0.1.1" AddressB="127.0.1.3" WireId="2" Distance="500" MaxFreqSlots="50" PortPrefix="113" SpectralWidth="1000"></wire>	  
 	<wire AddressA="127.0.1.1" AddressB="127.0.1.5" WireId="3" Distance="500" MaxFreqSlots="50" PortPrefix="115" SpectralWidth="1000"></wire>	
+	<wire AddressA="127.0.1.1" AddressB="127.0.1.7" WireId="8" Distance="500" MaxFreqSlots="50" PortPrefix="117" SpectralWidth="1000"></wire>	
+	<wire AddressA="127.0.1.1" AddressB="127.0.1.6" WireId="9" Distance="500" MaxFreqSlots="50" PortPrefix="116" SpectralWidth="1000"></wire>
+	<wire AddressA="127.0.1.2" AddressB="127.0.1.5" WireId="7" Distance="500" MaxFreqSlots="50" PortPrefix="125" SpectralWidth="1000"></wire>	
+	<wire AddressA="127.0.1.2" AddressB="127.0.1.8" WireId="10" Distance="500" MaxFreqSlots="50" PortPrefix="128" SpectralWidth="1000"></wire>	
 	<wire AddressA="127.0.1.3" AddressB="127.0.1.5" WireId="4" Distance="500" MaxFreqSlots="50" PortPrefix="135" SpectralWidth="1000"></wire>	
 	<wire AddressA="127.0.1.3" AddressB="127.0.1.4" WireId="5" Distance="500" MaxFreqSlots="50" PortPrefix="134" SpectralWidth="1000"></wire>	
-	<wire AddressA="127.0.1.4" AddressB="127.0.1.5" WireId="6" Distance="500" MaxFreqSlots="50" PortPrefix="145" SpectralWidth="1000"></wire>	
-	<wire AddressA="127.0.1.2" AddressB="127.0.1.5" WireId="7" Distance="500" MaxFreqSlots="50" PortPrefix="125" SpectralWidth="1000"></wire>	
-	<wire AddressA="127.0.1.1" AddressB="127.0.1.7" WireId="8" Distance="500" MaxFreqSlots="50" PortPrefix="117" SpectralWidth="1000"></wire>	
-	<wire AddressA="127.0.1.1" AddressB="127.0.1.8" WireId="9" Distance="500" MaxFreqSlots="50" PortPrefix="118" SpectralWidth="1000"></wire>	
-	<wire AddressA="127.0.1.2" AddressB="127.0.1.9" WireId="10" Distance="500" MaxFreqSlots="50" PortPrefix="129" SpectralWidth="1000"></wire>	
-	<wire AddressA="127.0.1.4" AddressB="127.0.1.6" WireId="11" Distance="500" MaxFreqSlots="50" PortPrefix="146" SpectralWidth="1000"></wire>	
+	<wire AddressA="127.0.1.4" AddressB="127.0.1.5" WireId="6" Distance="500" MaxFreqSlots="50" PortPrefix="145" SpectralWidth="1000"></wire>		
+	<wire AddressA="127.0.1.4" AddressB="127.0.1.9" WireId="11" Distance="500" MaxFreqSlots="50" PortPrefix="149" SpectralWidth="1000"></wire>	
 </wires>
