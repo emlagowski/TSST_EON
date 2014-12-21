@@ -544,8 +544,9 @@ namespace Router
                // String address = (client.LocalEndPoint as IPEndPoint).Address.ToString();
                 String port = (client.LocalEndPoint as IPEndPoint).Port.ToString();
                 int[] wireAndFreqSlotID = localPhysicalWires.getIDsbyPort(Int32.Parse(port));
+                if (wireAndFreqSlotID == null) return;
                 int[] route = freqSlotSwitchingTable.findRoute(wireAndFreqSlotID[0], wireAndFreqSlotID[1]);
-
+                
 
                 // ###### WYNALAZEK START
                 // mialo sprawdzac, czy to skad przyzla wiadomosc 
@@ -832,7 +833,8 @@ namespace Router
                     if (localPhysicalWires.getWireByID(agentData.firstWireID).removeFreqSlot(agentData.FSid) && 
                         localPhysicalWires.getWireByID(inttab[0]).removeFreqSlot(inttab[1]))
                     {
-                        freqSlotSwitchingTable.remove(agentData.firstWireID, agentData.FSid, inttab[0], inttab[1]);
+                        //freqSlotSwitchingTable.remove(agentData.firstWireID, agentData.FSid, inttab[0], inttab[1]);
+                        freqSlotSwitchingTable.remove(inttab[0], inttab[1], agentData.firstWireID, agentData.FSid);
                         AgentSend(new AgentData(ExtSrc.AgentComProtocol.DISROUTE_IS_DONE));
                         //Console.WriteLine("DISROUTE DONE");
                     }else{
