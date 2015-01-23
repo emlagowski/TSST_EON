@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Agent.Properties {
+namespace SubnetworkController.Properties {
     using System;
     
     

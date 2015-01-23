@@ -1,6 +1,6 @@
-﻿namespace Agent
+﻿namespace SubnetworkController
 {
-    partial class Form2
+    partial class SubNetConForm
     {
         /// <summary>
         /// Required designer variable.
@@ -214,9 +214,9 @@
             // 
             // communicationBindingSource
             // 
-            this.communicationBindingSource.DataSource = typeof(Agent.Communication);
+            this.communicationBindingSource.DataSource = typeof(SubnetworkController);
             // 
-            // Form2
+            // SubNetConForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -238,7 +238,7 @@
             this.Controls.Add(this.RemoveConnButton);
             this.Controls.Add(this.SetConnButton);
             this.Controls.Add(this.label2);
-            this.Name = "Form2";
+            this.Name = "SubNetConForm";
             this.Text = "NMS";
             this.Load += new System.EventHandler(this.Form2_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ConnDataGridView)).EndInit();

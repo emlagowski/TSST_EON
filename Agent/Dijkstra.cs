@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Agent
+namespace SubnetworkController
 {
     public class Dijkstra
     {
-        private Communication communication;
+        private SubnetworkController _subnetworkController;
         private static int MAXNODES = 5;
         public static int INFINITY = 9999;//Int32.MaxValue;
         //int routersNum = 0;
 
         public int RoutersNum
         {
-            get { return communication.OnlineRoutersList.Count; }
+            get { return _subnetworkController.OnlineRoutersList.Count; }
             private set { }
         }
 
@@ -23,9 +23,9 @@ namespace Agent
         int[] distance = new int[MAXNODES];
         int[] precede = new int[MAXNODES];
 
-        public Dijkstra(Communication communication)
+        public Dijkstra(SubnetworkController _subnetworkController)
         {
-            this.communication = communication;
+            this._subnetworkController = _subnetworkController;
         }
 
         //todo zwracanie wagi drogi i jesli wieksza od infinity wtedy znaczy ze graf rozlaczny i chuj nie da sie
@@ -41,11 +41,17 @@ namespace Agent
 
             weight = buildAdjacencyMatrix(weights);
 
+            MAXNODES = weight.GetLength(0);
+            distance = new int[MAXNODES];
+            precede = new int[MAXNODES];
+
             //int s = 1;
             //int d = 4;
 
             int s = source - 1;
+            //int s = source;
             int d = destination - 1;
+            //int d = destination;
 
             buildSpanningTree(s, d);
             //displayResult(getShortestPath(s, d));
@@ -71,7 +77,7 @@ namespace Agent
         {
             Boolean[] visit = new Boolean[MAXNODES];
 
-            for (int i = 0; i < RoutersNum; i++)
+            for (int i = 0; i < MAXNODES; i++)
             {
                 distance[i] = INFINITY;
                 precede[i] = INFINITY;
@@ -86,7 +92,7 @@ namespace Agent
                 int k = -1;
                 visit[current] = true;
 
-                for (int i = 0; i < RoutersNum; i++)
+                for (int i = 0; i < MAXNODES; i++)
                 {
                     if (visit[i])
                         continue;

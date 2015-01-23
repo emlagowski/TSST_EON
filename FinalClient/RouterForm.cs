@@ -14,16 +14,13 @@ using ExtSrc;
 using System.Windows.Forms.DataVisualization.Charting;
 
 
-namespace Router
+namespace Node
 {
-
-
     public partial class RouterForm : Form
     {
         // to samo jest w NewWire
-        static readonly int GUARD_BAND = 10;
-        //blabla
-        private Router _router;
+        private const int GuardBand = 10;
+        private Node _node;
         private Dictionary<int, Chart> chartsByWireIDs;
         private Random random;
         private List<System.Drawing.Color> colors;
@@ -40,9 +37,9 @@ namespace Router
             }
         }
 
-        public RouterForm(Router router)
+        public RouterForm(Node node)
         {
-            _router = router;
+            _node = node;
             random = new Random();
             colors = new List<Color>(/*new Color[]{
                 Color.Black,
@@ -63,14 +60,14 @@ namespace Router
             colors.Remove(Color.Crimson);
            // Shuffle(colors);
             InitializeComponent();
-            LabelText = _router.address.Substring(_router.address.Length-1, 1);
+            LabelText = _node.address.Substring(_node.address.Length-1, 1);
             this.Text = "Node " + LabelText;
             Console.SetOut(new TextBoxWriter(consoleOutput));
             var t = new Timer { Enabled = true, Interval = 1 * 1000 };
             t.Tick += delegate { Bind(); };
 
             chartsByWireIDs = new Dictionary<int, Chart>();
-            foreach (NewWire wire in _router.localPhysicalWires.Wires)
+            foreach (NewWire wire in _node.LocalPhysicalWires.Wires)
             {
                 TabPage page = new TabPage();
                 page.Text = "Wire " + wire.ID;
@@ -142,26 +139,26 @@ namespace Router
         {
             //            messageHistoryTable;
             messageHistoryTable.DataSource = null;
-            //Console.WriteLine(_router.messageHistory.Count);
-            messageHistoryTable.DataSource = (_router.messageHistory.Select(w => new
+            //Console.WriteLine(_node.messageHistory.Count);
+            messageHistoryTable.DataSource = (_node.MessageHistory.Select(w => new
             {
                 Type = w.Key,
                 Message = w.Value.info
             })).ToList();
             //            clientTable;
-            clientTable.DataSource = null;
-            clientTable.DataSource = (_router.clientSocketDictionary.Select(d => new
-            {
-                IDX = d.Key,
-                Client_ID = d.Value.ID,
-                LOCAL = d.Value.socket.LocalEndPoint,
-                REMOTE = d.Value.socket.RemoteEndPoint
-            })).ToList();
+//            clientTable.DataSource = null;
+//            clientTable.DataSource = (_node.clientSocketDictionary.Select(d => new
+//            {
+//                IDX = d.Key,
+//                Client_ID = d.Value.ID,
+//                LOCAL = d.Value.socket.LocalEndPoint,
+//                REMOTE = d.Value.socket.RemoteEndPoint
+//            })).ToList();
             //            messagesTable;
            
             //            frequencySlotsTable;
             frequencySlotsTable.DataSource = null;
-            frequencySlotsTable.DataSource = (_router.freqSlotSwitchingTable.freqSlotSwitchingTable.Select(d => new
+            frequencySlotsTable.DataSource = (_node.FreqSlotSwitchingTable.freqSlotSwitchingTable.Select(d => new
             {
                 WireID_A = d.Key[0],
                 FS_ID_A = d.Key[1],
@@ -169,7 +166,7 @@ namespace Router
                 FS_ID_B = d.Value[1]
             })).ToList();
 
-            foreach (NewWire wire in _router.localPhysicalWires.Wires)
+            foreach (NewWire wire in _node.LocalPhysicalWires.Wires)
             {
                 Chart chart;
                 if (chartsByWireIDs.TryGetValue(wire.ID, out chart))
@@ -189,11 +186,11 @@ namespace Router
                         var start = freqSlot.startingFreq;
                         string name = "FSid = " + freqSlot.ID;
                         //Console.WriteLine("start = " + start + ", height = " + height);
-                      /* KeyValuePair<int[], int> k = _router.FROMclientConnectionsTable.clientConnectionTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
-                       KeyValuePair<int[], int> s = _router.TOclientConnectionsTable.clientConnectionTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
+                      /* KeyValuePair<int[], int> k = _node.FROMclientConnectionsTable.clientConnectionTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
+                       KeyValuePair<int[], int> s = _node.TOclientConnectionsTable.clientConnectionTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
                                 
                        
-                       KeyValuePair<int[], int[]> z = _router.freqSlotSwitchingTable.freqSlotSwitchingTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
+                       KeyValuePair<int[], int[]> z = _node.freqSlotSwitchingTable.freqSlotSwitchingTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
                         if (k.Key != null)
                         {
                             name = "Start -> wireID = " + k.Key[0] + " FS_ID = " + k.Key[1];
@@ -244,11 +241,11 @@ namespace Router
                         chart.Series.Add(seriesGuardBand);
                         chart.Series.Add(seriesGuardBand1);
 
-                        double[] yValue1 = { start + height - GUARD_BAND, start + height - GUARD_BAND };
-                        double[] yValue2 = { start + GUARD_BAND, start + GUARD_BAND};
+                        double[] yValue1 = { start + height - GuardBand, start + height - GuardBand };
+                        double[] yValue2 = { start + GuardBand, start + GuardBand};
                         double[] yValue1Guard = { start + height, start + height};
-                        double[] yValue2Guard = { start + height - GUARD_BAND, start + height - GUARD_BAND};
-                        double[] yValue1Guard1 = { start + GUARD_BAND, start + GUARD_BAND};
+                        double[] yValue2Guard = { start + height - GuardBand, start + height - GuardBand};
+                        double[] yValue1Guard1 = { start + GuardBand, start + GuardBand};
                         double[] yValue2Guard1= { start, start};
 
                         chart.Series[name].Points.DataBindY(yValue1, yValue2);
@@ -282,7 +279,7 @@ namespace Router
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-            _router.closing();
+            _node.Closing();
         }
 
         private void SendButton_Click(object sender, EventArgs e)
@@ -304,9 +301,12 @@ namespace Router
             }
             Data data = new Data(/*bandwidthNeeded*/0, MsgTextBox.Text);
            
-            var id = _router.address.Substring(_router.address.Length - 1, 1);
-            _router.waitingMsgs.Add(new KeyValuePair<int[], DataAndID>
-                (new int[] { Convert.ToInt32(PortTextBox.Text), Convert.ToInt32(FSTextBox.Text) }, new ExtSrc.DataAndID(data, Int32.Parse(id))));
+            //var id = _node.address.Substring(_node.address.Length - 1, 1);
+
+            _node.MessageToSend("127.0.1." + Convert.ToInt32(PortTextBox.Text), data, 100);
+
+//            _node.WaitingMsgs.Add(new KeyValuePair<int[], DataAndID>
+//                (new int[] { Convert.ToInt32(PortTextBox.Text), Convert.ToInt32(FSTextBox.Text) }, new ExtSrc.DataAndID(data, Int32.Parse(id))));
         }
 
         private void connectedWiresTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -326,7 +326,7 @@ namespace Router
 
         private void RouterForm_Load(object sender, EventArgs e)
         {
-            if (!_router.isEdge)
+            if (!_node.isEdge)
             {
                 MsgLabel.Visible = false;
                 PortIdLabel.Visible = false;

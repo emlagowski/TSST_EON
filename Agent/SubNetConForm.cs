@@ -12,21 +12,21 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using ExtSrc;
 
-namespace Agent
+namespace SubnetworkController
 {
-    public partial class Form2 : Form
+    public partial class SubNetConForm : Form
     {
-        Communication cm;
+        SubnetworkController cm;
         private Action timerAction; 
         static System.Windows.Forms.Timer myTimer;
         private Action WireSourceSetter;
-        public Form2()
+        public SubNetConForm()
         {
 
             InitializeComponent();
             Console.SetOut(new TextBoxWriter(consoleOutput));
             bandwidthTextBox.Text = "50";
-            cm = new Communication(this);
+            cm = new SubnetworkController(this);
             //cm.Initialize();
             myTimer = new System.Windows.Forms.Timer();
             myTimer.Tick += new EventHandler(TimerEventProcessor);
@@ -61,30 +61,30 @@ namespace Agent
             var prevSelRouter = routerListBox.SelectedItem;
             
            // RouterComboBox.DataSource = cm.dijkstraDataList.Select(d => d.routerID).Distinct().ToList();
-            routerListBox.DataSource = cm.dijkstraDataList.Select(d => d.routerID).Distinct().ToList();
+            routerListBox.DataSource = cm.DijkstraDataList.Select(d => d.routerID).Distinct().ToList();
             if(prevSelRouter != null && routerListBox.Items.Contains(prevSelRouter))
             routerListBox.SelectedItem = prevSelRouter;
 
-            clientListBox.DataSource = cm.clientMap.Select(d => d.Key).ToList();
+            clientListBox.DataSource = cm.ClientMap.Select(d => d.Key).ToList();
 
                var list = new BindingList<int>();
-            if (cm.dijkstraDataList.Count != 0)
+            if (cm.DijkstraDataList.Count != 0)
             {
-                for (var i = 0; i < cm.dijkstraDataList.Count; i++)
+                for (var i = 0; i < cm.DijkstraDataList.Count; i++)
                 {
                     if (routerListBox.SelectedIndex == -1) continue;
-                    if (cm.dijkstraDataList.ElementAt(i).routerID.Equals(routerListBox.SelectedItem))
-                        list.Add(cm.dijkstraDataList.ElementAt(i).wireID);
+                    if (cm.DijkstraDataList.ElementAt(i).routerID.Equals(routerListBox.SelectedItem))
+                        list.Add(cm.DijkstraDataList.ElementAt(i).wireID);
                 }
             }
 
           
           
-            if (cm.routeHistoryList.Keys.Count != 0)
+            if (cm.RouteHistoryList.Keys.Count != 0)
             {
                 var list1 = new BindingList<string>();
 
-                foreach (var s in cm.routeHistoryList.Keys)
+                foreach (var s in cm.RouteHistoryList.Keys)
                 {
                     list1.Add(s[2]);
                 }
@@ -99,14 +99,14 @@ namespace Agent
            
         
             var connections = new List<String[]>();
-            foreach (var d in cm.routeHistoryList.Values)
+            foreach (var d in cm.RouteHistoryList.Values)
             {
                 foreach (var d1 in d)
                 {
                     if (d1[0] == (int)routerListBox.SelectedItem)
                     {
                         var tab = new string[3];
-                        tab[0] = cm.routeHistoryList.FirstOrDefault(x => x.Value == d).Key[2];
+                        tab[0] = cm.RouteHistoryList.FirstOrDefault(x => x.Value == d).Key[2];
                         tab[1] = d1[1].ToString();
                         tab[2] = d1[2].ToString();
                         connections.Add(tab);
@@ -139,12 +139,12 @@ namespace Agent
             {
                 MessageBox.Show("You must select connection hashkey", "ERROR");
             }
-            var routeHist = cm.routeHistoryList.Where(d => d.Key[2].Equals(ConHashComboBox.SelectedItem.ToString())).Select(d => d.Value).FirstOrDefault();
+            var routeHist = cm.RouteHistoryList.Where(d => d.Key[2].Equals(ConHashComboBox.SelectedItem.ToString())).Select(d => d.Value).FirstOrDefault();
             if (routeHist != null)
             {
                 cm.disroute(routeHist, ConHashComboBox.SelectedItem.ToString());
-                String[] key = cm.routeHistoryList.FirstOrDefault(d => d.Value.Equals(routeHist)).Key;
-                cm.routeHistoryList.Remove(key);
+                String[] key = cm.RouteHistoryList.FirstOrDefault(d => d.Value.Equals(routeHist)).Key;
+                cm.RouteHistoryList.Remove(key);
             }
 
             else

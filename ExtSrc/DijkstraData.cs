@@ -28,7 +28,8 @@ namespace ExtSrc
     {
         public bool Equals(DijkstraData x, DijkstraData y)
         {
-            return x.wireDistance == y.wireDistance && x.wireID == y.wireID;
+//            return x.wireDistance == y.wireDistance && x.wireID == y.wireID;
+            return x.wireDistance == y.wireDistance && ((x.RouterIds[0] == y.RouterIds[0] && x.RouterIds[1] == y.RouterIds[1]) || (x.RouterIds[0] == y.RouterIds[1] && x.RouterIds[1] == y.RouterIds[0]));
         }
 
         public int GetHashCode(DijkstraData obj)
@@ -38,7 +39,7 @@ namespace ExtSrc
             {
                 unchecked
                 {
-                    result = (int)(result * 23 + 0.8*obj.wireID + 0.44*obj.wireDistance);
+                    result = (int)(result * 23 + 0.8 * obj.RouterIds[0] + 0.8 * obj.RouterIds[1] + 0.44 * obj.wireDistance);
                 }
             }
             return result;

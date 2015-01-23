@@ -13,14 +13,14 @@
 //{
 //    public partial class Form1 : Form
 //    {
-//        Communication comm;
+//        SubnetworkController comm;
 //        Boolean UserEvent = true;
 //        static System.Windows.Forms.Timer myTimer;
 //        List<String> bandItems = new List<string>(){"1 band", "2 band", "3 band", "4 band", "5 band", "6 band", "7 band", "8 band", "9 band", "10 band", "11 band", "12 band"};
 //        public Form1()
 //        {
 //            InitializeComponent();
-//            comm = new Communication();
+//            comm = new SubnetworkController();
 //            checkedListBox1.ItemCheck += checkedListBox1_ItemCheck;
 //            checkedListBox2.ItemCheck += checkedListBox2_ItemCheck;
 
@@ -123,7 +123,7 @@
 
 //        private void button1_Click(object sender, EventArgs e)
 //        {
-//            //Form2 form2 = new Form2();
+//            //SubNetConForm form2 = new SubNetConForm();
 //            //DialogResult dialogresult = form2.ShowDialog();
 //            //form2.Dispose();
 

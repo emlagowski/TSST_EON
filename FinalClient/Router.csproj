@@ -63,8 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgentCommunication.cs" />
-    <Compile Include="Router.cs" />
+    <Compile Include="Node.cs" />
     <Compile Include="RouterForm.cs">
       <SubType>Form</SubType>
     </Compile>
