@@ -47,6 +47,7 @@
             this.startFreqTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.communicationBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ConnDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.banwidthTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.communicationBindingSource)).BeginInit();
@@ -55,17 +56,18 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 2);
+            this.label2.Location = new System.Drawing.Point(33, 2);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(87, 25);
+            this.label2.Size = new System.Drawing.Size(74, 25);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Routers";
+            this.label2.Text = "Nodes";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // SetConnButton
             // 
-            this.SetConnButton.Location = new System.Drawing.Point(586, 319);
+            this.SetConnButton.Location = new System.Drawing.Point(583, 247);
             this.SetConnButton.Name = "SetConnButton";
-            this.SetConnButton.Size = new System.Drawing.Size(329, 90);
+            this.SetConnButton.Size = new System.Drawing.Size(329, 88);
             this.SetConnButton.TabIndex = 10;
             this.SetConnButton.Text = "Set Connection";
             this.SetConnButton.UseVisualStyleBackColor = true;
@@ -73,9 +75,9 @@
             // 
             // RemoveConnButton
             // 
-            this.RemoveConnButton.Location = new System.Drawing.Point(487, 540);
+            this.RemoveConnButton.Location = new System.Drawing.Point(583, 341);
             this.RemoveConnButton.Name = "RemoveConnButton";
-            this.RemoveConnButton.Size = new System.Drawing.Size(428, 51);
+            this.RemoveConnButton.Size = new System.Drawing.Size(329, 90);
             this.RemoveConnButton.TabIndex = 11;
             this.RemoveConnButton.Text = "Remove Connection";
             this.RemoveConnButton.UseVisualStyleBackColor = true;
@@ -84,7 +86,7 @@
             // ConnDataGridView
             // 
             this.ConnDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ConnDataGridView.Location = new System.Drawing.Point(153, 49);
+            this.ConnDataGridView.Location = new System.Drawing.Point(150, 12);
             this.ConnDataGridView.Name = "ConnDataGridView";
             this.ConnDataGridView.RowTemplate.Height = 33;
             this.ConnDataGridView.Size = new System.Drawing.Size(762, 229);
@@ -94,7 +96,7 @@
             // banwidthTrackBar
             // 
             this.banwidthTrackBar.LargeChange = 10;
-            this.banwidthTrackBar.Location = new System.Drawing.Point(150, 319);
+            this.banwidthTrackBar.Location = new System.Drawing.Point(150, 290);
             this.banwidthTrackBar.Maximum = 1000;
             this.banwidthTrackBar.Minimum = 50;
             this.banwidthTrackBar.Name = "banwidthTrackBar";
@@ -107,25 +109,25 @@
             // 
             // consoleOutput
             // 
-            this.consoleOutput.Location = new System.Drawing.Point(12, 665);
+            this.consoleOutput.Location = new System.Drawing.Point(12, 551);
             this.consoleOutput.Multiline = true;
             this.consoleOutput.Name = "consoleOutput";
             this.consoleOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.consoleOutput.Size = new System.Drawing.Size(903, 240);
+            this.consoleOutput.Size = new System.Drawing.Size(903, 276);
             this.consoleOutput.TabIndex = 14;
             // 
             // bandwidthTextBox
             // 
-            this.bandwidthTextBox.Location = new System.Drawing.Point(318, 378);
+            this.bandwidthTextBox.Location = new System.Drawing.Point(329, 262);
             this.bandwidthTextBox.Name = "bandwidthTextBox";
             this.bandwidthTextBox.ReadOnly = true;
-            this.bandwidthTextBox.Size = new System.Drawing.Size(100, 31);
+            this.bandwidthTextBox.Size = new System.Drawing.Size(235, 31);
             this.bandwidthTextBox.TabIndex = 15;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(287, 291);
+            this.label5.Location = new System.Drawing.Point(160, 262);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(163, 25);
             this.label5.TabIndex = 16;
@@ -137,9 +139,9 @@
             this.ConHashComboBox.FormattingEnabled = true;
             this.ConHashComboBox.Items.AddRange(new object[] {
             ""});
-            this.ConHashComboBox.Location = new System.Drawing.Point(166, 550);
+            this.ConHashComboBox.Location = new System.Drawing.Point(153, 445);
             this.ConHashComboBox.Name = "ConHashComboBox";
-            this.ConHashComboBox.Size = new System.Drawing.Size(300, 33);
+            this.ConHashComboBox.Size = new System.Drawing.Size(411, 33);
             this.ConHashComboBox.TabIndex = 17;
             // 
             // routerListBox
@@ -158,7 +160,7 @@
             this.clientListBox.Location = new System.Drawing.Point(12, 291);
             this.clientListBox.Name = "clientListBox";
             this.clientListBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.clientListBox.Size = new System.Drawing.Size(120, 279);
+            this.clientListBox.Size = new System.Drawing.Size(120, 254);
             this.clientListBox.TabIndex = 20;
             this.clientListBox.SelectedIndexChanged += new System.EventHandler(this.clientListBox_SelectedIndexChanged);
             // 
@@ -173,15 +175,15 @@
             // 
             // routeTextBox
             // 
-            this.routeTextBox.Location = new System.Drawing.Point(157, 474);
+            this.routeTextBox.Location = new System.Drawing.Point(153, 371);
             this.routeTextBox.Name = "routeTextBox";
-            this.routeTextBox.Size = new System.Drawing.Size(374, 31);
+            this.routeTextBox.Size = new System.Drawing.Size(411, 31);
             this.routeTextBox.TabIndex = 25;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(152, 429);
+            this.label8.Location = new System.Drawing.Point(160, 341);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(357, 25);
             this.label8.TabIndex = 29;
@@ -190,7 +192,7 @@
             // ConHashLabel
             // 
             this.ConHashLabel.AutoSize = true;
-            this.ConHashLabel.Location = new System.Drawing.Point(161, 522);
+            this.ConHashLabel.Location = new System.Drawing.Point(160, 417);
             this.ConHashLabel.Name = "ConHashLabel";
             this.ConHashLabel.Size = new System.Drawing.Size(214, 25);
             this.ConHashLabel.TabIndex = 18;
@@ -198,29 +200,36 @@
             // 
             // startFreqTextBox
             // 
-            this.startFreqTextBox.Location = new System.Drawing.Point(344, 608);
+            this.startFreqTextBox.Location = new System.Drawing.Point(360, 498);
             this.startFreqTextBox.Name = "startFreqTextBox";
-            this.startFreqTextBox.Size = new System.Drawing.Size(100, 31);
+            this.startFreqTextBox.Size = new System.Drawing.Size(204, 31);
             this.startFreqTextBox.TabIndex = 32;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(124, 614);
+            this.label1.Location = new System.Drawing.Point(160, 498);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(194, 25);
             this.label1.TabIndex = 33;
             this.label1.Text = "Starting Frequency";
             // 
-            // communicationBindingSource
+            // button1
             // 
-            this.communicationBindingSource.DataSource = typeof(SubnetworkController);
+            this.button1.Location = new System.Drawing.Point(583, 437);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(329, 86);
+            this.button1.TabIndex = 34;
+            this.button1.Text = "Test Send";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // SubNetConForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(923, 942);
+            this.ClientSize = new System.Drawing.Size(923, 839);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.startFreqTextBox);
             this.Controls.Add(this.label8);
@@ -269,5 +278,6 @@
         private System.Windows.Forms.Label ConHashLabel;
         private System.Windows.Forms.TextBox startFreqTextBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
     }
 }

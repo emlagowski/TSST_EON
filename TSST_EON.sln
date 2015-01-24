@@ -41,6 +41,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Router90", "Router90\Router
 		{21190D90-C3AC-4455-805C-99C56A81EDAA} = {21190D90-C3AC-4455-805C-99C56A81EDAA}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubNetCon6", "SubNetCon6\SubNetCon6.csproj", "{7513799C-42C0-498A-8778-3D715F3184AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubNetCon7", "SubNetCon7\SubNetCon7.csproj", "{A09F12D3-E0E7-4411-984A-D6CD2BA47134}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -172,6 +176,26 @@ Global
 		{0CEE4851-A2F6-4390-B384-7A43105C84CB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0CEE4851-A2F6-4390-B384-7A43105C84CB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0CEE4851-A2F6-4390-B384-7A43105C84CB}.Release|Win32.ActiveCfg = Release|Any CPU
+		{7513799C-42C0-498A-8778-3D715F3184AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7513799C-42C0-498A-8778-3D715F3184AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7513799C-42C0-498A-8778-3D715F3184AD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7513799C-42C0-498A-8778-3D715F3184AD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7513799C-42C0-498A-8778-3D715F3184AD}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{7513799C-42C0-498A-8778-3D715F3184AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7513799C-42C0-498A-8778-3D715F3184AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7513799C-42C0-498A-8778-3D715F3184AD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7513799C-42C0-498A-8778-3D715F3184AD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7513799C-42C0-498A-8778-3D715F3184AD}.Release|Win32.ActiveCfg = Release|Any CPU
+		{A09F12D3-E0E7-4411-984A-D6CD2BA47134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A09F12D3-E0E7-4411-984A-D6CD2BA47134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A09F12D3-E0E7-4411-984A-D6CD2BA47134}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A09F12D3-E0E7-4411-984A-D6CD2BA47134}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A09F12D3-E0E7-4411-984A-D6CD2BA47134}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{A09F12D3-E0E7-4411-984A-D6CD2BA47134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A09F12D3-E0E7-4411-984A-D6CD2BA47134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A09F12D3-E0E7-4411-984A-D6CD2BA47134}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A09F12D3-E0E7-4411-984A-D6CD2BA47134}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A09F12D3-E0E7-4411-984A-D6CD2BA47134}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

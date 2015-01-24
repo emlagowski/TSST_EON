@@ -20,13 +20,14 @@ namespace SubnetworkController
         private Action timerAction; 
         static System.Windows.Forms.Timer myTimer;
         private Action WireSourceSetter;
-        public SubNetConForm()
+        public SubNetConForm(SubnetworkController subnetworkController)
         {
 
             InitializeComponent();
             Console.SetOut(new TextBoxWriter(consoleOutput));
             bandwidthTextBox.Text = "50";
-            cm = new SubnetworkController(this);
+            cm = subnetworkController;
+            Text = "Subnetwork Controller " + Int32.Parse(cm.AgentIp.Substring(cm.AgentIp.Length - 1, 1));
             //cm.Initialize();
             myTimer = new System.Windows.Forms.Timer();
             myTimer.Tick += new EventHandler(TimerEventProcessor);
@@ -65,7 +66,17 @@ namespace SubnetworkController
             if(prevSelRouter != null && routerListBox.Items.Contains(prevSelRouter))
             routerListBox.SelectedItem = prevSelRouter;
 
-            clientListBox.DataSource = cm.ClientMap.Select(d => d.Key).ToList();
+//            clientListBox.DataSource = cm.ClientMap.Select(d => d.Key).ToList();
+            clientListBox.Items.Clear();
+            clientListBox.Items.AddRange(cm.MyDomainInfo.Select(e=>e.ToString()).ToArray());
+            foreach (var kvp in cm.OtherDomainInfo)
+            {
+                foreach (var i in kvp.Value)
+                {
+                    clientListBox.Items.Add(i.ToString()+" via "+kvp.Key.ToString());
+                }
+            }
+
 
                var list = new BindingList<int>();
             if (cm.DijkstraDataList.Count != 0)
@@ -207,7 +218,7 @@ namespace SubnetworkController
 //            cm.setRoute("127.0.1." + clientATextBox.Text, "127.0.1." + clientBTextBox.Text, banwidthTrackBar.Value, null, hashKey, route, 
 //                Convert.ToInt32(startFreqTextBox.Text));
 
-            cm.setRouteFromTo("127.0.1." + route[0], "127.0.1." + route[route.Length-1], banwidthTrackBar.Value, null, hashKey, route,
+            cm.setRouteManually("127.0.1." + route[0], "127.0.1." + route[route.Length-1], banwidthTrackBar.Value, null, hashKey, route,
                 Convert.ToInt32(startFreqTextBox.Text));
         }
 
@@ -221,6 +232,21 @@ namespace SubnetworkController
         {
             base.OnClosing(e);
             cm.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            cm.Send("127.0.1.3", new AgentData()
+            {
+                Message = AgentComProtocol.DOMAIN_INFO,
+                DomainInfo = new List<int>() {8, 9},
+                UniqueKey = "CHUJ"
+            });
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

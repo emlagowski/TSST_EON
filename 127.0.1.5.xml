@@ -1,6 +1,4 @@
 <wires>	
-	<wire WireId="3" Distance="500" MaxFreqSlots="50" PortPrefix="115" SpectralWidth="1000"></wire>	
-	<wire WireId="4" Distance="500" MaxFreqSlots="50" PortPrefix="135" SpectralWidth="1000"></wire>	
-	<wire WireId="6" Distance="500" MaxFreqSlots="50" PortPrefix="145" SpectralWidth="1000"></wire>	
-	<wire WireId="7" Distance="500" MaxFreqSlots="50" PortPrefix="125" SpectralWidth="1000"></wire>
+	<wire WireId="1" Distance="500" MaxFreqSlots="50" PortPrefix="145" SpectralWidth="1000"></wire>	
+	<wire WireId="2" Distance="500" MaxFreqSlots="50" PortPrefix="157" SpectralWidth="1000"></wire>	
 </wires>

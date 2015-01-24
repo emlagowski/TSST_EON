@@ -46,6 +46,10 @@ namespace ExtSrc
         // In REGISTER message Node put here local IDs of wires
         public List<DijkstraData> WireIDsList { get; set; }
 
+        public List<int> DomainInfo { get; set; }
+        public int RouterID { get; set; }
+        public int DomainRouterID { get; set; }
+
         public AgentData()
         {
             Message = AgentComProtocol.NULL;
@@ -61,6 +65,7 @@ namespace ExtSrc
             ClientSocketId = -1;
             UniqueKey = null;
             WireIDsList = new List<DijkstraData>();
+            DomainInfo = new List<int>();
         }
     }
     public enum AgentComProtocol { 
@@ -81,7 +86,13 @@ namespace ExtSrc
         DISROUTE_ERROR_EDGE, 
         DISROUTE_ERROR, 
         DISROUTE_EDGE_IS_DONE, 
-        CLIENT_DISCONNECTED
+        CLIENT_DISCONNECTED,
+        DOMAIN_REGISTER,
+        DOMAIN_INFO,
+        DOMAIN_SET_ROUTE_FOR_ME,
+        DOMAIN_CAN_WE_SET_ROUTE,
+        DOMAIN_CAN_ROUTE,
+        DOMAIN_CAN_SEND
     }
     
     ///    ###########     MSG TYPES    ##########
