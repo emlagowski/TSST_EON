@@ -90,9 +90,33 @@ namespace ExtSrc
 
         }
 
-    public void Close()
-    {
-        Wires.ForEach(w => w.Close());
-    }
+        public void Close()
+        {
+            Wires.ForEach(w => w.Close());
+        }
+
+        public List<int[]> GetAvaibleFreqSlots(int FsuCount, int wireId)
+        {
+            var result = new List<int[]>();
+            foreach (var newWire in Wires)
+            {
+                if (newWire.ID != wireId) continue;
+                int start=0, count=0;
+                for (var i = 0; i < newWire.spectralWidth.GetLength(0); i++)
+                {
+                    if (newWire.spectralWidth[i] == NewWire.EMPTY_VALUE) count++;
+                    else if (count > FsuCount)
+                    {
+                        result.Add(new[] { start, start + count });
+                        count = 0;
+                    }
+                    else count = 0;
+
+                    if (count == 1) start = i;
+                }
+                if (count > FsuCount) result.Add(new[] { start, start+count });
+            }
+            return result;
+        }
     }
     }

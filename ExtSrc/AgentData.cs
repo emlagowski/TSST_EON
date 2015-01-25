@@ -49,6 +49,8 @@ namespace ExtSrc
         public List<int> DomainInfo { get; set; }
         public int RouterID { get; set; }
         public int DomainRouterID { get; set; }
+        public List<int[]> StartingFreqs { get; set; }
+        public List<List<int[]>> StartingFreqsPool { get; set; }
 
         public AgentData()
         {
@@ -92,7 +94,9 @@ namespace ExtSrc
         DOMAIN_SET_ROUTE_FOR_ME,
         DOMAIN_CAN_WE_SET_ROUTE,
         DOMAIN_CAN_ROUTE,
-        DOMAIN_CAN_SEND
+        DOMAIN_CAN_SEND,
+        AVAIBLE_STARTING_FREQS,
+        MY_FREES_FREQ_SLOTS
     }
     
     ///    ###########     MSG TYPES    ##########

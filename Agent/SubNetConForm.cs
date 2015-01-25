@@ -146,22 +146,39 @@ namespace SubnetworkController
 
         private void RemoveConnButton_Click(object sender, EventArgs e)
         {
+            
             if (ConHashComboBox.SelectedIndex == -1)
             {
                 MessageBox.Show("You must select connection hashkey", "ERROR");
             }
-            var routeHist = cm.RouteHistoryList.Where(d => d.Key[2].Equals(ConHashComboBox.SelectedItem.ToString())).Select(d => d.Value).FirstOrDefault();
+
+            var uniKey = ConHashComboBox.SelectedItem.ToString();
+
+            if (!cm.Disroute(uniKey)) Console.WriteLine("Error, no connection with this haskey in RouteHistoryList");
+
+            /*var routeHist = cm.RouteHistoryList.Where(d => d.Key[2].Equals(uniKey)).Select(d => d.Value).FirstOrDefault();
             if (routeHist != null)
             {
-                cm.disroute(routeHist, ConHashComboBox.SelectedItem.ToString());
-                String[] key = cm.RouteHistoryList.FirstOrDefault(d => d.Value.Equals(routeHist)).Key;
+                if (cm.EdgeRouterIDs.ContainsKey(uniKey))
+                {
+                    cm.Disroute(routeHist, uniKey);
+                }
+                else if (cm.EdgeLocalRouterIDs.ContainsKey(uniKey))
+                {
+                    cm.DisrouteLocal(routeHist, uniKey);
+                }
+                else if (cm.EdgeRemoteRouterIDs.ContainsKey(uniKey))
+                {
+                    cm.DisrouteRemote(routeHist, uniKey);
+                }
+                var key = cm.RouteHistoryList.FirstOrDefault(d => d.Value.Equals(routeHist)).Key;
                 cm.RouteHistoryList.Remove(key);
             }
 
             else
             {
                 Console.WriteLine("Error, no connection with this haskey in RouteHistoryList");
-            }
+            }*/
         }
 
       
@@ -218,7 +235,7 @@ namespace SubnetworkController
 //            cm.setRoute("127.0.1." + clientATextBox.Text, "127.0.1." + clientBTextBox.Text, banwidthTrackBar.Value, null, hashKey, route, 
 //                Convert.ToInt32(startFreqTextBox.Text));
 
-            cm.setRouteManually("127.0.1." + route[0], "127.0.1." + route[route.Length-1], banwidthTrackBar.Value, null, hashKey, route,
+            cm.SetRouteManually("127.0.1." + route[0], "127.0.1." + route[route.Length-1], banwidthTrackBar.Value, null, hashKey, route,
                 Convert.ToInt32(startFreqTextBox.Text));
         }
 

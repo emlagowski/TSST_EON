@@ -14,8 +14,8 @@ namespace ExtSrc
     public class NewWire : Observer
     {
         static readonly int GUARD_BAND = 10;
-        static readonly int FREQ_SLOT_UNIT = 10;
-        static readonly int EMPTY_VALUE = -1;
+        public static readonly int FREQ_SLOT_UNIT = 10;
+        public static readonly int EMPTY_VALUE = -1;
 
         private int nextSlotID = -1;
 

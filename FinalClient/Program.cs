@@ -32,7 +32,7 @@ namespace Node
 
             var clientZero = new Node(ip, edgeB, agentAddress);
 
-            new Thread(delegate()
+            new Thread(() =>
             {
                 var cf = new RouterForm(clientZero);
                 clientZero.RouterForm = cf;
@@ -41,7 +41,7 @@ namespace Node
                 Application.Run();
             }).Start();
 
-            new Thread(delegate()
+            new Thread(() =>
             {
                 if (domainAddress != null)
                     clientZero.ConnectDomain(domainAddress);
