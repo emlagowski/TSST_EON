@@ -22,8 +22,8 @@ namespace ExtSrc
         }
 
 
-    }
-    //porownuje tylko wireID i wireDistance
+    } 
+
     public class DijkstraEqualityComparer : IEqualityComparer<DijkstraData>
     {
         public bool Equals(DijkstraData x, DijkstraData y)

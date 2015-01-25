@@ -96,7 +96,12 @@ namespace ExtSrc
         DOMAIN_CAN_ROUTE,
         DOMAIN_CAN_SEND,
         AVAIBLE_STARTING_FREQS,
-        MY_FREES_FREQ_SLOTS
+        MY_FREES_FREQ_SLOTS,
+        UNREGISTER,
+        DOMAIN_DISROUTE,
+        MODIFY_UNQCON_AFTER_REPAIR,
+        DOMAIN_CAN_NOT_ROUTE,
+        ROUTE_UNAVAIBLE
     }
     
     ///    ###########     MSG TYPES    ##########

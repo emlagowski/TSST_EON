@@ -284,7 +284,7 @@ namespace Node
 
         private void SendButton_Click(object sender, EventArgs e)
         {
-            if (MsgTextBox.Text.Equals("") || PortTextBox.Text.Equals("") || FSTextBox.Text.Equals(""))
+            if (MsgTextBox.Text.Equals("") || PortTextBox.Text.Equals(""))
             {
                 MessageBox.Show("All fields must be filled.", "ERROR");
                 return;
@@ -293,7 +293,7 @@ namespace Node
             
             Regex rgx = new Regex(pattern);
 
-            if (!rgx.IsMatch(PortTextBox.Text) || !rgx.IsMatch(FSTextBox.Text))
+            if (!rgx.IsMatch(PortTextBox.Text))
             {
                 Console.WriteLine("regex doesn't match");
                 MessageBox.Show("Wrong text format in textboxes.", "ERROR");
@@ -330,11 +330,29 @@ namespace Node
             {
                 MsgLabel.Visible = false;
                 PortIdLabel.Visible = false;
-                FsIdLabel.Visible = false;
                 MsgTextBox.Visible = false;
                 PortTextBox.Visible = false;
-                FSTextBox.Visible = false;
                 SendButton.Visible = false;
+            }
+            else
+            {
+                RunButton.Visible = false;
+            }
+        }
+
+        private void RunButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (RunButton.Checked)
+            {
+                RunButton.Text = "Enable";
+                _node.Enabled = false;
+                _node.UnregisterToAgent();
+            }
+            else
+            {
+                RunButton.Text = "Disable";
+                _node.Enabled = true;
+                _node.RegisterToAgent();
             }
         }
     }
