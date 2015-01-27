@@ -36,11 +36,11 @@ namespace ExtSrc
             }
             catch (InvalidOperationException e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
             catch (Win32Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
@@ -54,7 +54,7 @@ namespace ExtSrc
             }
             catch (ObjectDisposedException e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 

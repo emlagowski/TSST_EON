@@ -43,6 +43,7 @@
     <Compile Include="FrequencySlot.cs" />
     <Compile Include="FrequencySlotUnit.cs" />
     <Compile Include="FrequencySlotSwitchingTable.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="NewWire.cs" />
     <Compile Include="Observers\Observer.cs" />
     <Compile Include="Observers\Subject.cs" />

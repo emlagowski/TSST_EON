@@ -130,7 +130,7 @@ namespace Node
         {
             //            messageHistoryTable;
             messageHistoryTable.DataSource = null;
-            //Console.WriteLine(_node.messageHistory.Count);
+            //Log.d(_node.messageHistory.Count);
             messageHistoryTable.DataSource = (_node.MessageHistory.Select(w => new
             {
                 Type = w.Key,
@@ -176,7 +176,7 @@ namespace Node
                         int height = freqSlot.FSUList.Count*10;
                         int start = freqSlot.startingFreq;
                         string name = "FSid = " + freqSlot.ID;
-                        //Console.WriteLine("start = " + start + ", height = " + height);
+                        //Log.d("start = " + start + ", height = " + height);
                         /* KeyValuePair<int[], int> k = _node.FROMclientConnectionsTable.clientConnectionTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
                        KeyValuePair<int[], int> s = _node.TOclientConnectionsTable.clientConnectionTable.FirstOrDefault(d => d.Key[0] == wire.ID && d.Key[1] == freqSlot.ID);
                                 
@@ -284,7 +284,7 @@ namespace Node
 
             if (!rgx.IsMatch(PortTextBox.Text))
             {
-                Console.WriteLine("regex doesn't match");
+                Log.d("regex doesn't match");
                 MessageBox.Show("Wrong text format in textboxes.", "ERROR");
                 return;
             }

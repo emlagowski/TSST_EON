@@ -150,9 +150,9 @@ namespace SubnetworkController
             {
                 for (var k = 0; k < adjMtrx.GetLength(1); k++)
                 {
-                    Console.Write(adjMtrx[j, k] + " ");
+                    //Console.Write(adjMtrx[j, k] + " ");
                 }
-                Console.WriteLine("");
+                //Console.WriteLine("");
             }
 
             return adjMtrx;

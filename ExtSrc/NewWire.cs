@@ -57,7 +57,7 @@ namespace ExtSrc
                 }
                 if (count == FSUcount) break;
             }
-            //if (count != FSUcount) Console.WriteLine("addFreqSlot error! Needed = " + FSUcount + " got = " + count);
+            //if (count != FSUcount) Log.d("addFreqSlot error! Needed = " + FSUcount + " got = " + count);
             takeSpectralWidth(startingFreq, FSUcount * FREQ_SLOT_UNIT /*+ GUARD_BAND*/, id);
             return id;
         }
@@ -65,7 +65,7 @@ namespace ExtSrc
         public void SlideDown()
         {
             //var freeSpectrumBefore = spectralWidth.Where(x => x==-1).ToList().Count;
-            Console.WriteLine("Slide down.");
+            Log.d("Slide down.");
             this.spectralWidth = Enumerable.Repeat(EMPTY_VALUE, spectralWidth.Count()).ToArray();
             var idxSpectralWidth = 0;
             var list = FrequencySlotDictionary.Values.ToList();
@@ -104,7 +104,7 @@ namespace ExtSrc
                 }
             }
             //var freeSpectrumAfter = spectralWidth.Where(x => x == -1).ToList().Count;
-            //Console.WriteLine("SLIDING TEST" + (freeSpectrumBefore == freeSpectrumAfter) + " Before:" + freeSpectrumBefore + " After:" + freeSpectrumAfter);
+            //Log.d("SLIDING TEST" + (freeSpectrumBefore == freeSpectrumAfter) + " Before:" + freeSpectrumBefore + " After:" + freeSpectrumAfter);
         }
 
         public Boolean IsPossibleToSlide(int FSUcount)
@@ -160,7 +160,7 @@ namespace ExtSrc
 
         public void takeSpectralWidth(int start, int count, int id)
         {
-            //Console.WriteLine("takeSpectralWidth : " + start + " - " + count + " - " + id);
+            //Log.d("takeSpectralWidth : " + start + " - " + count + " - " + id);
             for (int i = start; i < start + count; i++)
             {
                 if(i<spectralWidth.Length) spectralWidth[i] = id;

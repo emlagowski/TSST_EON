@@ -229,35 +229,18 @@ namespace Node
                             ReceiveFromCloud(unit.socket);
                         }
                     }
-                    Console.WriteLine("Node is ready.");
+                    Log.i("Node is ready.");
                     allReceive.WaitOne();
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
         void Send(ExtSrc.Data data, int[] route, bool isFirst = false)
         {
-            /*var id = TOclientConnectionsTable.findClient(route[0], route[1]);
-            ClientSocket clientSocketToSend;
-            if (clientSocketDictionary.TryGetValue(id, out clientSocketToSend))
-            {
-                var fs = new MemoryStream();
-                var formatter = new BinaryFormatter();
-
-                //znajduje adres poczatkowy polaczenia zeby odbiorca wiedzial skad to jest
-                var originatingAddr = String.Format("127.0.0." + FROMclientConnectionsTable.findClient(route[0], route[1]));
-                var clientdata = new ClientData(data.bandwidthNeeded, data.info, originatingAddr); 
-
-                formatter.Serialize(fs, clientdata);
-                var buffer = fs.ToArray();
-                clientSocketToSend.socket.BeginSend(buffer, 0, buffer.Length, 0, SendCallback, clientSocketToSend.socket);
-                sendDone.WaitOne();
-            }
-            else*/
             int[] newRoute = FreqSlotSwitchingTable.findRoute(route[0], route[1]);
             if (newRoute == null || newRoute[0] != -1 && newRoute[1] != -1)
             {// router poczatkowy || napewno nie router koncowy
@@ -280,7 +263,7 @@ namespace Node
             }
             else
             {
-                Console.WriteLine("There is no connection.");
+                Log.d("There is no connection.");
             }
         }
 
@@ -296,7 +279,7 @@ namespace Node
                 Socket client = unit.socket;
                 // Complete sending the data to the remote device.
                 int bytesSent = client.EndSend(ar);
-                Console.WriteLine("S: {0} bytes from {1} to {2}.", bytesSent, IpToString(client.LocalEndPoint), IpToString(client.RemoteEndPoint));
+                Log.d(String.Format("S: {0} bytes from {1} to {2}.", bytesSent, IpToString(client.LocalEndPoint), IpToString(client.RemoteEndPoint)));
                 //lock (this)
                 // addLog("Send", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString(), "none");
                 // Signal that all bytes have been sent.
@@ -308,13 +291,13 @@ namespace Node
                 {
                     Socket client = (Socket)ar.AsyncState;
                     int bytesSent = client.EndSend(ar);
-                    Console.WriteLine("S:{0} bytes from {1} to {2}.", bytesSent, IpToString(client.LocalEndPoint), IpToString(client.RemoteEndPoint));
+                    Log.d(String.Format("S:{0} bytes from {1} to {2}.", bytesSent, IpToString(client.LocalEndPoint), IpToString(client.RemoteEndPoint)));
                     sendDone.Set();
 
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    //Log.d(ex.ToString());
                 }
             }
         }
@@ -323,7 +306,7 @@ namespace Node
         {
             try
             {
-                //Console.WriteLine("Recieve method from Base Node Class.");
+                //Log.d("Recieve method from Base Node Class.");
                 // Create the state object.
                 var state = new StateObject();
                 state.WorkSocket = soc;
@@ -334,7 +317,7 @@ namespace Node
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
@@ -342,7 +325,7 @@ namespace Node
         {
             try
             {
-                // Console.WriteLine("Recieve Callback from Base Node Class.");
+                //Log.d("Recieve Callback from Base Node Class.");
                 if (!IsListening) return;
                 // Boolean flag = false;
                 // Retrieve the state object and the client socket 
@@ -359,7 +342,7 @@ namespace Node
 
                 state.Data = (ExtSrc.Data)formattor.Deserialize(ms);
 
-                Console.WriteLine("R: {0} bytes from {1}", bytesRead, client.RemoteEndPoint);
+                Log.d(String.Format("R: {0} bytes from {1}", bytesRead, client.RemoteEndPoint));
                 // String address = (client.LocalEndPoint as IPEndPoint).Address.ToString();
                 String port = (client.LocalEndPoint as IPEndPoint).Port.ToString();
                 int[] wireAndFreqSlotID = LocalPhysicalWires.getIDsbyPort(Int32.Parse(port));
@@ -389,15 +372,14 @@ namespace Node
                 }
                 receiveDone.Set();
                 allReceive.Set();
-                //                Console.WriteLine("Socket {0} Read '{1}'[{2} bytes] from socket {3}.", client.LocalEndPoint.ToString(),
-                //                        state.Data.ToString(), bytesRead, client.RemoteEndPoint.ToString());
+                //Log.d("Socket {0} Read '{1}'[{2} bytes] from socket {3}.", client.LocalEndPoint.ToString(), state.Data.ToString(), bytesRead, client.RemoteEndPoint.ToString());
 
                 if (canSend)
                 {
                     //na pon
                     if (route[0] == -1 && route[1] == -1)
                     {
-                        Console.WriteLine("R: '{0}'[{1} bytes].", state.Data.info, bytesRead);
+                        Log.d(String.Format("R: '{0}'[{1} bytes].", state.Data.info, bytesRead));
                         MessageHistory.Add(new KeyValuePair<string, Data>("RECEIVED", state.Data));
                         return;
 
@@ -408,7 +390,7 @@ namespace Node
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
@@ -428,7 +410,7 @@ namespace Node
                 {
                     client.EndConnect(ar);
                 }
-                Console.WriteLine("Node is connected to NMS {0}", IpToString(client.RemoteEndPoint));
+                Log.i(String.Format("Node is connected to NMS {0}", IpToString(client.RemoteEndPoint)));
 
                 // Signal that the connection has been made.
                 agentConnectDone.Set();
@@ -439,7 +421,7 @@ namespace Node
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
@@ -452,7 +434,7 @@ namespace Node
                 var state = new StateObject();
                 AgentOnline.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, result =>
                 {
-                    //Console.WriteLine("ROUTER RECEIVER ONLINE REQUEST AND SENDING RESPONSE");
+                    //Log.d("ROUTER RECEIVER ONLINE REQUEST AND SENDING RESPONSE");
                     var fs = new MemoryStream();
                     new BinaryFormatter().Serialize(fs, "ONLINE");
                     var buffer = fs.ToArray();
@@ -483,7 +465,7 @@ namespace Node
                 while (true)
                 {
                     agentReceiveDone.Reset();
-                    Console.WriteLine("Waiting for data from AGENT...");
+                    Log.i("Waiting for data from AGENT...");
                     AgentReceive();
                     agentReceiveDone.WaitOne();
                 }
@@ -491,13 +473,13 @@ namespace Node
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
         void AgentReceive()
         {
-            Console.WriteLine("AgentReceive");
+            Log.i("AgentReceive");
             try
             {
                 // Create the state object.
@@ -508,13 +490,13 @@ namespace Node
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
         void AgentReceiveCallback(IAsyncResult ar)
         {
-            Console.WriteLine("AgentReceiveCallback");
+            Log.d("AgentReceiveCallback");
             try
             {
                 // Retrieve the state object and the client socket 
@@ -539,7 +521,7 @@ namespace Node
             }
             catch (Exception)
             {
-                Console.WriteLine("Agent Closed.");
+                Log.d("Agent Closed.");
             }
         }
 
@@ -556,30 +538,32 @@ namespace Node
                 case AgentComProtocol.DOMAIN_CAN_WE_SET_ROUTE:
                 case AgentComProtocol.DOMAIN_INFO:
                     DomainSend(agentData);
-                    Console.WriteLine("Received and resend " + agentData.Message);
+                    //Log.d("Received and resend " + agentData.Message);
                     break;
                 case AgentComProtocol.MODIFY_UNQCON_AFTER_REPAIR:
                     var uniqConn = UniqueConnections.FirstOrDefault(w => w.AddressA.Equals(agentData.OriginatingAddress) & w.AddressB.Equals(agentData.RouterIpAddress));
                     if (uniqConn != null)
-                    {
+                    {   
                         uniqConn.AddressB = agentData.TargetAddress;
                     }
                     break;
                 case AgentComProtocol.ROUTE_UNAVAIBLE:
-                    Console.WriteLine("Route unavaible, delete waiting message.");
+                    Log.d("Route unavaible, delete waiting message.");
                     var uniqConn2 = UniqueConnections.FirstOrDefault(w => w.UniqueKey.Equals(agentData.UniqueKey));
                     UniqueConnections.Remove(uniqConn2);
                     var wm = WaitingMsgs.FirstOrDefault(w => w.Value.uniqueKey.Equals(agentData.UniqueKey));
                     WaitingMsgs.Remove(wm);
                     break;
                 case AgentComProtocol.AVAIBLE_STARTING_FREQS:
-                    Console.WriteLine("AVAIBLE_STARTING_FREQS asked fsuCount" + agentData.FsuCount + " wireId " + agentData.WireId);
+                    if(agentData.IsStartEdge) Log.CCC("Call accepted");
+                    Log.d("AVAIBLE_STARTING_FREQS asked fsuCount" + agentData.FsuCount + " wireId " + agentData.WireId);
                     var result = LocalPhysicalWires.GetAvaibleFreqSlots(agentData.FsuCount, agentData.WireId);
-                    result.ForEach(e => Console.WriteLine("AVAIBLE SLOT = <" + e[0] + "," + e[1] + ">"));
+                    result.ForEach(e => Log.d("AVAIBLE SLOT = <" + e[0] + "," + e[1] + ">"));
                     AgentSend(new AgentData() { Message = AgentComProtocol.MY_FREES_FREQ_SLOTS, StartingFreqs = result });
                     break;
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U_EDGE:
-                    Console.WriteLine("ROUTE_FOR_U_EDGE StartFreq=" + agentData.StartingFreq + " fsucount:" + agentData.FsuCount);
+                    //Log.d("ROUTE_FOR_U_EDGE StartFreq=" + agentData.StartingFreq + " fsucount:" + agentData.FsuCount);
+                    Log.CC("Connection Request IN");
                     var startfreqEdge = agentData.StartingFreq;
                     id1 = LocalPhysicalWires.getWireByID(agentData.WireId).addFreqSlot(startfreqEdge, agentData.FsuCount, agentData.Mod);
                     var ucon = UniqueConnections.FirstOrDefault(x => x.UniqueKey.Equals(agentData.UniqueKey));
@@ -609,7 +593,8 @@ namespace Node
                             WaitingMsgs.Add(newMsg);
                         }
                     }
-                    //Console.WriteLine("ROUTE SET, EDGE");
+                    Log.CC("Connection confirmed.");
+                    //Log.d("ROUTE SET, EDGE");
                     AgentSend(new AgentData()
                     {
                         Message = AgentComProtocol.CONNECTION_IS_ON,
@@ -619,20 +604,22 @@ namespace Node
                     break;
 
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U:
-                    Console.WriteLine("ROUTE_FOR_U StartFreq=" + agentData.StartingFreq + " fsucount:" + agentData.FsuCount);
+                    //Log.d("ROUTE_FOR_U StartFreq=" + agentData.StartingFreq + " fsucount:" + agentData.FsuCount);
+                    Log.CC("Connection Request IN");
                     id1 = LocalPhysicalWires.getWireByID(agentData.FirstWireId).addFreqSlot(agentData.StartingFreq, agentData.FsuCount, agentData.LastMod);
                     id2 = LocalPhysicalWires.getWireByID(agentData.SecondWireId).addFreqSlot(agentData.StartingFreq, agentData.FsuCount, agentData.Mod);
                     FreqSlotSwitchingTable.add(agentData.FirstWireId, id1, agentData.SecondWireId, id2);
-                    //Console.WriteLine("ROUTE SET, NOT EDGE");
+                    //Log.d("ROUTE SET, NOT EDGE");
                     AgentSend(new AgentData()
                     {
                         Message = AgentComProtocol.CONNECTION_IS_ON,
                         StartingFreq = agentData.StartingFreq,
                         FSid = id2
                     });
+                    Log.CC("Connection confirmed.");
                     break;
                 case ExtSrc.AgentComProtocol.DISROUTE:
-                    Console.WriteLine("DISROUTE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.FirstWireId + " FSid : " + agentData.FSid);
+                    Log.d("DISROUTE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.FirstWireId + " FSid : " + agentData.FSid);
                     var inttab = new int[2];
                     inttab = FreqSlotSwitchingTable.findReverseRoute(agentData.FirstWireId, agentData.FSid);
                     if (LocalPhysicalWires.getWireByID(agentData.FirstWireId).removeFreqSlot(agentData.FSid) &&
@@ -641,16 +628,16 @@ namespace Node
                         //freqSlotSwitchingTable.remove(agentData.firstWireID, agentData.FSid, inttab[0], inttab[1]);
                         FreqSlotSwitchingTable.remove(inttab[0], inttab[1], agentData.FirstWireId, agentData.FSid);
                         AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_IS_DONE });
-                        Console.WriteLine("DISROUTE DONE");
+                        Log.d("DISROUTE DONE");
                     }
                     else
                     {
                         AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_ERROR });
-                        Console.WriteLine("DISROUTE ERROR!!!!");
+                        Log.d("DISROUTE ERROR!!!!");
                     }
                     break;
                 case ExtSrc.AgentComProtocol.DISROUTE_EDGE:
-                    Console.WriteLine("DISROUTE_EDGE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.FirstWireId + " FSid : " + agentData.FSid);
+                    Log.d("DISROUTE_EDGE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.FirstWireId + " FSid : " + agentData.FSid);
                     if (LocalPhysicalWires.getWireByID(agentData.FirstWireId).removeFreqSlot(agentData.FSid))
                     {
                         FreqSlotSwitchingTable.removeEdge(agentData.FirstWireId, agentData.FSid);
@@ -664,40 +651,40 @@ namespace Node
                         if (uconnn != null)
                             UniqueConnections.Remove(uconnn);
                         AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_EDGE_IS_DONE });
-                        //Console.WriteLine("DISROUTE EDGE DONE");
+                        //Log.d("DISROUTE EDGE DONE");
                     }
                     else
                     {
                         AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_ERROR_EDGE });
-                        //Console.WriteLine("DISROUTE EDGE ERROR!!!!");
+                        //Log.d("DISROUTE EDGE ERROR!!!!");
                     }
                     break;
                 case ExtSrc.AgentComProtocol.U_CAN_SEND:
                     //Otrzymano pozwolenie na wyslanie wiadomosci z kolejki
-                    //Console.WriteLine("U_CAN_SEND");
+                    //Log.d("U_CAN_SEND");
+                    Log.CC("Call confirmed.");
                     var uc = UniqueConnections.First(w => w.UniqueKey.Equals(agentData.UniqueKey));
                     if (uc != null) uc.isOnline = true;
                     break;
 
                 default:
-                    //Console.WriteLine("Zły msg przybył");
+                    //Log.d("Zły msg przybył");
                     break;
             }
         }
 
         void AgentSend(ExtSrc.AgentData conn)
         {
-            MemoryStream fs = new MemoryStream();
+            var fs = new MemoryStream();
 
-            BinaryFormatter formatter = new BinaryFormatter();
+            var formatter = new BinaryFormatter();
 
             formatter.Serialize(fs, conn);
 
-            byte[] buffer = fs.ToArray();
+            var buffer = fs.ToArray();
 
             // Begin sending the data to the remote device.
-            agentSocket.BeginSend(buffer, 0, buffer.Length, 0,
-                new AsyncCallback(AgentSendCallback), agentSocket);
+            agentSocket.BeginSend(buffer, 0, buffer.Length, 0, AgentSendCallback, agentSocket);
             agentSendDone.WaitOne();
         }
 
@@ -706,18 +693,18 @@ namespace Node
             try
             {
                 // Retrieve the socket from the state object.
-                Socket client = (Socket)ar.AsyncState;
+                var client = (Socket)ar.AsyncState;
 
                 // Complete sending the data to the remote device.
-                int bytesSent = client.EndSend(ar);
-                //Console.WriteLine("Sent {0} bytes to AGENT.", bytesSent);
+                var bytesSent = client.EndSend(ar);
+                //Log.d("Sent {0} bytes to AGENT.", bytesSent);
 
                 // Signal that all bytes have been sent.
                 agentSendDone.Set();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
@@ -734,6 +721,7 @@ namespace Node
             else
             {
                 key = GenerateUniqueKey();
+                Log.CCC("Call request.");
                 AgentSend(new AgentData()
                 {
                     Message = AgentComProtocol.SET_ROUTE_FOR_ME,
@@ -802,7 +790,7 @@ namespace Node
             }
             catch (SocketException)
             {
-                Console.WriteLine("Connected from other side. " + domainSocket.Connected);
+                Log.d("Connected from other side. " + domainSocket.Connected);
                 domainConnectDone.Set();
                 new Thread(DomainListening).Start();
             }
@@ -820,7 +808,7 @@ namespace Node
                 {
                     client.EndConnect(ar);
                 }
-                Console.WriteLine("Node is connected to other Domain {0}", IpToString(client.RemoteEndPoint));
+                Log.d(String.Format("Node is connected to other Domain {0}", IpToString(client.RemoteEndPoint)));
 
                 // Signal that the connection has been made.
                 domainConnectDone.Set();
@@ -829,7 +817,7 @@ namespace Node
             }
             catch (Exception)
             {
-                Console.WriteLine("Connecting to other domain failed.");
+                Log.d("Connecting to other domain failed.");
                 Thread.Sleep(1000);
                 ConnectDomain(_domainAddress);
             }
@@ -843,7 +831,7 @@ namespace Node
                 while (true)
                 {
                     domainReceiveDone.Reset();
-                    Console.WriteLine("Waiting for data from Other provider...");
+                    Log.i("Waiting for data from Other provider...");
                     DomainReceie();
                     domainReceiveDone.WaitOne();
                 }
@@ -851,13 +839,13 @@ namespace Node
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
         void DomainReceie()
         {
-            Console.WriteLine("DomainReceie");
+            Log.i("DomainReceie");
             try
             {
                 // Create the state object.
@@ -868,13 +856,13 @@ namespace Node
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
         void DomainReceiveCallback(IAsyncResult ar)
         {
-            Console.WriteLine("DomainReceiveCallback");
+            Log.d("DomainReceiveCallback");
             try
             {
                 // Retrieve the state object and the client socket 
@@ -900,7 +888,7 @@ namespace Node
             }
             catch (Exception)
             {
-                Console.WriteLine("Domain Node Closed.");
+                Log.d("Domain Node Closed.");
             }
         }
 
@@ -908,7 +896,7 @@ namespace Node
         {
             if (domainSocket == null)
             {
-                Console.WriteLine("Domain connection not exists.");
+                Log.d("Domain connection not exists.");
                 return;
             }
 
@@ -934,7 +922,7 @@ namespace Node
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 

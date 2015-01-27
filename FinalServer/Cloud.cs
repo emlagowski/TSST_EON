@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Xml;
+using ExtSrc;
 
 #endregion
 
@@ -61,7 +62,7 @@ namespace Cloud
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
@@ -111,19 +112,13 @@ namespace Cloud
                 if (state.dt.info.Equals("CLOSING_UNIT"))
                 {
                     handler.Close();
-                    Console.WriteLine(sockets.Remove(handler) + " " + sockets.Count);
+                    //Log.d(sockets.Remove(handler) + " " + sockets.Count);
 
                     return;
                 }
+                Log.d(String.Format("R: {0} bytes from {1}", bytesRead, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString())));
 
-                /*Console.WriteLine("R: '{0}' [{1} bytes] from {2}",
-                    state.dt.ToString(), bytesRead,
-                    IPAddress.Parse(((IPEndPoint) handler.RemoteEndPoint).Address.ToString()));*/
-                Console.WriteLine("R: {0} bytes from {1}", bytesRead, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
-                Socket s;
-
-
-                s = FindTarget((IPEndPoint)handler.RemoteEndPoint);
+                var s = FindTarget((IPEndPoint)handler.RemoteEndPoint);
 
                 var newState = new StateObject { workSocket = handler };
 
@@ -138,7 +133,7 @@ namespace Cloud
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
@@ -163,7 +158,7 @@ namespace Cloud
                     }
                 }
             }
-            //Console.WriteLine("Target was not found in the CloudWires.");
+            //Log.d("Target was not found in the CloudWires.");
             return null;
         }
 
@@ -185,7 +180,7 @@ namespace Cloud
             catch (Exception)
             {
                 //int line = (new StackTrace(e, true)).GetFrame(0).GetFileLineNumber();
-                //Console.WriteLine("Router not responding (ERROR LINE: " + line + ")");
+                //Log.d("Router not responding (ERROR LINE: " + line + ")");
             }
         }
 
@@ -198,11 +193,11 @@ namespace Cloud
 
                 // Complete sending the data to the remote device.
                 var bytesSent = handler.EndSend(ar);
-                Console.WriteLine("S: {0} bytes to {1}.", bytesSent, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
+                Log.d(String.Format("S: {0} bytes to {1}.", bytesSent, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString())));
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 

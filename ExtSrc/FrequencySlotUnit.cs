@@ -48,20 +48,20 @@ namespace ExtSrc
                 // Complete the connection.
                 client.EndConnect(ar);
 
-                //Console.WriteLine("{0} Socket connected to {1}", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
+                //Log.d("{0} Socket connected to {1}", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString());
 
                 // Signal that the connection has been made.
                 connectDone.Set();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 
         public void close()
         {
-            //Console.WriteLine("FSU closing");
+            //Log.d("FSU closing");
             var fs = new MemoryStream();
             var formatter = new BinaryFormatter();
             var data = new Data(0, "CLOSING_UNIT");
@@ -73,7 +73,7 @@ namespace ExtSrc
             }
             catch (ObjectDisposedException)
             {
-                //Console.WriteLine(e.ToString());
+                //Log.d(e.ToString());
             }
         }
 

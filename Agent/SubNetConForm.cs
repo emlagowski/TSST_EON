@@ -54,7 +54,7 @@ namespace SubnetworkController
 
 
         private void TimerEventProcessor(Object myObject, EventArgs myEventArgs)
-        {//Console.WriteLine("dsd");
+        {//Log.d("dsd");
 
             var prevSelRouter = routerListBox.SelectedItem;
 
@@ -151,7 +151,7 @@ namespace SubnetworkController
 
             var uniKey = ConHashComboBox.SelectedItem.ToString();
 
-            if (!cm.Disroute(uniKey)) Console.WriteLine("Error, no connection with this haskey in RouteHistoryList");
+            if (!cm.Disroute(uniKey)) Log.d("Error, no connection with this haskey in RouteHistoryList");
 
             /*var routeHist = cm.RouteHistoryList.Where(d => d.Key[2].Equals(uniKey)).Select(d => d.Value).FirstOrDefault();
             if (routeHist != null)
@@ -174,7 +174,7 @@ namespace SubnetworkController
 
             else
             {
-                Console.WriteLine("Error, no connection with this haskey in RouteHistoryList");
+                Log.d("Error, no connection with this haskey in RouteHistoryList");
             }*/
         }
 
@@ -182,7 +182,7 @@ namespace SubnetworkController
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            //  Console.WriteLine(trackBar1.Value);
+            //Log.d(trackBar1.Value);
             int tens = banwidthTrackBar.Value / 10;
 
             if (banwidthTrackBar.Value % 10 >= 5)
@@ -217,7 +217,7 @@ namespace SubnetworkController
             Regex rgx1 = new Regex(pattern1);
             if (!rgx1.IsMatch(routeTextBox.Text) || !rgx.IsMatch(startFreqTextBox.Text))
             {
-                Console.WriteLine("regex doesn't match");
+                Log.d("regex doesn't match");
                 MessageBox.Show("Wrong text format int textboxes.", "ERROR");
                 return;
             }
