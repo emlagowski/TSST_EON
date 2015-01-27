@@ -887,7 +887,6 @@ namespace SubnetworkController
                         TargetAddress = targetAddress,
                         UniqueKey = hashKey,
                         StartingFreq = startfrequency,
-                        IsStartEdge = false
                     });
                     //Log.d("WYSYLALEM DO OSTATNIEGO EDGE ROUTERA DANE ROUTINGOWE (" + ip + ")");
                 }
@@ -1090,7 +1089,8 @@ namespace SubnetworkController
                     {
                         Message = AgentComProtocol.AVAIBLE_STARTING_FREQS,
                         WireId = FindWireIdFromTo(route[j], route[j - 1], route[j]),
-                        FsuCount = fsucount
+                        FsuCount = fsucount,
+                        IsEndEdge = true
                     });
                 }
                 else
@@ -1099,8 +1099,7 @@ namespace SubnetworkController
                     {
                         Message = AgentComProtocol.AVAIBLE_STARTING_FREQS,
                         WireId = FindWireIdFromTo(route[j], route[j + 1], route[j]),
-                        FsuCount = fsucount,
-                        IsStartEdge = true
+                        FsuCount = fsucount
                     });
                 }
 

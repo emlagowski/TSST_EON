@@ -20,6 +20,7 @@ namespace ExtSrc
         public String RouterIpAddress { get; set; }
         public String ClientIpAddress { get; set; }
         public bool IsStartEdge { get; set; }
+        public bool IsEndEdge { get; set; }
 
         //addfreqslot
         public int StartingFreq { get; set; }

@@ -555,7 +555,7 @@ namespace Node
                     WaitingMsgs.Remove(wm);
                     break;
                 case AgentComProtocol.AVAIBLE_STARTING_FREQS:
-                    if(agentData.IsStartEdge) Log.CCC("Call accepted");
+                    if (agentData.IsEndEdge) Log.CCC("Call accepted");
                     Log.d("AVAIBLE_STARTING_FREQS asked fsuCount" + agentData.FsuCount + " wireId " + agentData.WireId);
                     var result = LocalPhysicalWires.GetAvaibleFreqSlots(agentData.FsuCount, agentData.WireId);
                     result.ForEach(e => Log.d("AVAIBLE SLOT = <" + e[0] + "," + e[1] + ">"));
