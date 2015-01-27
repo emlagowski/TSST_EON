@@ -47,6 +47,7 @@ namespace Node
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tabs = new System.Windows.Forms.TabControl();
             this.generalTab = new System.Windows.Forms.TabPage();
+            this.RunButton = new System.Windows.Forms.CheckBox();
             this.SendButton = new System.Windows.Forms.Button();
             this.MsgLabel = new System.Windows.Forms.Label();
             this.PortIdLabel = new System.Windows.Forms.Label();
@@ -57,7 +58,6 @@ namespace Node
             this.advancedTab = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.frequencySlotsTable = new System.Windows.Forms.DataGridView();
-            this.RunButton = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.messageHistoryTable)).BeginInit();
             this.tabs.SuspendLayout();
             this.generalTab.SuspendLayout();
@@ -154,6 +154,18 @@ namespace Node
             this.generalTab.Text = "General";
             this.generalTab.UseVisualStyleBackColor = true;
             // 
+            // RunButton
+            // 
+            this.RunButton.Appearance = System.Windows.Forms.Appearance.Button;
+            this.RunButton.AutoSize = true;
+            this.RunButton.Location = new System.Drawing.Point(442, 18);
+            this.RunButton.Name = "RunButton";
+            this.RunButton.Size = new System.Drawing.Size(110, 35);
+            this.RunButton.TabIndex = 10;
+            this.RunButton.Text = "DISABLE";
+            this.RunButton.UseVisualStyleBackColor = true;
+            this.RunButton.CheckedChanged += new System.EventHandler(this.RunButton_CheckedChanged);
+            // 
             // SendButton
             // 
             this.SendButton.Location = new System.Drawing.Point(382, 824);
@@ -249,25 +261,12 @@ namespace Node
             this.frequencySlotsTable.Size = new System.Drawing.Size(559, 300);
             this.frequencySlotsTable.TabIndex = 0;
             // 
-            // RunButton
-            // 
-            this.RunButton.Appearance = System.Windows.Forms.Appearance.Button;
-            this.RunButton.AutoSize = true;
-            this.RunButton.Location = new System.Drawing.Point(442, 18);
-            this.RunButton.Name = "RunButton";
-            this.RunButton.Size = new System.Drawing.Size(110, 35);
-            this.RunButton.TabIndex = 10;
-            this.RunButton.Text = "DISABLE";
-            this.RunButton.UseVisualStyleBackColor = true;
-            this.RunButton.CheckedChanged += new System.EventHandler(this.RunButton_CheckedChanged);
-            // 
             // NodeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(596, 969);
             this.Controls.Add(this.tabs);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
