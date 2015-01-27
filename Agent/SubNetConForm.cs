@@ -1,24 +1,22 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtSrc;
+
+#endregion
 
 namespace SubnetworkController
 {
     public partial class SubNetConForm : Form
     {
         SubnetworkController cm;
-        private Action timerAction; 
         static System.Windows.Forms.Timer myTimer;
-        private Action WireSourceSetter;
+
         public SubNetConForm(SubnetworkController subnetworkController)
         {
 
@@ -32,52 +30,52 @@ namespace SubnetworkController
             myTimer.Tick += new EventHandler(TimerEventProcessor);
             myTimer.Interval = 1000;
             myTimer.Start();
-            
-          /*  WireSourceSetter = delegate
-            {
-                var list1 = new BindingList<int>();
-                for (var i = 0; i < cm.dijkstraDataList.Count; i++)
-                {
-                    if (cm.dijkstraDataList.ElementAt(i).Equals(RouterComboBox.SelectedItem))
-                        list1.Add(cm.dijkstraDataList.ElementAt(i).wireID);
-                }
-                var wiresBindingSource = new BindingSource
-                {
-                    DataSource = list1
-                };
-                WireComboBox.DataSource = wiresBindingSource.DataSource;
-            };*/
-           
-           
 
-            
+            /*  WireSourceSetter = delegate
+              {
+                  var list1 = new BindingList<int>();
+                  for (var i = 0; i < cm.dijkstraDataList.Count; i++)
+                  {
+                      if (cm.dijkstraDataList.ElementAt(i).Equals(RouterComboBox.SelectedItem))
+                          list1.Add(cm.dijkstraDataList.ElementAt(i).wireID);
+                  }
+                  var wiresBindingSource = new BindingSource
+                  {
+                      DataSource = list1
+                  };
+                  WireComboBox.DataSource = wiresBindingSource.DataSource;
+              };*/
+
+
+
+
 
         }
 
-      
+
         private void TimerEventProcessor(Object myObject, EventArgs myEventArgs)
         {//Console.WriteLine("dsd");
-            
-            var prevSelRouter = routerListBox.SelectedItem;
-            
-           // RouterComboBox.DataSource = cm.dijkstraDataList.Select(d => d.routerID).Distinct().ToList();
-            routerListBox.DataSource = cm.DijkstraDataList.Select(d => d.routerID).Distinct().ToList();
-            if(prevSelRouter != null && routerListBox.Items.Contains(prevSelRouter))
-            routerListBox.SelectedItem = prevSelRouter;
 
-//            clientListBox.DataSource = cm.ClientMap.Select(d => d.Key).ToList();
+            var prevSelRouter = routerListBox.SelectedItem;
+
+            // RouterComboBox.DataSource = cm.dijkstraDataList.Select(d => d.routerID).Distinct().ToList();
+            routerListBox.DataSource = cm.DijkstraDataList.Select(d => d.routerID).Distinct().ToList();
+            if (prevSelRouter != null && routerListBox.Items.Contains(prevSelRouter))
+                routerListBox.SelectedItem = prevSelRouter;
+
+            //            clientListBox.DataSource = cm.ClientMap.Select(d => d.Key).ToList();
             clientListBox.Items.Clear();
-            clientListBox.Items.AddRange(cm.MyDomainInfo.Select(e=>e.ToString()).ToArray());
+            clientListBox.Items.AddRange(cm.MyDomainInfo.Select(e => e.ToString()).ToArray());
             foreach (var kvp in cm.OtherDomainInfo)
             {
                 foreach (var i in kvp.Value)
                 {
-                    clientListBox.Items.Add(i.ToString()+" via "+kvp.Key.ToString());
+                    clientListBox.Items.Add(i.ToString() + " via " + kvp.Key.ToString());
                 }
             }
 
 
-               var list = new BindingList<int>();
+            var list = new BindingList<int>();
             if (cm.DijkstraDataList.Count != 0)
             {
                 for (var i = 0; i < cm.DijkstraDataList.Count; i++)
@@ -88,8 +86,8 @@ namespace SubnetworkController
                 }
             }
 
-          
-          
+
+
             if (cm.RouteHistoryList.Keys.Count != 0)
             {
                 var list1 = new BindingList<string>();
@@ -106,8 +104,8 @@ namespace SubnetworkController
                     ConHashComboBox.SelectedItem = prevSelConHash;
 
             }
-           
-        
+
+
             var connections = new List<String[]>();
             foreach (var d in cm.RouteHistoryList.Values)
             {
@@ -130,7 +128,7 @@ namespace SubnetworkController
                 FSid = d[2]
             })).ToList();
 
-          
+
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -145,7 +143,7 @@ namespace SubnetworkController
 
         private void RemoveConnButton_Click(object sender, EventArgs e)
         {
-            
+
             if (ConHashComboBox.SelectedIndex == -1)
             {
                 MessageBox.Show("You must select connection hashkey", "ERROR");
@@ -180,14 +178,14 @@ namespace SubnetworkController
             }*/
         }
 
-      
+
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-          //  Console.WriteLine(trackBar1.Value);
+            //  Console.WriteLine(trackBar1.Value);
             int tens = banwidthTrackBar.Value / 10;
 
-            if (banwidthTrackBar.Value%10 >= 5)
+            if (banwidthTrackBar.Value % 10 >= 5)
             {
                 bandwidthTextBox.Text = "" + (tens * 10 + 10);
             }
@@ -208,7 +206,7 @@ namespace SubnetworkController
         }
         private void SetConnButton_Click(object sender, EventArgs e)
         {
-            if ( startFreqTextBox.Text.Equals("") || routeTextBox.Text.Equals(""))
+            if (startFreqTextBox.Text.Equals("") || routeTextBox.Text.Equals(""))
             {
                 MessageBox.Show("All fields must be filled.", "ERROR");
                 return;
@@ -231,10 +229,10 @@ namespace SubnetworkController
             {
                 route[i] = Convert.ToInt32(r[i].Trim());
             }
-//            cm.setRoute("127.0.1." + clientATextBox.Text, "127.0.1." + clientBTextBox.Text, banwidthTrackBar.Value, null, hashKey, route, 
-//                Convert.ToInt32(startFreqTextBox.Text));
+            //            cm.setRoute("127.0.1." + clientATextBox.Text, "127.0.1." + clientBTextBox.Text, banwidthTrackBar.Value, null, hashKey, route, 
+            //                Convert.ToInt32(startFreqTextBox.Text));
 
-            cm.SetRouteManually("127.0.1." + route[0], "127.0.1." + route[route.Length-1], banwidthTrackBar.Value, null, hashKey, route,
+            cm.SetRouteManually("127.0.1." + route[0], "127.0.1." + route[route.Length - 1], banwidthTrackBar.Value, null, hashKey, route,
                 Convert.ToInt32(startFreqTextBox.Text));
         }
 
@@ -255,7 +253,7 @@ namespace SubnetworkController
             cm.Send("127.0.1.3", new AgentData()
             {
                 Message = AgentComProtocol.DOMAIN_INFO,
-                DomainInfo = new List<int>() {8, 9},
+                DomainInfo = new List<int>() { 8, 9 },
                 UniqueKey = "CHUJ"
             });
         }

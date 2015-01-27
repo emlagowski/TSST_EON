@@ -1,19 +1,21 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Net;
-using System.Threading;
 using System.IO;
-using System.Xml;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
+using System.Xml;
+using ExtSrc;
 using ExtSrc.Observers;
+
+#endregion
 
 namespace Node
 {
-    using Observer = ExtSrc.Observers.Observer;
-    using ExtSrc;
-
     public class Node : Subject, IDisposable
     {
         private const String CloudIp = "127.0.0.1";
@@ -41,26 +43,24 @@ namespace Node
 
         // Node physical wires object
         public ExtSrc.PhysicalWires LocalPhysicalWires { get; set; }
-        
+
         // Route Table
         public ExtSrc.FrequencySlotSwitchingTable FreqSlotSwitchingTable { get; set; }
 
         // Messages that are waiting to be sent
         public List<KeyValuePair<int[], ExtSrc.DataAndID>> WaitingMsgs { get; set; }
 
-        // todo name that
         private List<UniqueConnection> UniqueConnections { get; set; }
 
         // History of messeges only for GUI purpose
         public List<KeyValuePair<string, Data>> MessageHistory { get; set; }
-        
+
         // Node full IP address
         public String address;
 
         // Socket connected to Cloud of wires
         private IPEndPoint cloudEP;
 
-        // todo name that
         private Socket AgentOnline;
 
         // Is Node active/running ?
@@ -137,13 +137,13 @@ namespace Node
                 //Dodatkowo po zarejestrowaniu wszystkich lambd robie inicjalizacje socketow w lambdach
                 wire.initWire(address, cloudEP);
             }
-            
+
             new Thread(Run).Start();
 
             var agentLocalEndPoint = new IPEndPoint(IPAddress.Parse(address), AgentPort);
             var agentRemoteEndPoint = new IPEndPoint(IPAddress.Parse(AgentIp), AgentPort);
             agentSocket.Bind(agentLocalEndPoint);
-            agentSocket.ReceiveBufferSize = 1024*100;
+            agentSocket.ReceiveBufferSize = 1024 * 100;
             agentSocket.BeginConnect(agentRemoteEndPoint, AgentConnectCallback, agentSocket);
             agentConnectDone.WaitOne();
 
@@ -158,8 +158,8 @@ namespace Node
                         var tmpList = new List<KeyValuePair<int[], DataAndID>>();
                         foreach (var keyValuePair in WaitingMsgs)
                         {
-                            var l = UniqueConnections.First(e => e.UniqueKey.Equals(keyValuePair.Value.uniqueKey));
-                            if(!l.isOnline) continue;
+                            var uniqueConnection = UniqueConnections.FirstOrDefault(e => e.UniqueKey.Equals(keyValuePair.Value.uniqueKey));
+                            if (uniqueConnection == null || !uniqueConnection.isOnline) continue;
                             Send(keyValuePair.Value.data, keyValuePair.Key, true);
                             tmpList.Add(keyValuePair);
                         }
@@ -177,7 +177,7 @@ namespace Node
 
         void ReadLocalPhysicalWires()
         {
-            var xmlString = File.ReadAllText(address+".xml");
+            var xmlString = File.ReadAllText(address + ".xml");
             using (var reader = XmlReader.Create(new StringReader(xmlString)))
             {
                 var idx = 1;
@@ -202,10 +202,10 @@ namespace Node
                     {
                         var port = String.Concat(new String[] { portPrefix, i.ToString() });
                         var freqslotunit = new ExtSrc.FrequencySlotUnit(Int32.Parse(port), i);
-                        nw.FrequencySlotUnitList.Add( freqslotunit);
+                        nw.FrequencySlotUnitList.Add(freqslotunit);
                         //stworz nową lambde z otrzymanych danych i dodaj ją na liste lambd ostatnio utworzonego wire
                     }
-                    LocalPhysicalWires.add(nw);                 
+                    LocalPhysicalWires.add(nw);
                 }
             }
         }
@@ -221,7 +221,7 @@ namespace Node
             {
                 while (IsListening)
                 {
-                    allReceive.Reset();                 
+                    allReceive.Reset();
                     foreach (var wire in LocalPhysicalWires.Wires)
                     {
                         foreach (var unit in wire.FrequencySlotUnitList)
@@ -259,7 +259,7 @@ namespace Node
             }
             else*/
             int[] newRoute = FreqSlotSwitchingTable.findRoute(route[0], route[1]);
-            if (newRoute==null || newRoute[0] != -1 && newRoute[1] != -1)
+            if (newRoute == null || newRoute[0] != -1 && newRoute[1] != -1)
             {// router poczatkowy || napewno nie router koncowy
 
                 var sockets = LocalPhysicalWires.getSockets(route);
@@ -298,13 +298,12 @@ namespace Node
                 int bytesSent = client.EndSend(ar);
                 Console.WriteLine("S: {0} bytes from {1} to {2}.", bytesSent, IpToString(client.LocalEndPoint), IpToString(client.RemoteEndPoint));
                 //lock (this)
-               // addLog("Send", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString(), "none");
+                // addLog("Send", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString(), "none");
                 // Signal that all bytes have been sent.
                 unit.sendDone.Set();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                //todo co to?
                 try
                 {
                     Socket client = (Socket)ar.AsyncState;
@@ -337,7 +336,7 @@ namespace Node
             {
                 Console.WriteLine(e.ToString());
             }
-        }   
+        }
 
         void ReceiveFromCloudCallback(IAsyncResult ar)
         {
@@ -351,7 +350,7 @@ namespace Node
                 StateObject state = (StateObject)ar.AsyncState;
                 Socket client = state.WorkSocket;
                 // adres potrzebny do indentyfikowania lambdy i socketu
-                
+
                 // Read data from the remote device.
                 int bytesRead = client.EndReceive(ar);
                 BinaryFormatter formattor = new BinaryFormatter();
@@ -361,12 +360,12 @@ namespace Node
                 state.Data = (ExtSrc.Data)formattor.Deserialize(ms);
 
                 Console.WriteLine("R: {0} bytes from {1}", bytesRead, client.RemoteEndPoint);
-               // String address = (client.LocalEndPoint as IPEndPoint).Address.ToString();
+                // String address = (client.LocalEndPoint as IPEndPoint).Address.ToString();
                 String port = (client.LocalEndPoint as IPEndPoint).Port.ToString();
                 int[] wireAndFreqSlotID = LocalPhysicalWires.getIDsbyPort(Int32.Parse(port));
                 if (wireAndFreqSlotID == null) return;
                 int[] route = FreqSlotSwitchingTable.findRoute(wireAndFreqSlotID[0], wireAndFreqSlotID[1]);
-                
+
 
                 // ###### WYNALAZEK START
                 // mialo sprawdzac, czy to skad przyzla wiadomosc 
@@ -390,8 +389,8 @@ namespace Node
                 }
                 receiveDone.Set();
                 allReceive.Set();
-//                Console.WriteLine("Socket {0} Read '{1}'[{2} bytes] from socket {3}.", client.LocalEndPoint.ToString(),
-//                        state.Data.ToString(), bytesRead, client.RemoteEndPoint.ToString());
+                //                Console.WriteLine("Socket {0} Read '{1}'[{2} bytes] from socket {3}.", client.LocalEndPoint.ToString(),
+                //                        state.Data.ToString(), bytesRead, client.RemoteEndPoint.ToString());
 
                 if (canSend)
                 {
@@ -401,7 +400,7 @@ namespace Node
                         Console.WriteLine("R: '{0}'[{1} bytes].", state.Data.info, bytesRead);
                         MessageHistory.Add(new KeyValuePair<string, Data>("RECEIVED", state.Data));
                         return;
-                        
+
                     }
                     Send(state.Data, route);
                 }
@@ -463,17 +462,17 @@ namespace Node
                     }
                     catch (ObjectDisposedException)
                     {
-                        //todo 
+                        //todo what if exception?
                     }
                     catch (SocketException)
                     {
-                        //todo
+                        //todo what if exception?
                     }
                 }, state);
             }
             catch (SocketException)
             {
-                //todo
+                //todo what if exception?
             }
         }
 
@@ -502,7 +501,7 @@ namespace Node
             try
             {
                 // Create the state object.
-                var state = new AgentStateObject {WorkSocket = agentSocket};
+                var state = new AgentStateObject { WorkSocket = agentSocket };
                 //response = String.Empty;
                 // Begin receiving the data from the remote device.
                 agentSocket.BeginReceive(state.buffer, 0, AgentStateObject.BufferSize, 0, AgentReceiveCallback, state);
@@ -538,7 +537,7 @@ namespace Node
 
                 agentReceiveDone.Set();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Console.WriteLine("Agent Closed.");
             }
@@ -574,40 +573,20 @@ namespace Node
                     WaitingMsgs.Remove(wm);
                     break;
                 case AgentComProtocol.AVAIBLE_STARTING_FREQS:
-                    Console.WriteLine("AVAIBLE_STARTING_FREQS asked fsuCount" + agentData.FsuCount+" wireId "+agentData.WireId);
+                    Console.WriteLine("AVAIBLE_STARTING_FREQS asked fsuCount" + agentData.FsuCount + " wireId " + agentData.WireId);
                     var result = LocalPhysicalWires.GetAvaibleFreqSlots(agentData.FsuCount, agentData.WireId);
-                    result.ForEach(e=>Console.WriteLine("AVAIBLE SLOT = <"+e[0]+","+e[1]+">"));
+                    result.ForEach(e => Console.WriteLine("AVAIBLE SLOT = <" + e[0] + "," + e[1] + ">"));
                     AgentSend(new AgentData() { Message = AgentComProtocol.MY_FREES_FREQ_SLOTS, StartingFreqs = result });
                     break;
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U_EDGE:
-                    Console.WriteLine("ROUTE_FOR_U_EDGE StartFreq="+agentData.StartingFreq);
+                    Console.WriteLine("ROUTE_FOR_U_EDGE StartFreq=" + agentData.StartingFreq + " fsucount:" + agentData.FsuCount);
                     var startfreqEdge = agentData.StartingFreq;
-                    /*var startfreqEdge=0;
-                    if (agentData.StartingFreq == -1)
-                    {
-                        startfreqEdge = LocalPhysicalWires.getWireByID(agentData.WireId).findSpaceForFS(agentData.FsuCount);
-                        if (startfreqEdge == -1 & LocalPhysicalWires.getWireByID(agentData.WireId).IsPossibleToSlide(agentData.FsuCount))
-                        {
-                            LocalPhysicalWires.getWireByID(agentData.WireId).SlideDown();
-                            startfreqEdge = LocalPhysicalWires.getWireByID(agentData.WireId).findSpaceForFS(agentData.FsuCount);
-                        }
-                    }
-                    else
-                        startfreqEdge = agentData.StartingFreq;*/
-                    //Console.WriteLine("startfreqEdge = "+ startfreqEdge);
                     id1 = LocalPhysicalWires.getWireByID(agentData.WireId).addFreqSlot(startfreqEdge, agentData.FsuCount, agentData.Mod);
-                  //  TOclientConnectionsTable.add(agentData.wireID, id1, agentData.clientSocketID);
-                    //var id = Int32.Parse(agentData.OriginatingAddress.Substring(agentData.OriginatingAddress.Length - 1, 1));
-                   // FROMclientConnectionsTable.add(agentData.wireID, id1, id);
                     var ucon = UniqueConnections.FirstOrDefault(x => x.UniqueKey.Equals(agentData.UniqueKey));
 
-                    //todo na poniedz // usunalem dwie linijki bo nie mozna dodawac dwa razy -1,-1 do slownika
-                    if(!agentData.IsStartEdge)
-                   //     freqSlotSwitchingTable.add(-1, -1, agentData.wireID, agentData.FSid);
-                   // else
-                        FreqSlotSwitchingTable.add(agentData.WireId, /*agentData.FSid*/id1, -1, -1);
-                    
-                    //
+                    if (!agentData.IsStartEdge)
+                        FreqSlotSwitchingTable.add(agentData.WireId, id1, -1, -1);
+
                     if (ucon == null)
                     {
                         ucon = new UniqueConnection()
@@ -619,7 +598,7 @@ namespace Node
                         };
                         UniqueConnections.Add(ucon);
                     }
-                    ucon.WireAndFsu = new int[] { agentData.WireId , id1};
+                    ucon.WireAndFsu = new int[] { agentData.WireId, id1 };
                     if (agentData.IsStartEdge)
                     {
                         var msg = WaitingMsgs.FirstOrDefault(e => e.Value.uniqueKey.Equals(agentData.UniqueKey));
@@ -633,65 +612,40 @@ namespace Node
                     //Console.WriteLine("ROUTE SET, EDGE");
                     AgentSend(new AgentData()
                     {
-                        Message = AgentComProtocol.CONNECTION_IS_ON, 
-                        StartingFreq = startfreqEdge, 
+                        Message = AgentComProtocol.CONNECTION_IS_ON,
+                        StartingFreq = startfreqEdge,
                         FSid = id1
                     });
                     break;
-               
+
                 case ExtSrc.AgentComProtocol.ROUTE_FOR_U:
-                    ///od agenta: fsucount, mod, firstwireid,secondwireid, startingfreq dla odbierajacego kabla bo juz obliczone w poprzednim roouterze
-                    Console.WriteLine("ROUTE_FOR_U StartFreq=" + agentData.StartingFreq);
-                    //sprawdzanie 1 kabla
-                   /* var startfreq1 = agentData.StartingFreq;
-                    if (!LocalPhysicalWires.getWireByID(agentData.FirstWireId).IsTherePlace(startfreq1, agentData.LastFsuCount) || 
-                        startfreq1 == -1 &
-                        LocalPhysicalWires.getWireByID(agentData.FirstWireId).IsPossibleToSlide(agentData.LastFsuCount))
-                    {
-                        LocalPhysicalWires.getWireByID(agentData.FirstWireId).SlideDown();
-                        startfreq1 = LocalPhysicalWires.getWireByID(agentData.FirstWireId).findSpaceForFS(agentData.LastFsuCount);
-                    }
-                    //sprawdzanie 2 kabla
-                    //todo sf2=sf1 na potrzeby pierwszego etapu do poprawy
-                    var startfreq2 = startfreq1;//localPhysicalWires.getWireByID(agentData.secondWireID).findSpaceForFS(agentData.FSUCount);
-                    if (startfreq2 == -1 &
-                        LocalPhysicalWires.getWireByID(agentData.SecondWireId).IsPossibleToSlide(agentData.FsuCount))
-                    {
-                        LocalPhysicalWires.getWireByID(agentData.SecondWireId).SlideDown();
-                        startfreq2 = LocalPhysicalWires.getWireByID(agentData.SecondWireId).findSpaceForFS(agentData.FsuCount);
-                    }*/
-                    //if (startfreq2 >= 0)
-                    //{
+                    Console.WriteLine("ROUTE_FOR_U StartFreq=" + agentData.StartingFreq + " fsucount:" + agentData.FsuCount);
                     id1 = LocalPhysicalWires.getWireByID(agentData.FirstWireId).addFreqSlot(agentData.StartingFreq, agentData.FsuCount, agentData.LastMod);
                     id2 = LocalPhysicalWires.getWireByID(agentData.SecondWireId).addFreqSlot(agentData.StartingFreq, agentData.FsuCount, agentData.Mod);
-                        FreqSlotSwitchingTable.add(agentData.FirstWireId, id1, agentData.SecondWireId, id2);
-                        //Console.WriteLine("ROUTE SET, NOT EDGE");
-                        AgentSend(new AgentData()
-                        {
-                            Message = AgentComProtocol.CONNECTION_IS_ON,
-                            StartingFreq = agentData.StartingFreq,
-                            FSid = id2
-                        });
-                    //}
-                    //else
-//                    {
-//                        AgentSend(new AgentData() { Message = AgentComProtocol.CONNECTION_UNAVAILABLE });
-//                        //Console.WriteLine("CONNECTION UNAVAILABLE, NOT EDGE");
-//                    }
+                    FreqSlotSwitchingTable.add(agentData.FirstWireId, id1, agentData.SecondWireId, id2);
+                    //Console.WriteLine("ROUTE SET, NOT EDGE");
+                    AgentSend(new AgentData()
+                    {
+                        Message = AgentComProtocol.CONNECTION_IS_ON,
+                        StartingFreq = agentData.StartingFreq,
+                        FSid = id2
+                    });
                     break;
                 case ExtSrc.AgentComProtocol.DISROUTE:
                     Console.WriteLine("DISROUTE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.FirstWireId + " FSid : " + agentData.FSid);
                     var inttab = new int[2];
                     inttab = FreqSlotSwitchingTable.findReverseRoute(agentData.FirstWireId, agentData.FSid);
-                    if (LocalPhysicalWires.getWireByID(agentData.FirstWireId).removeFreqSlot(agentData.FSid) && 
+                    if (LocalPhysicalWires.getWireByID(agentData.FirstWireId).removeFreqSlot(agentData.FSid) &&
                         LocalPhysicalWires.getWireByID(inttab[0]).removeFreqSlot(inttab[1]))
                     {
                         //freqSlotSwitchingTable.remove(agentData.firstWireID, agentData.FSid, inttab[0], inttab[1]);
                         FreqSlotSwitchingTable.remove(inttab[0], inttab[1], agentData.FirstWireId, agentData.FSid);
-                        AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_IS_DONE});
+                        AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_IS_DONE });
                         Console.WriteLine("DISROUTE DONE");
-                    }else{
-                        AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_ERROR});
+                    }
+                    else
+                    {
+                        AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_ERROR });
                         Console.WriteLine("DISROUTE ERROR!!!!");
                     }
                     break;
@@ -699,9 +653,6 @@ namespace Node
                     Console.WriteLine("DISROUTE_EDGE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.FirstWireId + " FSid : " + agentData.FSid);
                     if (LocalPhysicalWires.getWireByID(agentData.FirstWireId).removeFreqSlot(agentData.FSid))
                     {
-                        //TOclientConnectionsTable.remove(agentData.firstWireID, agentData.FSid);
-                        //FROMclientConnectionsTable.remove(agentData.firstWireID, agentData.FSid);
-                        //na pon
                         FreqSlotSwitchingTable.removeEdge(agentData.FirstWireId, agentData.FSid);
 
                         UniqueConnection uconnn = null;
@@ -710,14 +661,14 @@ namespace Node
                             if (uniqueConnection.UniqueKey.Equals(agentData.UniqueKey))
                                 uconnn = uniqueConnection;
                         }
-                        if(uconnn != null)
+                        if (uconnn != null)
                             UniqueConnections.Remove(uconnn);
-                        AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_EDGE_IS_DONE});
+                        AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_EDGE_IS_DONE });
                         //Console.WriteLine("DISROUTE EDGE DONE");
                     }
                     else
                     {
-                        AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_ERROR_EDGE});
+                        AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_ERROR_EDGE });
                         //Console.WriteLine("DISROUTE EDGE ERROR!!!!");
                     }
                     break;
@@ -725,7 +676,7 @@ namespace Node
                     //Otrzymano pozwolenie na wyslanie wiadomosci z kolejki
                     //Console.WriteLine("U_CAN_SEND");
                     var uc = UniqueConnections.First(w => w.UniqueKey.Equals(agentData.UniqueKey));
-                    if(uc!=null) uc.isOnline = true;
+                    if (uc != null) uc.isOnline = true;
                     break;
 
                 default:
@@ -743,7 +694,7 @@ namespace Node
             formatter.Serialize(fs, conn);
 
             byte[] buffer = fs.ToArray();
-            
+
             // Begin sending the data to the remote device.
             agentSocket.BeginSend(buffer, 0, buffer.Length, 0,
                 new AsyncCallback(AgentSendCallback), agentSocket);
@@ -773,7 +724,7 @@ namespace Node
         public void MessageToSend(String target, Data data)
         {
             String key;
-            int[] wireandfsid = new int[] {};
+            var wireandfsid = new int[] { };
             var uc = UniqueConnections.FirstOrDefault(w => w.AddressA.Equals(address) & w.AddressB.Equals(target));
             if (uc != null && uc.isOnline)
             {
@@ -783,11 +734,12 @@ namespace Node
             else
             {
                 key = GenerateUniqueKey();
-                AgentSend(new AgentData() {
-                    Message = AgentComProtocol.SET_ROUTE_FOR_ME, 
-                    OriginatingAddress = address, 
-                    TargetAddress = target, 
-                    UniqueKey = key, 
+                AgentSend(new AgentData()
+                {
+                    Message = AgentComProtocol.SET_ROUTE_FOR_ME,
+                    OriginatingAddress = address,
+                    TargetAddress = target,
+                    UniqueKey = key,
                     Bitrate = data.bandwidthNeeded
                 });
 
@@ -843,12 +795,12 @@ namespace Node
                 {
                     var domainLocalEndPoint = new IPEndPoint(IPAddress.Parse(address), DomainPort);
                     domainSocket.Bind(domainLocalEndPoint);
-                    domainSocket.ReceiveBufferSize = 1024*100;
+                    domainSocket.ReceiveBufferSize = 1024 * 100;
                 }
                 domainSocket.BeginConnect(domainRemoteEndPoint, DomainConnectCallback, domainSocket);
                 domainConnectDone.WaitOne();
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 Console.WriteLine("Connected from other side. " + domainSocket.Connected);
                 domainConnectDone.Set();
@@ -875,7 +827,7 @@ namespace Node
 
                 new Thread(DomainListening).Start();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Console.WriteLine("Connecting to other domain failed.");
                 Thread.Sleep(1000);
@@ -885,7 +837,7 @@ namespace Node
 
         void DomainListening()
         {
-            DomainSend(new AgentData(){Message = AgentComProtocol.DOMAIN_REGISTER});
+            DomainSend(new AgentData() { Message = AgentComProtocol.DOMAIN_REGISTER });
             try
             {
                 while (true)
@@ -909,7 +861,7 @@ namespace Node
             try
             {
                 // Create the state object.
-                var state = new AgentStateObject {WorkSocket = domainSocket};
+                var state = new AgentStateObject { WorkSocket = domainSocket };
                 //response = String.Empty;
                 // Begin receiving the data from the remote device.
                 domainSocket.BeginReceive(state.buffer, 0, AgentStateObject.BufferSize, 0, DomainReceiveCallback, state);
@@ -946,7 +898,7 @@ namespace Node
 
                 domainReceiveDone.Set();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Console.WriteLine("Domain Node Closed.");
             }
@@ -1002,7 +954,8 @@ namespace Node
             System.Environment.Exit(1);
         }
 
-        private String GenerateUniqueKey(){
+        private String GenerateUniqueKey()
+        {
             Guid g = Guid.NewGuid();
             String str = Convert.ToBase64String(g.ToByteArray());
             str = str.Replace("=", "");
@@ -1059,7 +1012,6 @@ namespace Node
             domainConnectDone.Close();
             domainReceiveDone.Close();
             domainSendDone.Close();
-            // free native resources
         }
 
         public void Dispose()
@@ -1074,7 +1026,7 @@ namespace Node
         // Client socket.
         public Socket WorkSocket = null;
         // Size of receive buffer.
-        public const int BufferSize = 1024*5;
+        public const int BufferSize = 1024 * 5;
         // Receive buffer.
         public byte[] buffer = new byte[BufferSize];
         // Received data string.

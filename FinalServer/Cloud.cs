@@ -1,17 +1,16 @@
-﻿ using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Sockets;
-using System.Net;
-using System.Threading;
 using System.IO;
-using System.Collections;
-using System.Xml;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
+using System.Xml;
+
+#endregion
 
 namespace Cloud
 {
@@ -36,7 +35,7 @@ namespace Cloud
             {
                 while (true)
                 {
-                    
+
                     Thread.Sleep(1000);
                 }
             }).Start();
@@ -53,7 +52,7 @@ namespace Cloud
                     allDone.Reset();
 
                     // Start an asynchronous socket to listen for connections.
-                    if(localSocket!=null) localSocket.BeginAccept(AcceptCallback, localSocket);
+                    if (localSocket != null) localSocket.BeginAccept(AcceptCallback, localSocket);
 
                     // Wait until a connection is made before continuing.
                     allDone.WaitOne();
@@ -74,17 +73,17 @@ namespace Cloud
                 allDone.Set();
 
                 // Get the socket that handles the client request.
-                var listener = (Socket) ar.AsyncState;
+                var listener = (Socket)ar.AsyncState;
                 var handler = listener.EndAccept(ar);
                 sockets.Add(handler);
 
                 // Create the state object.
-                var state = new StateObject {workSocket = handler};
+                var state = new StateObject { workSocket = handler };
                 handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, ReadCallback, state);
             }
             catch (Exception)
             {
-                //todo
+
             }
         }
 
@@ -96,7 +95,7 @@ namespace Cloud
 
                 // Retrieve the state object and the handler socket
                 // from the asynchronous state object.
-                var state = (StateObject) ar.AsyncState;
+                var state = (StateObject)ar.AsyncState;
                 var handler = state.workSocket;
 
                 // Read data from the client socket. 
@@ -107,13 +106,13 @@ namespace Cloud
 
                 var ms = new MemoryStream(state.buffer);
 
-                state.dt = (ExtSrc.Data) formattor.Deserialize(ms);
+                state.dt = (ExtSrc.Data)formattor.Deserialize(ms);
 
                 if (state.dt.info.Equals("CLOSING_UNIT"))
                 {
                     handler.Close();
                     Console.WriteLine(sockets.Remove(handler) + " " + sockets.Count);
-                    
+
                     return;
                 }
 
@@ -122,11 +121,11 @@ namespace Cloud
                     IPAddress.Parse(((IPEndPoint) handler.RemoteEndPoint).Address.ToString()));*/
                 Console.WriteLine("R: {0} bytes from {1}", bytesRead, IPAddress.Parse(((IPEndPoint)handler.RemoteEndPoint).Address.ToString()));
                 Socket s;
-                
-                
-                    s = FindTarget((IPEndPoint) handler.RemoteEndPoint);
-                
-                var newState = new StateObject {workSocket = handler};
+
+
+                s = FindTarget((IPEndPoint)handler.RemoteEndPoint);
+
+                var newState = new StateObject { workSocket = handler };
 
                 Send(s, state.dt);
 
@@ -149,14 +148,16 @@ namespace Cloud
             {
                 if (iPEndPoint.Equals(cep.One))
                 {
-                    foreach (var socket in sockets.Where(socket => socket.RemoteEndPoint.Equals(cep.Two)))
+                    var cep1 = cep;
+                    foreach (var socket in sockets.Where(socket => socket.RemoteEndPoint.Equals(cep1.Two)))
                     {
                         return socket;
                     }
                 }
                 if (iPEndPoint.Equals(cep.Two))
                 {
-                    foreach (var socket in sockets.Where(socket => socket.RemoteEndPoint.Equals(cep.One)))
+                    var cep1 = cep;
+                    foreach (var socket in sockets.Where(socket => socket.RemoteEndPoint.Equals(cep1.One)))
                     {
                         return socket;
                     }
@@ -181,7 +182,7 @@ namespace Cloud
                 handler.BeginSend(buffer, 0, buffer.Length, 0,
                     new AsyncCallback(SendCallback), handler);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //int line = (new StackTrace(e, true)).GetFrame(0).GetFileLineNumber();
                 //Console.WriteLine("Router not responding (ERROR LINE: " + line + ")");
@@ -208,7 +209,7 @@ namespace Cloud
         public void Close()
         {
             localSocket.Close();
-            sockets.Where(s => s!=null).ToList().ForEach(s => s.Close());
+            sockets.Where(s => s != null).ToList().ForEach(s => s.Close());
             System.Windows.Forms.Application.Exit();
             System.Environment.Exit(1);
         }
@@ -241,7 +242,7 @@ namespace Cloud
 
         public CloudWires()
         {
-             ConnectedEndPointsList = new List<ConnectedEndPoints>();
+            ConnectedEndPointsList = new List<ConnectedEndPoints>();
             var xmlString = File.ReadAllText("cloudwires.xml");
             using (var reader = XmlReader.Create(new StringReader(xmlString)))
             {
@@ -303,7 +304,7 @@ namespace Cloud
         // Client  socket.
         public Socket workSocket = null;
         // Size of receive buffer.
-        public const int BufferSize = 1024*5;
+        public const int BufferSize = 1024 * 5;
         // Receive buffer.
         public byte[] buffer = new byte[BufferSize];
         // Received data string.

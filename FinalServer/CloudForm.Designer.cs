@@ -74,7 +74,6 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.BindingSource serverBindingSource;
         private System.Windows.Forms.TextBox consoleOutput;
     }
 }

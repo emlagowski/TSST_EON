@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RouterNN
+﻿namespace RouterNN
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
         }
     }

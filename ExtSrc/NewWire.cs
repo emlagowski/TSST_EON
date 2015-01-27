@@ -1,16 +1,15 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.PerformanceData;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using ExtSrc.Observers;
+
+#endregion
 
 namespace ExtSrc
 {
-    using ExtSrc.Observers;
-    using System.Threading;
-    using Observer = ExtSrc.Observers.Observer;
     public class NewWire : Observer
     {
         static readonly int GUARD_BAND = 10;
@@ -59,7 +58,6 @@ namespace ExtSrc
                 if (count == FSUcount) break;
             }
             //if (count != FSUcount) Console.WriteLine("addFreqSlot error! Needed = " + FSUcount + " got = " + count);
-            // todo
             takeSpectralWidth(startingFreq, FSUcount * FREQ_SLOT_UNIT /*+ GUARD_BAND*/, id);
             return id;
         }

@@ -1,22 +1,23 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#endregion
 
 namespace ExtSrc
 {
     [Serializable()]
     public class AgentData
     {
-        public AgentComProtocol Message { get; set;}
-        
+        public AgentComProtocol Message { get; set; }
+
         // Originating Client Address
-        public String OriginatingAddress{ get; set;}
+        public String OriginatingAddress { get; set; }
 
         // Target Client Address
         public String TargetAddress { get; set; }
-        public String RouterIpAddress{ get; set; }
+        public String RouterIpAddress { get; set; }
         public String ClientIpAddress { get; set; }
         public bool IsStartEdge { get; set; }
 
@@ -37,12 +38,11 @@ namespace ExtSrc
 
         public int FSid { get; set; }
 
-        // todo to delete when there is no client?
         public int ClientSocketId { get; set; }
 
         // Unique key of connection
         public String UniqueKey { get; set; }
-        
+
         // In REGISTER message Node put here local IDs of wires
         public List<DijkstraData> WireIDsList { get; set; }
 
@@ -70,24 +70,25 @@ namespace ExtSrc
             DomainInfo = new List<int>();
         }
     }
-    public enum AgentComProtocol { 
-        NULL, 
-        REGISTER, 
-        REGISTER_CLIENT, 
-        SET_ROUTE_FOR_ME, 
-        ROUTE_FOR_U_EDGE, 
-        ROUTE_FOR_U_EDGE_MANUAL, 
-        ROUTE_FOR_U, 
-        ROUTE_FOR_U_MANUAL, 
-        U_CAN_SEND, DISROUTE, 
-        DISROUTE_EDGE, 
-        DISROUTE_IS_DONE, 
-        CONNECTION_IS_ON, 
-        CONNECTION_UNAVAILABLE, 
+    public enum AgentComProtocol
+    {
+        NULL,
+        REGISTER,
+        REGISTER_CLIENT,
+        SET_ROUTE_FOR_ME,
+        ROUTE_FOR_U_EDGE,
+        ROUTE_FOR_U_EDGE_MANUAL,
+        ROUTE_FOR_U,
+        ROUTE_FOR_U_MANUAL,
+        U_CAN_SEND, DISROUTE,
+        DISROUTE_EDGE,
+        DISROUTE_IS_DONE,
+        CONNECTION_IS_ON,
+        CONNECTION_UNAVAILABLE,
         MSG_DELIVERED,
-        DISROUTE_ERROR_EDGE, 
-        DISROUTE_ERROR, 
-        DISROUTE_EDGE_IS_DONE, 
+        DISROUTE_ERROR_EDGE,
+        DISROUTE_ERROR,
+        DISROUTE_EDGE_IS_DONE,
         CLIENT_DISCONNECTED,
         DOMAIN_REGISTER,
         DOMAIN_INFO,
@@ -103,7 +104,7 @@ namespace ExtSrc
         DOMAIN_CAN_NOT_ROUTE,
         ROUTE_UNAVAIBLE
     }
-    
+
     ///    ###########     MSG TYPES    ##########
     ///    NULL                 -
     ///    REGISTER             - router rejestruje sie u NMS'a

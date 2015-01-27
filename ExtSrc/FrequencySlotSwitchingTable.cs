@@ -1,8 +1,9 @@
-﻿using System;
+﻿#region
+
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#endregion
 
 namespace ExtSrc
 {
@@ -24,14 +25,12 @@ namespace ExtSrc
 
         public void remove(int wireA, int FSidA, int wireB, int FSidB)
         {
-            //todo dobrze usuwa bo jest uzyty MyEqualityComparer ktory sprawdza wartosci?
             freqSlotSwitchingTable.Remove(new int[] { wireA, FSidA });
             //freqSlotSwitchingTable.Remove(new int[] { wireB, FSidB });
         }
 
         public void removeEdge(int wireA, int FSidA)
         {
-            //todo dobrze usuwa bo jest uzyty MyEqualityComparer ktory sprawdza wartosci?
             if (!freqSlotSwitchingTable.Remove(new int[] { wireA, FSidA }))
             {
                 var toDelete = freqSlotSwitchingTable.Values.FirstOrDefault(x => x[0] == -1 && x[1] == -1);

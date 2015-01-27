@@ -37,11 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentData.cs" />
-    <Compile Include="BindingDictionary.cs" />
     <Compile Include="DijkstraData.cs" />
-    <Compile Include="ClientConnectionsTable.cs" />
-    <Compile Include="ClientData.cs" />
-    <Compile Include="ClientSocket.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="DataAndID.cs" />
     <Compile Include="FrequencySlot.cs" />
