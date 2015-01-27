@@ -186,7 +186,7 @@ namespace ExtSrc
             }
         }
 
-        public void update()
+        public void Update()
         {
             //close all sockets
             foreach (var l in FrequencySlotUnitList)

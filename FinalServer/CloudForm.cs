@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,10 +13,10 @@ using ExtSrc;
 
 namespace Cloud
 {
-    public partial class Form1 : Form
+    public partial class CloudForm : Form
     {
         Cloud _server;
-        public Form1(Cloud server)
+        public CloudForm(Cloud server)
         {
             _server = server;
             InitializeComponent();

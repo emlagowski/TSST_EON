@@ -15,7 +15,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Cloud
 {
-    public class Cloud
+    public class Cloud : IDisposable
     {
         IPEndPoint endPoint;
         Socket localSocket;
@@ -211,6 +211,27 @@ namespace Cloud
             sockets.Where(s => s!=null).ToList().ForEach(s => s.Close());
             System.Windows.Forms.Application.Exit();
             System.Environment.Exit(1);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // dispose managed resources
+                localSocket.Close();
+                foreach (var socket in sockets)
+                {
+                    socket.Close();
+                }
+                allDone.Close();
+            }
+            // free native resources
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 

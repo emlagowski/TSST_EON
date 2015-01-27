@@ -7,8 +7,8 @@
     <ProjectGuid>{21190D90-C3AC-4455-805C-99C56A81EDAA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Router</RootNamespace>
-    <AssemblyName>Router</AssemblyName>
+    <RootNamespace>Node</RootNamespace>
+    <AssemblyName>Node</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -56,19 +56,22 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Node.cs" />
-    <Compile Include="RouterForm.cs">
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="NodeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RouterForm.Designer.cs">
-      <DependentUpon>RouterForm.cs</DependentUpon>
+    <Compile Include="NodeForm.Designer.cs">
+      <DependentUpon>NodeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,12 +80,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="RouterForm.resx">
-      <DependentUpon>RouterForm.cs</DependentUpon>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="wires.xml" />
+    <EmbeddedResource Include="NodeForm.resx">
+      <DependentUpon>NodeForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExtSrc\ExtSrc.csproj">

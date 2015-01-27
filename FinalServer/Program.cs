@@ -10,6 +10,7 @@ namespace Cloud
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
             Cloud server = new Cloud("127.0.0.1", 8000);
@@ -23,7 +24,7 @@ namespace Cloud
 
             //server.signaling.addConnection(new Connection(lambdasOut_c1, null, 5, 172), 1);
             //server.signaling.addConnection(new Connection(null, lambdasOut_c1, 5, 172), 1);
-            Application.Run(new Form1(server));
+            Application.Run(new CloudForm(server));
 
 
            

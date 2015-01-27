@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ExtSrc
 {
-    public class FrequencySlotUnit
+    public class FrequencySlotUnit : IDisposable
     {
         public int port { get; set; }
         public int ID { get; set; }
@@ -75,6 +75,24 @@ namespace ExtSrc
             {
                 //Console.WriteLine(e.ToString());
             }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // dispose managed resources
+                socket.Close();
+                sendDone.Close();
+                connectDone.Close();
+            }
+            // free native resources
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

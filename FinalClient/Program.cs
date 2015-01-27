@@ -10,6 +10,7 @@ namespace Node
 {
     public class Program
     {
+        [STAThread]
         public static void Main(string[] args)
         {
             // RouterIp, isEdge?, AgentIp, DomainConnectIp(optional)
@@ -34,8 +35,8 @@ namespace Node
 
             new Thread(() =>
             {
-                var cf = new RouterForm(clientZero);
-                clientZero.RouterForm = cf;
+                var cf = new NodeForm(clientZero);
+                clientZero.NodeForm = cf;
                 cf.Show();
                 clientZero.ConnectAndRun();
                 Application.Run();

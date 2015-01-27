@@ -18,7 +18,7 @@ using Timer = System.Threading.Timer;
 
 namespace SubnetworkController
 {
-    public class SubnetworkController
+    public class SubnetworkController : IDisposable
     {
         const int Timeout = 2000;
         public String AgentIp = "127.6.6.6";
@@ -77,7 +77,7 @@ namespace SubnetworkController
         // List of Online Routers, send requests, show in gui
         public List<RouterOnline> OnlineRoutersList { get; set; }
 
-        // Map of{routerAaddress, routerBaddress, hashKey} - > routeHistory (list of {routerID, wireId, FSid} )
+        // Map of{routerAaddress, routerBaddress, hashKey, route type (ownDomain, local, remote, manual), bitrate as string} - > routeHistory (list of {routerID, wireId, FSid} )
         public Dictionary<String[], List<int[]>> RouteHistoryList { get; set; }
 
 
@@ -317,13 +317,13 @@ namespace SubnetworkController
                     var toRemove = new List<DijkstraData>();
                     foreach (var dd in DijkstraDataList)
                     {
-                        foreach (var dd2 in agentData.WireIDsList)
-                        {
-                            if(new DijkstraEqualityComparer().Equals(dd, dd2))
+                        //foreach (var dd2 in agentData.WireIDsList)
+                        //{
+                            if(dd.routerID==agentData.RouterID)
                                 toRemove.Add(dd);
-                        }
+                        //}
                     }
-                    toRemove = toRemove.GroupBy(x => x, new DijkstraEqualityComparer()).SelectMany(grp => grp.Skip(1)).ToList();
+                    //toRemove = toRemove.GroupBy(x => x, new DijkstraEqualityComparer()).SelectMany(grp => grp.Skip(1)).ToList();
                     toRemove.ForEach(dd => SubNetForm.Invoke(this._dijkstraDataRemover, dd));
                     Console.WriteLine("UREGISTER AFTER COUNT " + DijkstraDataList.Count);
                     if (agentData.IsStartEdge) UpdateClientList(agentData.RouterID, false);
@@ -534,7 +534,7 @@ namespace SubnetworkController
                     if (j == route.Length - 1)
                     {
                         routeHistory.Add(new int[3] { route[j], FindWireIdFromTo(route[j - 1], route[j], route[j]), _bufferRouterResponse.FSid });
-                        RouteHistoryList.Add(new String[4] { originatingAddress, targetAddress, hashKey , "ownDomain"}, routeHistory);
+                        RouteHistoryList.Add(new String[5] { originatingAddress, targetAddress, hashKey , "ownDomain", bitrate.ToString()}, routeHistory);
 
                         var rRid = Int32.Parse(targetAddress.Substring(targetAddress.Length - 1, 1));
                         // edgeRouterIDs.Add(hashKey, new int[2] { rSid, rRid });
@@ -671,7 +671,7 @@ namespace SubnetworkController
                     {
                         //routeHistory.Add(new int[3] { route[j], FindWireIdFromTo(route[j - 1], route[j], route[j]), _bufferRouterResponse.FSid });
                         routeHistory.Add(new int[3] { route[j], FindWireIdFromTo(route[j], routerId, route[j]), _bufferRouterResponse.FSid });
-                        RouteHistoryList.Add(new String[4] { originatingAddress, remoteTarget, hashKey, "local" }, routeHistory);
+                        RouteHistoryList.Add(new String[5] { originatingAddress, remoteTarget, hashKey, "local", bitrate.ToString() }, routeHistory);
 
                         var rRid = Int32.Parse(targetAddress.Substring(targetAddress.Length - 1, 1));
                         // edgeRouterIDs.Add(hashKey, new int[2] { rSid, rRid });
@@ -811,7 +811,7 @@ namespace SubnetworkController
                     if (j == route.Length - 1)
                     {
                         routeHistory.Add(new int[3] { route[j], FindWireIdFromTo(route[j - 1], route[j], route[j]), _bufferRouterResponse.FSid });
-                        RouteHistoryList.Add(new String[4] { originatingAddr, targetAddress, hashKey, "remote" }, routeHistory);
+                        RouteHistoryList.Add(new String[5] { originatingAddr, targetAddress, hashKey, "remote", bitrate.ToString() }, routeHistory);
 
                         var rRid = Int32.Parse(targetAddress.Substring(targetAddress.Length - 1, 1));
                         // edgeRouterIDs.Add(hashKey, new int[2] { rSid, rRid });
@@ -1181,7 +1181,7 @@ namespace SubnetworkController
                     if (j == route.Length - 1)
                     {
                         routeHistory.Add(new int[3] { route[j], FindWireIdFromTo(route[j - 1], route[j], route[j]), _bufferRouterResponse.FSid });
-                        RouteHistoryList.Add(new String[4] { clientSourceIP, ClientDestinationIP, hashKey, "manual"}, routeHistory);
+                        RouteHistoryList.Add(new String[5] { clientSourceIP, ClientDestinationIP, hashKey, "manual", bitrate.ToString() }, routeHistory);
 
                         int rRid = Int32.Parse(ClientDestinationIP.Substring(ClientDestinationIP.Length - 1, 1));
                         // edgeRouterIDs.Add(hashKey, new int[2] { rSid, rRid });
@@ -1478,7 +1478,8 @@ namespace SubnetworkController
                         var addressA = keyValuePair.Key[0];
                         var addressB = keyValuePair.Key[1];
                         var type = keyValuePair.Key[3];
-                        mapToDo.Add(new[]{addressA, addressB, key, type});
+                        var bitrate = keyValuePair.Key[4];
+                        mapToDo.Add(new[] { addressA, addressB, key, type, bitrate });
                     }
                 }
             }
@@ -1486,7 +1487,7 @@ namespace SubnetworkController
             {
                 if (e[3] == "manual") return;
                 DisrouteFullDomains(e[2]);
-                SetRouteForMe(e[0], e[1], 100, e[2]);
+                SetRouteForMe(e[0], e[1], Convert.ToInt32(e[4]), e[2]);
                 Send(e[0], new AgentData()
                 {
                     Message = AgentComProtocol.MODIFY_UNQCON_AFTER_REPAIR,
@@ -2104,6 +2105,31 @@ namespace SubnetworkController
         {
             var ipEndPoint = endPoint as IPEndPoint;
             return ipEndPoint != null ? ipEndPoint.Address.ToString() : null;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // dispose managed resources
+                _socket.Close();
+                _onlineAgentSocket.Close();
+                _allDone.Close();
+                _sendDone.Close();
+                _allDoneOnline.Close();
+                _sendDoneOnline.Close();
+                foreach (var socket in Sockets.Values)
+                {
+                    socket.Close();
+                }
+            }
+            // free native resources
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 
