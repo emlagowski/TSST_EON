@@ -51,6 +51,7 @@ namespace ExtSrc
         public int DomainRouterID { get; set; }
         public List<int[]> StartingFreqs { get; set; }
         public List<List<int[]>> StartingFreqsPool { get; set; }
+        public int[] Excluded { get; set; }
 
         public AgentData()
         {

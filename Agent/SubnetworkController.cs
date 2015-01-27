@@ -255,28 +255,27 @@ namespace SubnetworkController
                     Console.WriteLine("Received " + agentData.Message + " " + agentData.RouterID + " " + agentData.DomainInfo.Count);
                     break;
                 case AgentComProtocol.DOMAIN_CAN_WE_SET_ROUTE:
-                    //OtherDomainInfo.Add(agentData.RouterID, agentData.DomainInfo);
-                    //OtherDomainInfo[agentData.RouterID] = agentData.DomainInfo;
                     Console.WriteLine("Other domain asked for route");
+                    CheckIfConnectionAvaibleRemote("127.0.1." + agentData.RouterID, agentData.TargetAddress, agentData.FsuCount, null, agentData.DomainRouterID);
                     // todo tutaj sprawdzic czy mozna zestawic polaczenie dla zewnetrznej sieci
-                    var route = CalculateRoute("127.0.1." + agentData.RouterID, agentData.TargetAddress, null);
-                    if (route.Count() != 0)
-                    {
-                        var startingFreqs = CalculateAvaibleStartingFreqs(route, agentData.FsuCount);
-                        Send("127.0.1." + agentData.RouterID, new AgentData()
-                        {
-                            Message = AgentComProtocol.DOMAIN_CAN_ROUTE,
-                            DomainRouterID = DomainToTargetConnector(agentData.DomainRouterID),
-                            StartingFreqsPool = startingFreqs
-                        });
-                    }
-                    else
-                    {
-                        Send("127.0.1." + agentData.RouterID, new AgentData()
-                        {
-                            Message = AgentComProtocol.DOMAIN_CAN_NOT_ROUTE
-                        });
-                    }
+//                    var route = CalculateRoute("127.0.1." + agentData.RouterID, agentData.TargetAddress, null);
+//                    if (route.Count() != 0)
+//                    {
+//                        var startingFreqs = CalculateAvaibleStartingFreqs(route, agentData.FsuCount);
+//                        Send("127.0.1." + agentData.RouterID, new AgentData()
+//                        {
+//                            Message = AgentComProtocol.DOMAIN_CAN_ROUTE,
+//                            DomainRouterID = DomainToTargetConnector(agentData.DomainRouterID),
+//                            StartingFreqsPool = startingFreqs
+//                        });
+//                    }
+//                    else
+//                    {
+//                        Send("127.0.1." + agentData.RouterID, new AgentData()
+//                        {
+//                            Message = AgentComProtocol.DOMAIN_CAN_NOT_ROUTE
+//                        });
+//                    }
                     break;
                 case AgentComProtocol.DOMAIN_DISROUTE:
                     Console.WriteLine("Received " + agentData.Message + " for " + agentData.UniqueKey);
@@ -286,7 +285,7 @@ namespace SubnetworkController
                     Console.WriteLine("Received " + agentData.Message + " " + agentData.RouterID);
                     //OtherDomainInfo.Add(agentData.RouterID, new List<int>());
                     //SendDomainInfoToOtherDomains();
-                    var res = SetRemoteRoute(agentData.OriginatingAddress, agentData.TargetAddress, agentData.Bitrate, null,
+                    var res = SetRemoteRoute(agentData.OriginatingAddress, agentData.TargetAddress, agentData.Bitrate, agentData.Excluded,
                         agentData.UniqueKey, agentData.StartingFreq, agentData.DomainRouterID);
                     if (res != -1)
                         Send("127.0.1." + agentData.RouterID, new AgentData()
@@ -388,6 +387,73 @@ namespace SubnetworkController
         // ####################### Calculate, set and send route messages
         // ############################################################################################################
 
+        bool CheckIfConnectionAvaibleRemote(String originatingAddress, String targetAddress, int fsuCount, int[] excluded, int domainRouterId)
+        {
+            // todo not tested method
+            var route = CalculateRoute(originatingAddress, targetAddress, excluded);
+            if (route.Count() != 0)
+            {
+                var startingFreqs = CalculateAvaibleStartingFreqs(route, fsuCount);
+                var newExcluded = GetExcluded(startingFreqs, fsuCount);
+                if (newExcluded != -1)
+                {
+                    excluded = AddExcluded(excluded, route[newExcluded]);
+                    var res = CheckIfConnectionAvaibleRemote(originatingAddress, targetAddress, fsuCount, excluded, domainRouterId);
+                    return res;
+                }
+
+                Send(originatingAddress, new AgentData()
+                {
+                    Message = AgentComProtocol.DOMAIN_CAN_ROUTE,
+                    DomainRouterID = DomainToTargetConnector(domainRouterId),
+                    StartingFreqsPool = startingFreqs,
+                    Excluded = excluded
+                });
+            }
+            else
+            {
+                Send(originatingAddress, new AgentData()
+                {
+                    Message = AgentComProtocol.DOMAIN_CAN_NOT_ROUTE
+                });
+            }
+            return false;
+        }
+
+        private int GetExcluded(List<List<int[]>> startingFreqs, int fsuCount)
+        {
+            foreach (var startingFreq in startingFreqs)
+            {
+                bool isAvaible = false;
+                foreach (var intse in startingFreq)
+                {
+                    if (intse[1] - intse[0] > fsuCount * NewWire.FREQ_SLOT_UNIT)
+                    {
+                        isAvaible = true;
+                        break;
+                    }
+                }
+                if (!isAvaible) return startingFreqs.IndexOf(startingFreq)+1;
+            }
+            return -1;
+        }
+
+        int[] AddExcluded(int[] excluded, int newExcluded)
+        {
+            if (excluded == null)
+            {
+                return new int[]{newExcluded};
+            }
+            var tmp = excluded;
+            excluded = new int[excluded.GetLength(0) + 1];
+            for (var i = 0; i < tmp.GetLength(0); i++)
+            {
+                excluded[i] = tmp[i];
+            }
+            excluded[excluded.GetLength(0) - 1] = newExcluded;
+            return excluded;
+        }
+
         bool SetRouteForMe(String originatingAddress, String targetAddress, int bitrate, String uniqueKey)
         {
             var targetId = Int32.Parse(targetAddress.Substring(targetAddress.Length - 1, 1));
@@ -434,9 +500,16 @@ namespace SubnetworkController
         {
             var fsuCount = (int)Math.Round((double)(bitrate) / Convert.ToDouble(NewWire.FREQ_SLOT_UNIT));
 
-            var route = CalculateRoute(originatingAddress, targetAddress, null);
+            var route = CalculateRoute(originatingAddress, targetAddress, excludedWiresIDs);
             if (route.Count() == 0) return false;
             var startingFreqs = CalculateAvaibleStartingFreqs(route, fsuCount);
+            var newExcluded = GetExcluded(startingFreqs, fsuCount);
+            if (newExcluded != -1)
+            {
+                Console.WriteLine("Excluded router = "+ newExcluded);
+                excludedWiresIDs = AddExcluded(excludedWiresIDs, route[newExcluded]);
+                return SetRoute(originatingAddress, targetAddress, bitrate, excludedWiresIDs, hashKey);
+            }
             var startingFreqFinal = FindBestStartingFreq(startingFreqs, fsuCount);
             if (startingFreqFinal == -1)
             {
@@ -879,13 +952,24 @@ namespace SubnetworkController
             }
             var tmpList = _bufferRouterResponse.StartingFreqsPool;
             var tmpRouterId = _bufferRouterResponse.DomainRouterID;
-            var route = CalculateRoute(originatingAddress, "127.0.1." + localTargetId, null);
+            var externalExcluded = _bufferRouterResponse.Excluded;
+            var route = CalculateRoute(originatingAddress, "127.0.1." + localTargetId, excludedWiresIDs);
             if (route.Count() == 0)
             {
                 Console.WriteLine("This domain cannot set route.");
                 return false;
             }
             var startingFreqs = CalculateAvaibleStartingFreqs(route, fsuCount);
+
+            //
+            var newExcluded = GetExcluded(startingFreqs, fsuCount);
+            if (newExcluded != -1)
+            {
+                excludedWiresIDs = AddExcluded(excludedWiresIDs, route[newExcluded]);
+                route = CalculateRoute(originatingAddress, "127.0.1." + localTargetId, excludedWiresIDs);
+            }
+            //
+
             startingFreqs.AddRange(tmpList);
             var startingFreqFinal = FindBestStartingFreq(startingFreqs, fsuCount);
             Console.WriteLine("Domain response we can set route. startingFreqFinal=" + startingFreqFinal);
@@ -911,7 +995,8 @@ namespace SubnetworkController
                 TargetAddress = targetAddress,
                 Bitrate = bitrate,
                 UniqueKey = hashKey,
-                StartingFreq = startingFreqFinal
+                StartingFreq = startingFreqFinal,
+                Excluded = externalExcluded
             });
             if (!WaitForAnswerWithTimeout()) return false;
             if (_bufferRouterResponse.Message == AgentComProtocol.DOMAIN_CAN_NOT_ROUTE)
@@ -1010,13 +1095,29 @@ namespace SubnetworkController
 
             // todo excluded wires musze miec cos wiecej niz samo ID lokalne
             //excluding wires
-            //            if (excludedWiresIDs != null)
-            //            {
-            //                foreach (int d in excludedWiresIDs)
-            //                {
-            //                    wireIdOnline2.Remove(d);
-            //                }
-            //            }
+            
+            if (excludedWiresIDs != null)
+            {
+                var toRemove = new List<int>();
+                for (var i = 0; i < wireIdOnline.Count; i++)
+                {
+                    if (excludedWiresIDs.Contains(wireIdOnline[i][0]))
+                    {
+                        toRemove.Add(i);
+                        continue;
+                    }
+                    if (excludedWiresIDs.Contains(wireIdOnline[i][1]))
+                    {
+                        toRemove.Add(i);
+                        continue;
+                    }
+                }
+                var tmp = toRemove.OrderByDescending(i => i);
+                foreach (var i in tmp)
+                {
+                    wireIdOnline.RemoveAt(i);
+                }
+            }
 
             var dataReadyForDijkstra = new int[wireIdOnline.Count][];
             for (var i = 0; i < wireIdOnline.Count; i++)

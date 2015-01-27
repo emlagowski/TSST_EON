@@ -1,3 +1,3 @@
 <wires>	
-	<wire WireId="1" Distance="500" MaxFreqSlots="100" PortPrefix="157" SpectralWidth="1000"></wire>	
+	<wire WireId="1" Distance="100" MaxFreqSlots="100" PortPrefix="127" SpectralWidth="1000"></wire>	
 </wires>
