@@ -346,7 +346,14 @@ namespace Node
 
         private void button1_Click(object sender, EventArgs e)
         {
-            _node.Disroute("127.0.1." + Convert.ToInt32(PortTextBox.Text));
+            try
+            {
+                _node.Disroute("127.0.1." + Convert.ToInt32(PortTextBox.Text));
+            }
+            catch (Exception)
+            {
+                
+            }
         }
     }
 }

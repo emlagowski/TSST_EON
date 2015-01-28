@@ -555,7 +555,7 @@ namespace Node
                     WaitingMsgs.Remove(wm);
                     break;
                 case AgentComProtocol.AVAIBLE_STARTING_FREQS:
-                    if (agentData.IsEndEdge) Log.CCC("Call accepted");
+                    if (agentData.IsEndEdge && isEdge) Log.CCC("Call accepted");
                     Log.d("AVAIBLE_STARTING_FREQS asked fsuCount" + agentData.FsuCount + " wireId " + agentData.WireId);
                     var result = LocalPhysicalWires.GetAvaibleFreqSlots(agentData.FsuCount, agentData.WireId);
                     result.ForEach(e => Log.d("AVAIBLE SLOT = <" + e[0] + "," + e[1] + ">"));
@@ -641,7 +641,7 @@ namespace Node
                     break;
                 case ExtSrc.AgentComProtocol.DISROUTE_EDGE:
                     //Log.d("DISROUTE_EDGE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.FirstWireId + " FSid : " + agentData.FSid);
-                    if(agentData.IsEndEdge) Log.CCC("Call Teardown In");
+                    if(agentData.IsEndEdge && isEdge) Log.CCC("Call Teardown In");
                     if (LocalPhysicalWires.getWireByID(agentData.FirstWireId).removeFreqSlot(agentData.FSid))
                     {
                         FreqSlotSwitchingTable.removeEdge(agentData.FirstWireId, agentData.FSid);
@@ -656,7 +656,7 @@ namespace Node
                             UniqueConnections.Remove(uconnn);
                         AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_EDGE_IS_DONE });
                         //Log.d("DISROUTE EDGE DONE");
-                        if (agentData.IsEndEdge) Log.CCC("Call Teardown Confirmed");
+                        if (agentData.IsEndEdge && isEdge) Log.CCC("Call Teardown Confirmed");
                         Log.CC("Connection teardown in.");
                         Log.CC("Connection teardown confirmed.");
                     }
