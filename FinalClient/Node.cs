@@ -1018,7 +1018,7 @@ namespace Node
         public void Disroute(string ipAddress)
         {
             var uc = UniqueConnections.FirstOrDefault(w => w.AddressA.Equals(address) & w.AddressB.Equals(ipAddress));
-            if (uc == null)
+            if (uc != null)
             {
                 Log.CCC("Call teardown out.");
                 AgentSend(new AgentData(){ Message = AgentComProtocol.DISROUTE_REQUEST, UniqueKey = uc.UniqueKey});
