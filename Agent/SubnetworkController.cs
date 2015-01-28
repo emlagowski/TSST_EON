@@ -279,8 +279,11 @@ namespace SubnetworkController
 //                    }
                     break;
                 case AgentComProtocol.DOMAIN_DISROUTE:
-                    Log.d("Received " + agentData.Message + " for " + agentData.UniqueKey);
+                    //Log.d("Received " + agentData.Message + " for " + agentData.UniqueKey);
+                    Log.NCC("Call Teardown in");
+                    Log.CC("Connection Teardown in");
                     Disroute(agentData.UniqueKey);
+                    Log.CC("Connection Teardown confirmed");
                     break;
                 case AgentComProtocol.DOMAIN_SET_ROUTE_FOR_ME:
                     //Log.d("Received " + agentData.Message + " " + agentData.RouterID);
@@ -360,6 +363,10 @@ namespace SubnetworkController
                 case ExtSrc.AgentComProtocol.CLIENT_DISCONNECTED:
                     Log.d(String.Format("Client {0} disconnected from router {1}.", agentData.ClientIpAddress, agentData.RouterIpAddress));
                     //ClientMap.Remove(agentData.ClientIpAddress);
+                    break;
+                case AgentComProtocol.DISROUTE_REQUEST:
+                    
+                    DisrouteFullDomains(agentData.UniqueKey);
                     break;
                 default:
                     //Log.d("Zły msg przybył");
@@ -1333,17 +1340,17 @@ namespace SubnetworkController
             {
                 if (EdgeRouterIDs.ContainsKey(uniKey))
                 {
-                    Log.d("EdgeRouterIDs");
+                    //Log.d("EdgeRouterIDs");
                     Disroute(routeHist, uniKey);
                 }
                 else if (EdgeLocalRouterIDs.ContainsKey(uniKey))
                 {
-                    Log.d("EdgeLocalRouterIDs");
+                    //Log.d("EdgeLocalRouterIDs");
                     DisrouteLocal(routeHist, uniKey);
                 }
                 else if (EdgeRemoteRouterIDs.ContainsKey(uniKey))
                 {
-                    Log.d("EdgeRemoteRouterIDs");
+                    //Log.d("EdgeRemoteRouterIDs");
                     DisrouteRemote(routeHist, uniKey);
                 }
                 var key = RouteHistoryList.FirstOrDefault(d => d.Value.Equals(routeHist)).Key;
@@ -1421,9 +1428,11 @@ namespace SubnetworkController
             {
                 for (int i = routeHistory.Count - 1; i >= 0; i--)
                 {
-                    Log.d("ONE DISROUTE MSG IS GOING TO BE SENT : " + routeHistory.ElementAt(i)[0] + " -> " + routeHistory.ElementAt(i)[1] + " -> " + routeHistory.ElementAt(i)[2]);
+                    Log.CC("Connection teardown out.");
+                    //Log.d("ONE DISROUTE MSG IS GOING TO BE SENT : " + routeHistory.ElementAt(i)[0] + " -> " + routeHistory.ElementAt(i)[1] + " -> " + routeHistory.ElementAt(i)[2]);
                     if ((edgeRouters[0] != routeHistory.ElementAt(i)[0]))
                     {
+
                         //   agentData.firstWireID, agentData.FSid, agentData.secondWireID, agentData.secondFSid
                         _bufferRouterResponse = null;
                         Send(String.Format("127.0.1." + routeHistory.ElementAt(i)[0]), new AgentData()
@@ -1466,7 +1475,9 @@ namespace SubnetworkController
                         }
 
                     }
-
+                    Log.CC("Link Connection Teardown.");
+                    Log.LRM("Link Connection deallocation.");
+                    Log.LRM("Link Connection teardown confirmed.");
                 }
                 EdgeLocalRouterIDs.Remove(hashKey);
                 return true;
@@ -1482,7 +1493,8 @@ namespace SubnetworkController
             {
                 for (int i = routeHistory.Count - 1; i >= 0; i--)
                 {
-                    Log.d("ONE DISROUTE MSG IS GOING TO BE SENT : " + routeHistory.ElementAt(i)[0] + " -> " + routeHistory.ElementAt(i)[1] + " -> " + routeHistory.ElementAt(i)[2]);
+                    Log.CC("Connection teardown out.");
+                    //Log.d("ONE DISROUTE MSG IS GOING TO BE SENT : " + routeHistory.ElementAt(i)[0] + " -> " + routeHistory.ElementAt(i)[1] + " -> " + routeHistory.ElementAt(i)[2]);
                     if ((edgeRouters[1] != routeHistory.ElementAt(i)[0]))
                     {
                         //   agentData.firstWireID, agentData.FSid, agentData.secondWireID, agentData.secondFSid
@@ -1512,13 +1524,14 @@ namespace SubnetworkController
                             Message = AgentComProtocol.DISROUTE_EDGE,
                             FirstWireId = routeHistory.ElementAt(i)[1],
                             FSid = routeHistory.ElementAt(i)[2],
-                            UniqueKey = hashKey
+                            UniqueKey = hashKey,
+                            IsEndEdge = true
                         });
                         if (!WaitForAnswerWithTimeout()) break;
 
                         if (_bufferRouterResponse != null && _bufferRouterResponse.Message.Equals(ExtSrc.AgentComProtocol.DISROUTE_EDGE_IS_DONE))
                             //Log.d("DISROUTE EDGE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(0)[0]) + " IS DONE");
-                            Log.d("Disoute done.");
+                            Log.NCC("Call teardown confirmed");
                         else if (_bufferRouterResponse == null || _bufferRouterResponse.Message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR_EDGE))
                         {
                             //Log.d("DISROUTE EDGE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(0)[0]) + " ERROR!!!");
@@ -1527,7 +1540,9 @@ namespace SubnetworkController
                         }
 
                     }
-
+                    Log.CC("Link Connection Teardown.");
+                    Log.LRM("Link Connection deallocation.");
+                    Log.LRM("Link Connection teardown confirmed.");
                 }
                 EdgeRemoteRouterIDs.Remove(hashKey);
                 return true;
@@ -1541,23 +1556,29 @@ namespace SubnetworkController
             var routeHist = RouteHistoryList.FirstOrDefault(d => d.Key[2].Equals(uniKey));
             if (routeHist.Value != null)
             {
+                Log.NCC("Call teardown in");
                 if (EdgeRouterIDs.ContainsKey(uniKey))
                 {
-                    Log.d("EdgeRouterIDs");
+                    //Log.d("EdgeRouterIDs");
                     Disroute(routeHist.Value, uniKey);
                 }
                 else if (EdgeLocalRouterIDs.ContainsKey(uniKey))
                 {
-                    Log.d("EdgeLocalRouterIDs");
+                    Log.NCC("Call Teardown out");
+                    Log.NCC("Connection Teardown out");
+                    Log.NCC("Connection Teardown in");
+                    //Log.d("EdgeLocalRouterIDs");
                     DisrouteLocal(routeHist.Value, uniKey);
                     var ip = routeHist.Key[1];
                     var id = Int32.Parse(ip.Substring(ip.Length - 1, 1));
                     var newIp = "127.0.1." + DomainToTargetConnector(id);
+                    Log.CC("Connection teardown out.");
                     Send(newIp, new AgentData() { Message = AgentComProtocol.DOMAIN_DISROUTE, UniqueKey = uniKey });
                 }
                 else if (EdgeRemoteRouterIDs.ContainsKey(uniKey))
                 {
-                    Log.d("EdgeRemoteRouterIDs");
+                    Log.NCC("Call Teardown out");
+                    //Log.d("EdgeRemoteRouterIDs");
                     DisrouteRemote(routeHist.Value, uniKey);
                     var ip = routeHist.Key[0];
                     var id = Int32.Parse(ip.Substring(ip.Length - 1, 1));
@@ -1566,6 +1587,7 @@ namespace SubnetworkController
                 }
                 var key = RouteHistoryList.FirstOrDefault(d => d.Value.Equals(routeHist.Value)).Key;
                 RouteHistoryList.Remove(key);
+                Log.NCC("Call termination confirmed");
                 return true;
             }
             return false;

@@ -619,7 +619,8 @@ namespace Node
                     Log.CC("Connection confirmed.");
                     break;
                 case ExtSrc.AgentComProtocol.DISROUTE:
-                    Log.d("DISROUTE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.FirstWireId + " FSid : " + agentData.FSid);
+                    Log.CC("Connection teardown in.");
+                    //Log.d("DISROUTE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.FirstWireId + " FSid : " + agentData.FSid);
                     var inttab = new int[2];
                     inttab = FreqSlotSwitchingTable.findReverseRoute(agentData.FirstWireId, agentData.FSid);
                     if (LocalPhysicalWires.getWireByID(agentData.FirstWireId).removeFreqSlot(agentData.FSid) &&
@@ -628,7 +629,9 @@ namespace Node
                         //freqSlotSwitchingTable.remove(agentData.firstWireID, agentData.FSid, inttab[0], inttab[1]);
                         FreqSlotSwitchingTable.remove(inttab[0], inttab[1], agentData.FirstWireId, agentData.FSid);
                         AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_IS_DONE });
-                        Log.d("DISROUTE DONE");
+                        //Log.d("DISROUTE DONE");
+                        
+                        Log.CC("Connection teardown confirmed.");
                     }
                     else
                     {
@@ -637,7 +640,8 @@ namespace Node
                     }
                     break;
                 case ExtSrc.AgentComProtocol.DISROUTE_EDGE:
-                    Log.d("DISROUTE_EDGE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.FirstWireId + " FSid : " + agentData.FSid);
+                    //Log.d("DISROUTE_EDGE MSG ARRIVED, : " + address + " -> remove WIRE_ID : " + agentData.FirstWireId + " FSid : " + agentData.FSid);
+                    if(agentData.IsEndEdge) Log.CCC("Call Teardown In");
                     if (LocalPhysicalWires.getWireByID(agentData.FirstWireId).removeFreqSlot(agentData.FSid))
                     {
                         FreqSlotSwitchingTable.removeEdge(agentData.FirstWireId, agentData.FSid);
@@ -652,6 +656,9 @@ namespace Node
                             UniqueConnections.Remove(uconnn);
                         AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_EDGE_IS_DONE });
                         //Log.d("DISROUTE EDGE DONE");
+                        if (agentData.IsEndEdge) Log.CCC("Call Teardown Confirmed");
+                        Log.CC("Connection teardown in.");
+                        Log.CC("Connection teardown confirmed.");
                     }
                     else
                     {
@@ -1006,6 +1013,16 @@ namespace Node
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public void Disroute(string ipAddress)
+        {
+            var uc = UniqueConnections.FirstOrDefault(w => w.AddressA.Equals(address) & w.AddressB.Equals(ipAddress));
+            if (uc == null)
+            {
+                Log.CCC("Call teardown out.");
+                AgentSend(new AgentData(){ Message = AgentComProtocol.DISROUTE_REQUEST, UniqueKey = uc.UniqueKey});
+            }
         }
     }
 

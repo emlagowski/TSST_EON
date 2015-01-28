@@ -58,6 +58,7 @@ namespace Node
             this.advancedTab = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.frequencySlotsTable = new System.Windows.Forms.DataGridView();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.messageHistoryTable)).BeginInit();
             this.tabs.SuspendLayout();
             this.generalTab.SuspendLayout();
@@ -136,6 +137,7 @@ namespace Node
             // 
             // generalTab
             // 
+            this.generalTab.Controls.Add(this.button1);
             this.generalTab.Controls.Add(this.RunButton);
             this.generalTab.Controls.Add(this.SendButton);
             this.generalTab.Controls.Add(this.MsgLabel);
@@ -261,6 +263,16 @@ namespace Node
             this.frequencySlotsTable.Size = new System.Drawing.Size(559, 300);
             this.frequencySlotsTable.TabIndex = 0;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(208, 873);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(168, 31);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "Close";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // NodeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -308,5 +320,6 @@ namespace Node
         private System.Windows.Forms.TextBox PortTextBox;
         private System.Windows.Forms.TextBox MsgTextBox;
         private System.Windows.Forms.CheckBox RunButton;
+        private System.Windows.Forms.Button button1;
     }
 }

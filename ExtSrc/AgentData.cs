@@ -104,7 +104,8 @@ namespace ExtSrc
         DOMAIN_DISROUTE,
         MODIFY_UNQCON_AFTER_REPAIR,
         DOMAIN_CAN_NOT_ROUTE,
-        ROUTE_UNAVAIBLE
+        ROUTE_UNAVAIBLE,
+        DISROUTE_REQUEST
     }
 
     ///    ###########     MSG TYPES    ##########
