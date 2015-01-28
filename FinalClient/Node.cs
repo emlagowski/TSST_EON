@@ -521,7 +521,7 @@ namespace Node
             }
             catch (Exception)
             {
-                Log.d("Agent Closed.");
+                Log.CC("Connection to parent CC error.");
             }
         }
 
@@ -548,7 +548,8 @@ namespace Node
                     }
                     break;
                 case AgentComProtocol.ROUTE_UNAVAIBLE:
-                    Log.d("Route unavaible, delete waiting message.");
+                    //Log.d("Route unavaible, delete waiting message.");
+                    Log.CCC("Call request reject received.");
                     var uniqConn2 = UniqueConnections.FirstOrDefault(w => w.UniqueKey.Equals(agentData.UniqueKey));
                     UniqueConnections.Remove(uniqConn2);
                     var wm = WaitingMsgs.FirstOrDefault(w => w.Value.uniqueKey.Equals(agentData.UniqueKey));
@@ -637,6 +638,7 @@ namespace Node
                     {
                         AgentSend(new AgentData() { Message = AgentComProtocol.DISROUTE_ERROR });
                         Log.d("DISROUTE ERROR!!!!");
+                        Log.CC("Connection teardown failed.");
                     }
                     break;
                 case ExtSrc.AgentComProtocol.DISROUTE_EDGE:
@@ -798,6 +800,7 @@ namespace Node
             catch (SocketException)
             {
                 Log.d("Connected from other side. " + domainSocket.Connected);
+                Log.CC("Inter domain connection succeeded");
                 domainConnectDone.Set();
                 new Thread(DomainListening).Start();
             }
@@ -815,8 +818,8 @@ namespace Node
                 {
                     client.EndConnect(ar);
                 }
-                Log.d(String.Format("Node is connected to other Domain {0}", IpToString(client.RemoteEndPoint)));
-
+                //Log.d(String.Format("Node is connected to other Domain {0}", IpToString(client.RemoteEndPoint)));
+                Log.CC("Inter domain connection succeeded");
                 // Signal that the connection has been made.
                 domainConnectDone.Set();
 
@@ -824,7 +827,8 @@ namespace Node
             }
             catch (Exception)
             {
-                Log.d("Connecting to other domain failed.");
+                Log.CC("Inter domain connection failed");
+                //Log.d("Connecting to other domain failed.");
                 Thread.Sleep(1000);
                 ConnectDomain(_domainAddress);
             }
@@ -903,7 +907,7 @@ namespace Node
         {
             if (domainSocket == null)
             {
-                Log.d("Domain connection not exists.");
+                Log.d("Domain connection does not exist.");
                 return;
             }
 

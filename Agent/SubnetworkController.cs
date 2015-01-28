@@ -246,10 +246,12 @@ namespace SubnetworkController
             {
                 case AgentComProtocol.DOMAIN_REGISTER:
                     Log.d("Received " + agentData.Message + " " + agentData.RouterID);
+                    Log.CC("Peer found");
                     OtherDomainInfo.Add(agentData.RouterID, new List<int>());
                     SendDomainInfoToOtherDomains();
                     break;
                 case AgentComProtocol.DOMAIN_INFO:
+                    Log.RC("Network topology in");
                     //OtherDomainInfo.Add(agentData.RouterID, agentData.DomainInfo);
                     OtherDomainInfo[agentData.RouterID] = agentData.DomainInfo;
                     Log.d("Received " + agentData.Message + " " + agentData.RouterID + " " + agentData.DomainInfo.Count);
@@ -312,6 +314,7 @@ namespace SubnetworkController
                     break;
                 case ExtSrc.AgentComProtocol.REGISTER:
                     Log.d(String.Format("Router {0} connected.", agentData.RouterIpAddress));
+                    Log.RC("Local topology in");
                     //dijkstra.RoutersNum++;
                     foreach (var dd in agentData.WireIDsList)
                     {
@@ -324,6 +327,7 @@ namespace SubnetworkController
                 case ExtSrc.AgentComProtocol.UNREGISTER:
                     Log.d(String.Format("Router {0} unconnected.", agentData.RouterIpAddress));
                     //dijkstra.RoutersNum++;
+
                     Log.d("UREGISTER BEFORE COUNT " + DijkstraDataList.Count);
                     //DijkstraDataList = new BindingList<DijkstraData>(DijkstraDataList.Union(agentData.WireIDsList, new DijkstraEqualityComparer()).ToList());
                     var toRemove = new List<DijkstraData>();
@@ -344,10 +348,19 @@ namespace SubnetworkController
                     break;
                 case ExtSrc.AgentComProtocol.SET_ROUTE_FOR_ME:
                     //Log.d("Router asked for route.");
-                    Log.NCC("Call coordination");
+                    
                     var result = SetRouteForMe(agentData.OriginatingAddress, agentData.TargetAddress, agentData.Bitrate, agentData.UniqueKey);
                     if (!result)
-                        Send(agentData.OriginatingAddress, new AgentData() { Message = AgentComProtocol.ROUTE_UNAVAIBLE, UniqueKey = agentData.UniqueKey });
+                    {
+                        Log.RC("Can not find route.");
+                        Log.NCC("Call request rejection");
+                        Send(agentData.OriginatingAddress,
+                            new AgentData()
+                            {
+                                Message = AgentComProtocol.ROUTE_UNAVAIBLE,
+                                UniqueKey = agentData.UniqueKey
+                            });
+                    }
                     break;
                 case ExtSrc.AgentComProtocol.MSG_DELIVERED:
                     //todo info o tym ze jakas wiadomosc dotarla na koniec drogi
@@ -475,6 +488,8 @@ namespace SubnetworkController
             var targetId = Int32.Parse(targetAddress.Substring(targetAddress.Length - 1, 1));
             if (MyDomainInfo.Contains(targetId))
             {
+                // todo logs for own domain route
+                Log.NCC("Call indication");
                 // Local domain routing
                 //policz droge i odeslij do wszystkich ruterow ktore maja byc droga informacje route-for-you
                 var hashCode = uniqueKey;
@@ -482,6 +497,7 @@ namespace SubnetworkController
                 var res = SetRoute(originatingAddress, targetAddress, bitrate, null, hashCode);
                 if (res)
                 {
+                    Log.CC("Connection confirmed.");
                     Send(originatingAddress,
                         new AgentData() { Message = AgentComProtocol.U_CAN_SEND, UniqueKey = hashCode });
                     return true;
@@ -491,6 +507,7 @@ namespace SubnetworkController
             }
             else
             {
+                Log.NCC("Call coordination");
                 Log.d("Target not found in my domain. id=" + targetId);
                 // Other domain routing
                 if (TargetExists(targetId))
@@ -515,7 +532,9 @@ namespace SubnetworkController
         private bool SetRoute(String originatingAddress, String targetAddress, int bitrate, int[] excludedWiresIDs, String hashKey)
         {
             var fsuCount = (int)Math.Round((double)(bitrate) / Convert.ToDouble(NewWire.FREQ_SLOT_UNIT));
-
+            Log.NCC("Connection request.");
+            Log.CC("Connection request in.");
+            Log.CC("Route Table Query");
             var route = CalculateRoute(originatingAddress, targetAddress, excludedWiresIDs);
             if (route.Count() == 0) return false;
             var startingFreqs = CalculateAvaibleStartingFreqs(route, fsuCount);
@@ -534,7 +553,7 @@ namespace SubnetworkController
             }
             //Log.d("Domain response we can set route. startingFreqFinal=" + startingFreqFinal);
             //SetLocalRoute(originatingAddress, "127.0.1." + localTargetId, bitrate, excludedWiresIDs, hashKey, startingFreqFinal, tmpRouterId);
-
+            Log.RC("Ordered list of SNPPS");
             var routeHistory = new List<int[]>();
             var startfrequency = startingFreqFinal;
 
@@ -544,13 +563,15 @@ namespace SubnetworkController
                 Log.d("Can't find route from " + originatingAddress + " to " + targetAddress);
                 return false;
             }
-
+            Log.CC("Link Connection request.");
+            Log.LRM("return Link Connection.");
             for (var j = 0; j < route.Length; j++)
             {
                 _bufferRouterResponse = null;
 
                 if (j == 0)
                 {
+                    Log.CC("Connection Request Out");
                     //wyslij d source routera
                     //Log.d("WYSYLAM DO PIERWSZEGO EDGE ROUTERA DANE ROUTINGOWE");
                     var ar = CalculateFsUcountFromTo(route[j], FindWireIdFromTo(route[j], route[j + 1], route[j]), bitrate);
@@ -574,6 +595,7 @@ namespace SubnetworkController
                 }
                 else if (j > 0 && j < route.Length - 1)
                 {
+                    Log.CC("Connection Request Out");
                     //fsucount, mod, firstwireid,secondwireid, startingfreq dla odbierajacego kabla bo juz obliczone w poprzednim roouterze
                     //wyslij do zwyklych routerow
                     //Log.d("WYSYLAM DO SRODKOWEGO ROUTERA DANE ROUTINGOWE");
@@ -596,6 +618,7 @@ namespace SubnetworkController
                 }
                 else if (j == route.Length - 1)
                 {
+                    Log.CC("Connection Request Out");
                     //wyslij do destinationIP routra
                     //Log.d("WYSYLAM DO OSTATNIEGO EDGE ROUTERA DANE ROUTINGOWE");
                     var ar0 = CalculateFsUcountFromTo(route[j], FindWireIdFromTo(route[j - 1], route[j], route[j]), bitrate);
@@ -610,7 +633,8 @@ namespace SubnetworkController
                         TargetAddress = targetAddress,
                         UniqueKey = hashKey,
                         StartingFreq = startfrequency,
-                        IsStartEdge = false
+                        IsStartEdge = false,
+                        IsEndEdge = true
                     });
                     //Log.d("WYSYLALEM DO OSTATNIEGO EDGE ROUTERA DANE ROUTINGOWE (" + ip + ")");
                 }
@@ -619,6 +643,7 @@ namespace SubnetworkController
 
                 if (_bufferRouterResponse.Message.Equals(ExtSrc.AgentComProtocol.CONNECTION_IS_ON))
                 {
+                    Log.CC("Connection Set");
                     //startfrequency = _bufferRouterResponse.StartingFreq;
                     //dodawanie do routeHistory
                     if (j < route.Length - 1)
@@ -1385,7 +1410,8 @@ namespace SubnetworkController
                         else if (_bufferRouterResponse == null || _bufferRouterResponse.Message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR))
                         {
                             //Log.d("DISROUTE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(i)[0]) + " ERROR!!!");
-                            Log.d("Disroute error.");
+                            //Log.d("Disroute error.");
+                            Log.CC("Connection teardown failed.");
                             continue; //todo tu był return test aby disroutowało sie do konca nawet jak jest ktorys router off
                         }
                     }
@@ -1407,7 +1433,8 @@ namespace SubnetworkController
                         else if (_bufferRouterResponse == null || _bufferRouterResponse.Message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR_EDGE))
                         {
                             //Log.d("DISROUTE EDGE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(0)[0]) + " ERROR!!!");
-                            Log.d("Disroute error.");
+                            //Log.d("Disroute error.");
+                            Log.CC("Connection teardown failed.");
                             continue; //todo tu był return test aby disroutowało sie do konca nawet jak jest ktorys router off
                         }
 
@@ -1450,7 +1477,8 @@ namespace SubnetworkController
                         else if (_bufferRouterResponse == null || _bufferRouterResponse.Message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR))
                         {
                             //Log.d("DISROUTE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(i)[0]) + " ERROR!!!");
-                            Log.d("Disroute error.");
+                            //Log.d("Disroute error.");
+                            Log.CC("Connection teardown failed.");
                             continue; //todo tu był return test aby disroutowało sie do konca nawet jak jest ktorys router off
                         }
                     }
@@ -1472,7 +1500,8 @@ namespace SubnetworkController
                         else if (_bufferRouterResponse == null || _bufferRouterResponse.Message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR_EDGE))
                         {
                             //Log.d("DISROUTE EDGE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(0)[0]) + " ERROR!!!");
-                            Log.d("Disroute error.");
+                            //Log.d("Disroute error.");
+                            Log.CC("Connection teardown failed.");
                             continue; //todo tu był return test aby disroutowało sie do konca nawet jak jest ktorys router off
                         }
 
@@ -1514,7 +1543,8 @@ namespace SubnetworkController
                         else if (_bufferRouterResponse == null || _bufferRouterResponse.Message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR))
                         {
                             //Log.d("DISROUTE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(i)[0]) + " ERROR!!!");
-                            Log.d("Disroute error.");
+                            //Log.d("Disroute error.");
+                            Log.CC("Connection teardown failed.");
                             continue; //todo tu był return test aby disroutowało sie do konca nawet jak jest ktorys router off
                         }
                     }
@@ -1537,7 +1567,8 @@ namespace SubnetworkController
                         else if (_bufferRouterResponse == null || _bufferRouterResponse.Message.Equals(ExtSrc.AgentComProtocol.DISROUTE_ERROR_EDGE))
                         {
                             //Log.d("DISROUTE EDGE FOR " + String.Format("127.0.1." + routeHistory.ElementAt(0)[0]) + " ERROR!!!");
-                            Log.d("Disroute error.");
+                            //Log.d("Disroute error.");
+                            Log.CC("Connection teardown failed.");
                             continue; //todo tu był return test aby disroutowało sie do konca nawet jak jest ktorys router off
                         }
 
