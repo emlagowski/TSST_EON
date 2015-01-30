@@ -229,7 +229,7 @@ namespace Node
                             ReceiveFromCloud(unit.socket);
                         }
                     }
-                    Log.i("Node is ready.");
+                    //Log.i("Node is ready.");
                     allReceive.WaitOne();
                 }
             }
@@ -252,6 +252,7 @@ namespace Node
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(fs, data);
                 var buffer = fs.ToArray();
+                Log.i(String.Format("S: {0} bytes to [Wire = {1}, Slot = {2}]", buffer.Count(), route[0], route[1]));
 
                 // Begin sending the data to the remote device.
                 foreach (var unit in units)
@@ -279,7 +280,7 @@ namespace Node
                 Socket client = unit.socket;
                 // Complete sending the data to the remote device.
                 int bytesSent = client.EndSend(ar);
-                Log.d(String.Format("S: {0} bytes from {1} to {2}.", bytesSent, IpToString(client.LocalEndPoint), IpToString(client.RemoteEndPoint)));
+                //Log.i(String.Format("S: {0} bytes from {1} to {2}.", bytesSent, IpToString(client.LocalEndPoint), IpToString(client.RemoteEndPoint)));
                 //lock (this)
                 // addLog("Send", client.LocalEndPoint.ToString(), client.RemoteEndPoint.ToString(), "none");
                 // Signal that all bytes have been sent.
@@ -342,7 +343,7 @@ namespace Node
 
                 state.Data = (ExtSrc.Data)formattor.Deserialize(ms);
 
-                Log.d(String.Format("R: {0} bytes from {1}", bytesRead, client.RemoteEndPoint));
+                
                 // String address = (client.LocalEndPoint as IPEndPoint).Address.ToString();
                 String port = (client.LocalEndPoint as IPEndPoint).Port.ToString();
                 int[] wireAndFreqSlotID = LocalPhysicalWires.getIDsbyPort(Int32.Parse(port));
@@ -376,6 +377,7 @@ namespace Node
 
                 if (canSend)
                 {
+                    Log.i(String.Format("R: {0} bytes from [Wire = {1}, Slot = {2}]", bytesRead, wireAndFreqSlotID[0], wireAndFreqSlotID[1]));
                     //na pon
                     if (route[0] == -1 && route[1] == -1)
                     {
@@ -410,7 +412,7 @@ namespace Node
                 {
                     client.EndConnect(ar);
                 }
-                Log.i(String.Format("Node is connected to NMS {0}", IpToString(client.RemoteEndPoint)));
+                //Log.i(String.Format("Node is connected to NMS {0}", IpToString(client.RemoteEndPoint)));
 
                 // Signal that the connection has been made.
                 agentConnectDone.Set();
@@ -465,7 +467,7 @@ namespace Node
                 while (true)
                 {
                     agentReceiveDone.Reset();
-                    Log.i("Waiting for data from AGENT...");
+                    //Log.i("Waiting for data from AGENT...");
                     AgentReceive();
                     agentReceiveDone.WaitOne();
                 }
@@ -479,7 +481,7 @@ namespace Node
 
         void AgentReceive()
         {
-            Log.i("AgentReceive");
+            //Log.i("AgentReceive");
             try
             {
                 // Create the state object.
@@ -754,6 +756,7 @@ namespace Node
 
         public void RegisterToAgent()
         {
+            Log.LRM("Local topology out.");
             var wiresIds = LocalPhysicalWires.Wires.Select(nw => new DijkstraData(Id, nw.ID, nw.distance, nw.RouterIds)).ToList();
             AgentSend(new AgentData()
             {
@@ -842,7 +845,7 @@ namespace Node
                 while (true)
                 {
                     domainReceiveDone.Reset();
-                    Log.i("Waiting for data from Other provider...");
+                    //Log.i("Waiting for data from Other provider...");
                     DomainReceie();
                     domainReceiveDone.WaitOne();
                 }
@@ -856,7 +859,7 @@ namespace Node
 
         void DomainReceie()
         {
-            Log.i("DomainReceie");
+            //Log.i("DomainReceie");
             try
             {
                 // Create the state object.

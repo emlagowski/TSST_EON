@@ -9,7 +9,7 @@ namespace ExtSrc
     public class Log
     {
         private const bool _debugState = false;
-        private const bool _infoState = false;
+        private const bool _infoState = true;
 
         private const string _lrm = "LRM";
         private const string _ncc = "NCC";

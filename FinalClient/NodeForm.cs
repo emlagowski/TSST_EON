@@ -319,6 +319,7 @@ namespace Node
                 MsgTextBox.Visible = false;
                 PortTextBox.Visible = false;
                 SendButton.Visible = false;
+                button1.Visible = false;
                 //groupBox2.Visible = false;
                 //groupBox1.Location = new Point(0, 30);
             }

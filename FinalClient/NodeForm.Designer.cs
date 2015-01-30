@@ -47,6 +47,7 @@ namespace Node
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tabs = new System.Windows.Forms.TabControl();
             this.generalTab = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.RunButton = new System.Windows.Forms.CheckBox();
             this.SendButton = new System.Windows.Forms.Button();
             this.MsgLabel = new System.Windows.Forms.Label();
@@ -58,7 +59,6 @@ namespace Node
             this.advancedTab = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.frequencySlotsTable = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.messageHistoryTable)).BeginInit();
             this.tabs.SuspendLayout();
             this.generalTab.SuspendLayout();
@@ -155,6 +155,16 @@ namespace Node
             this.generalTab.TabIndex = 0;
             this.generalTab.Text = "General";
             this.generalTab.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(208, 873);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(168, 31);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "Close";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // RunButton
             // 
@@ -263,21 +273,11 @@ namespace Node
             this.frequencySlotsTable.Size = new System.Drawing.Size(559, 300);
             this.frequencySlotsTable.TabIndex = 0;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(208, 873);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(168, 31);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "Close";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // NodeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(596, 969);
+            this.ClientSize = new System.Drawing.Size(596, 965);
             this.Controls.Add(this.tabs);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6);
