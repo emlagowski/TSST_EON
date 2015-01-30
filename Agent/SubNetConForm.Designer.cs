@@ -70,6 +70,7 @@
             // 
             // SetConnButton
             // 
+            this.SetConnButton.Enabled = false;
             this.SetConnButton.Location = new System.Drawing.Point(13, 359);
             this.SetConnButton.Name = "SetConnButton";
             this.SetConnButton.Size = new System.Drawing.Size(411, 57);
@@ -102,6 +103,7 @@
             // 
             // banwidthTrackBar
             // 
+            this.banwidthTrackBar.Enabled = false;
             this.banwidthTrackBar.LargeChange = 10;
             this.banwidthTrackBar.Location = new System.Drawing.Point(13, 105);
             this.banwidthTrackBar.Maximum = 1000;
@@ -125,6 +127,7 @@
             // 
             // bandwidthTextBox
             // 
+            this.bandwidthTextBox.Enabled = false;
             this.bandwidthTextBox.Location = new System.Drawing.Point(229, 52);
             this.bandwidthTextBox.Name = "bandwidthTextBox";
             this.bandwidthTextBox.ReadOnly = true;
@@ -134,6 +137,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Enabled = false;
             this.label5.Location = new System.Drawing.Point(32, 52);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(163, 25);
@@ -182,6 +186,7 @@
             // 
             // routeTextBox
             // 
+            this.routeTextBox.Enabled = false;
             this.routeTextBox.Location = new System.Drawing.Point(13, 249);
             this.routeTextBox.Name = "routeTextBox";
             this.routeTextBox.Size = new System.Drawing.Size(411, 31);
@@ -190,6 +195,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
+            this.label8.Enabled = false;
             this.label8.Location = new System.Drawing.Point(32, 198);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(357, 25);
@@ -207,6 +213,7 @@
             // 
             // startFreqTextBox
             // 
+            this.startFreqTextBox.Enabled = false;
             this.startFreqTextBox.Location = new System.Drawing.Point(229, 298);
             this.startFreqTextBox.Name = "startFreqTextBox";
             this.startFreqTextBox.Size = new System.Drawing.Size(195, 31);
@@ -215,6 +222,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Enabled = false;
             this.label1.Location = new System.Drawing.Point(32, 298);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(194, 25);

@@ -56,7 +56,7 @@ namespace Node
             foreach (NewWire wire in _node.LocalPhysicalWires.Wires)
             {
                 var page = new TabPage();
-                page.Text = "Wire " + wire.ID;
+                page.Text = "Port " + wire.ID;
                 tabs.TabPages.Add(page);
                 var chart = new Chart();
                 initChart(chart);

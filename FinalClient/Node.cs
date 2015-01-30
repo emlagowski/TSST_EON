@@ -252,7 +252,7 @@ namespace Node
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(fs, data);
                 var buffer = fs.ToArray();
-                Log.i(String.Format("S: {0} bytes to [Wire = {1}, Slot = {2}]", buffer.Count(), route[0], route[1]));
+                Log.i(String.Format("S: {0} bytes to [Port = {1}, Slot = {2}]", buffer.Count(), route[0], route[1]));
 
                 // Begin sending the data to the remote device.
                 foreach (var unit in units)
@@ -377,7 +377,7 @@ namespace Node
 
                 if (canSend)
                 {
-                    Log.i(String.Format("R: {0} bytes from [Wire = {1}, Slot = {2}]", bytesRead, wireAndFreqSlotID[0], wireAndFreqSlotID[1]));
+                    Log.i(String.Format("R: {0} bytes from [Port = {1}, Slot = {2}]", bytesRead, wireAndFreqSlotID[0], wireAndFreqSlotID[1]));
                     //na pon
                     if (route[0] == -1 && route[1] == -1)
                     {
